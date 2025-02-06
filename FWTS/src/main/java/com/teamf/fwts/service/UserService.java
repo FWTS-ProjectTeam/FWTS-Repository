@@ -1,33 +1,89 @@
 package com.teamf.fwts.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.teamf.fwts.dao.UserMapper;
-import com.teamf.fwts.dto.User;
-import com.teamf.fwts.dto.UserDetail;
+import com.teamf.fwts.dao.UserDao;
+import com.teamf.fwts.dto.SignupDTO;
+import com.teamf.fwts.dto.Users;
+import com.teamf.fwts.dto.UserDetails;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserMapper userMapper;
+    private final UserDao userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    // 회원가입 처리
+    // 회원가입
     @Transactional
-    public void registerUser(User user, UserDetail userDetail) {
-        // 비밀번호 해싱 처리
-        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-        
-        // 회원 정보 저장
+    public void signup(SignupDTO dto) {
+    	String hashedPassword = hashPassword(dto.getPassword());
+
+        // User 객체 생성
+        Users user = new Users();
+        user.setEmail(dto.getEmail());
+        user.setUsername(dto.getUsername());
+        user.setPassword(hashedPassword);
+        user.setRole(dto.getRole());
+
         userMapper.insertUser(user);
+
+        // UserDetail 객체 생성
+        UserDetails userDetail = new UserDetails();
         userDetail.setUserId(user.getUserId());
+        userDetail.setPhoneNum(dto.getPhoneNum());       
+        userDetail.setBusinessNo(dto.getBusinessNo());
+        userDetail.setCompanyName(dto.getCompanyName());
+        userDetail.setCeoName(dto.getCeoName());
+        userDetail.setPostalCode(dto.getPostalCode());
+        userDetail.setAddress(dto.getAddress());
+        
+        // 빈 문자열이면 NULL로 변환
+        userDetail.setCompanyNum(
+        		dto.getCompanyNum().isBlank() ? null : dto.getCompanyNum()
+        );
+        userDetail.setDetailAddress(
+        		dto.getDetailAddress().isBlank() ? null : dto.getDetailAddress()
+        );
+
         userMapper.insertUserDetail(userDetail);
+    }
+    
+    // 비밀번호 재설정
+    @Transactional
+    public void resetPassword(String email, String password) {
+        String hashedPassword = hashPassword(password);
+        userMapper.resetPassword(email, hashedPassword);
+    }
+    
+    // 비밀번호 암호화
+    public String hashPassword(String password) {
+    	return passwordEncoder.encode(password);
     }
 
     // 중복 확인
     public boolean isDuplicate(String type, String value) {
-        return userMapper.checkDuplicate(type, value) > 0;
+    	// 사업자등록번호 중복 확인
+        if ("businessNo".equals(type)) {
+        	return userMapper.checkBesinessNo(value) > 0;
+        }
+        // 나머지 중복 확인
+        if ("email".equals(type) || "username".equals(type)) {
+        	return userMapper.checkEmailOrUsername(type, value) > 0;
+        }
+        return false;
+    }
+    
+    // 아이디 조회
+    public String findUsernameByEmail(String email) {
+        return userMapper.findUsernameByEmail(email);
+    }
+    
+    // 이메일 확인
+    public boolean existsByEmail(String email) {
+        return userMapper.existsByEmail(email) > 0;
     }
 }

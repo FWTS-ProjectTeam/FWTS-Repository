@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -132,7 +133,7 @@
 <script>
 	//다음 페이지 이동
 	document.getElementById('nextButton').addEventListener('click', function() {
-		fetch('/sign-up?page=2') // 서버에서 p=2로 변경된 JSP를 요청
+		fetch('/sign-up?step=2') // 서버에서 다음 단계로 변경된 JSP를 요청
 	        .then(response => response.text())
 	        .then(html => {
 	            history.pushState(null, '', '/sign-up'); // URL 유지
