@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.teamf.fwts.dto.ResetPasswordDTO;
-import com.teamf.fwts.dto.SignupDTO;
-import com.teamf.fwts.dto.UserDTO;
-import com.teamf.fwts.dto.VerificationCodeDTO;
+import com.teamf.fwts.dto.ResetPasswordDto;
+import com.teamf.fwts.dto.SignupDto;
+import com.teamf.fwts.dto.UserDto;
+import com.teamf.fwts.dto.VerificationCodeDto;
 import com.teamf.fwts.service.EmailService;
-import com.teamf.fwts.service.UserService;
+import com.teamf.fwts.service.UsersService;
 import com.teamf.fwts.service.VerifyService;
 
 import jakarta.servlet.http.HttpSession;
@@ -31,15 +31,15 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
+    private final UsersService userService;
     private final VerifyService verifyService;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
 
     // 로그인 페이지
     @GetMapping("/login")
-    public String loginForm(@RequestParam(name = "error", required = false) Boolean error, Model model) {
-    	if (error != null && error == true) {
+    public String loginForm(@RequestParam(name = "error", defaultValue = "false") boolean error, Model model) {
+    	if (error == true) {
     		model.addAttribute("errorMessage", "아이디 또는 비밀번호가 유효하지 않습니다.");
     	}
     	return "auth/login";
@@ -47,7 +47,7 @@ public class AuthController {
     
     // 로그인
     @PostMapping("/login")
-    public String login(UserDTO dto, Model model) {
+    public String login(UserDto dto, Model model) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
@@ -77,7 +77,7 @@ public class AuthController {
     
     // 회원가입
     @PostMapping("/sign-up")
-    public String signup(@Valid SignupDTO dto, BindingResult bindingResult, Model model) {
+    public String signup(@Valid SignupDto dto, BindingResult bindingResult, Model model) {
     	// 유효성 검사
         if (bindingResult.hasErrors()) {
             model.addAttribute("inputData", dto);
@@ -118,7 +118,7 @@ public class AuthController {
     
     // 아이디 찾기
     @PostMapping("/find-id")
-    public String findUsername(UserDTO dto, Model model) {
+    public String findUsername(UserDto dto, Model model) {
     	String email = dto.getEmail();
     	
     	String username = userService.findUsernameByEmail(email);
@@ -129,7 +129,7 @@ public class AuthController {
     
     // 인증 코드 요청
     @PostMapping("/find-password/send-code")
-    public ResponseEntity<?> verifyForm(@RequestBody Map<String, String> request, HttpSession session) {
+    public ResponseEntity<?> sendCode(@RequestBody Map<String, String> request, HttpSession session) {
         String email = request.get("email");
     	
     	if (!userService.existsByEmail(email)) {
@@ -151,7 +151,7 @@ public class AuthController {
     
     // 인증 번호 재전송 요청
     @PostMapping("/find-password/resend-code")
-    public ResponseEntity<?> resendVerificationCode(HttpSession session) {
+    public ResponseEntity<?> resendCode(HttpSession session) {
     	String email = (String) session.getAttribute("email");
     	
     	// 이메일이 존재하지 않으면
@@ -187,7 +187,7 @@ public class AuthController {
 
     // 인증 코드 확인 처리
     @PostMapping("/find-password/verify-code")
-    public String verifyCode(VerificationCodeDTO dto, HttpSession session, Model model) {
+    public String verifyCode(VerificationCodeDto dto, HttpSession session, Model model) {
         String code = dto.getCode();
     	
     	String verificationCode = (String) session.getAttribute("verificationCode");
@@ -237,7 +237,7 @@ public class AuthController {
     
     // 비밀번호 재설정
     @PostMapping("/find-password/reset-password")
-    public String resetPassword(@Valid ResetPasswordDTO dto, BindingResult bindingResult, HttpSession session, Model model) {    	
+    public String resetPassword(@Valid ResetPasswordDto dto, BindingResult bindingResult, HttpSession session, Model model) {    	
     	String email = (String) session.getAttribute("email");
         String password = dto.getPassword();
         String confirmPassword = dto.getConfirmPassword();

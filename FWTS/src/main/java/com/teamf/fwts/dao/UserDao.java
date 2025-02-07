@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.teamf.fwts.dto.Users;
-import com.teamf.fwts.dto.UserDetails;
+import com.teamf.fwts.entity.UserDetails;
+import com.teamf.fwts.entity.Users;
 
 @Mapper
 public interface UserDao {

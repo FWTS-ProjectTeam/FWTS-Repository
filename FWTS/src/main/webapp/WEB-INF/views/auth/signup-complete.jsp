@@ -30,13 +30,15 @@
     }
     h1 {
         color: #ff6699;
-        font-weight: bold;
+        font-weight: 600;
     }
     p {
         font-size: 16px;
         margin: 15px 0;
     }
-    .button-container { margin-top: 30px; }
+    .button-container {
+    	margin-top: 30px;
+    }
     .button-container a {
         display: inline-block;
         padding: 10px 20px;
@@ -44,9 +46,11 @@
         color: #fff;
         border-radius: 5px;
         text-decoration: none;
-        font-weight: bold;
+        font-weight: 600;
     }
-    .button-container a:hover { background-color: #ff5577; }
+    .button-container a:hover {
+    	background-color: #ff5577;
+    }
 </style>
 </head>
 <body>

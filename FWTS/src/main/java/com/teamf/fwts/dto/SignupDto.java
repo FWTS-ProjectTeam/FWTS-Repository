@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class SignupDTO {
+public class SignupDto {
 	// 기본 회원 정보
 	@NotBlank
     @Size(max=320)

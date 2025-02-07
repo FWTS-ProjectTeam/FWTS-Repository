@@ -70,11 +70,13 @@
 	    transition: border-color 0.3s;
 	    box-sizing: border-box;
 	}
-	.input-container input:focus { border-color: #ff6699; }
+	.input-container input:focus {
+		border-color: #ff6699;
+	}
 	.resend-code {
 	    padding: 8px 12px;
 	    font-size: 12px;
-	    font-weight: bold;
+	    font-weight: 600;
 	    color: #fff;
 	    background-color: #ffb6c1;
 	    cursor: pointer;
@@ -83,7 +85,9 @@
 	    white-space: nowrap;
 	    transition: background-color 0.3s;
 	}
-	.resend-code:hover { background-color: #ff9aa2; }
+	.resend-code:hover {
+		background-color: #ff9aa2;
+	}
     .button-container {
         display: flex;
         flex-direction: column;

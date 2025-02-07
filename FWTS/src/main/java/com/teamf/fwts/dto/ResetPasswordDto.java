@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ResetPasswordDTO {
+public class ResetPasswordDto {
 	@Size(min = 4, max = 20)
 	private String username;
 	@NotNull

@@ -10,15 +10,15 @@
 <title>생화 24 - 고객센터</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #fff;
-        color: #333;
-    }
-    .container {
-        width: 80%;
-        margin: 0 auto;
-    }
+	body {
+	    font-family: Arial, sans-serif;
+	    background-color: #fff;
+	    color: #333;
+	}
+	.container {
+	    width: 80%;
+	    margin: 0 auto;
+	}
     .header {
         display: flex;
         justify-content: space-between;
@@ -40,11 +40,11 @@
         display: flex;
     }
     .header-right a {
-        font-size: 13px;
-        text-decoration: none;
-        color: #333;
-        margin-left: 10px;
-    }
+       font-size: 13px;
+       text-decoration: none;
+       color: #333;
+       margin-left: 10px;
+   	}
     .search-container {
     	width: 240px;
         display: flex;
@@ -73,7 +73,7 @@
         display: flex;
         justify-content: space-between;
         border: 1px solid #ccc; /* 상단 메뉴 구분선 */
-        border-radius: 10px;
+    	border-radius: 10px;
         padding: 20px;
         align-items: flex-end;
     }
@@ -96,9 +96,9 @@
     	margin: 20px;
     }
     .sidebar {
-        width: 180px; /* 사이드 메뉴 너비 고정 */
+    	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
-       	max-width: 180px;
+    	max-width: 180px;
         padding: 10px;
         border: 1px solid #ccc;
         background-color: #fff;
@@ -125,47 +125,47 @@
     }
     .search-board-container {
     	display: flex;
-     	align-items: center;
-     	justify-content: end;
-     	margin-bottom: 20px;
- 	}
- 	.search-category {
- 		width: 80px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	background-color: #fff;
-     	margin-right: 10px;
- 	}
- 	.search-board-box {
- 		width: 280px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	outline: none;
- 	}
- 	.search-board-button {
-     	padding: 10px 15px;
-     	border: none;
-     	border-radius: 5px;
-     	background-color: #ff7f9d;
-     	color: #fff;
-     	font-size: 16px;
-     	font-weight: 600;
-     	cursor: pointer;
-     	margin-left: 10px;
- 	}
+	    align-items: center;
+	    justify-content: end;
+	    margin-bottom: 20px;
+	}
+	.search-category {
+	 	width: 80px;
+	    padding: 10px;
+	    border: 1px solid #ccc;
+	    border-radius: 5px;
+	    font-size: 16px;
+	    background-color: #fff;
+	    margin-right: 10px;
+	}
+    .search-board-box {
+    	width: 280px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        outline: none;
+    }
+    .search-board-button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #ff7f9d;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 10px;
+    }
     .table-container {
         width: 100%;
-        margin: 82px 10px 0px 10px;
+        margin: 20px 10px 0px 10px;
     }
     table {
         width: 100%;
         border-collapse: collapse;
         background-color: #fff;
-    }    
+    }
     th, td {
         padding: 10px;
         border-bottom: 1px solid #ccc;
@@ -176,8 +176,8 @@
         text-align: center;
     }
     td:nth-child(2) {
-	    text-align: left; /* 제목만 왼쪽 정렬 */
-	}
+   		text-align: left; /* 제목만 왼쪽 정렬 */
+   	}
     td a {
         text-decoration: none;
         color: #333;
@@ -185,25 +185,24 @@
         text-align: left;
     }
     th:nth-child(1), td:nth-child(1) { 
-    	width: 60px;  /* 번호 열의 너비 고정 */
+	    width: 60px;  /* 번호 열의 너비 고정 */
 	    min-width: 60px;
 	    max-width: 60px;
 	    text-align: center;
 	}
 	th:nth-child(3), td:nth-child(3) { 
-		width: 100px; /* 작성자 열의 너비 고정 */
+	    width: 100px; /* 작성자 열의 너비 고정 */
 	    min-width: 100px;
 	    max-width: 100px;
 	    text-align: center;
 	}
 	th:nth-child(4), td:nth-child(4) { 
-		width: 100px; /* 작성일 열의 너비 고정 */
+	    width: 100px; /* 작성일 열의 너비 고정 */
 	    min-width: 100px;
 	    max-width: 100px;
 	    text-align: center;
 	}
     .pagination {
-    	white-space: nowrap;
         text-align: center;
         margin-top: 20px;
     }
@@ -257,11 +256,21 @@
         <div class="body-container">
             <div class="sidebar">
                 <h2>고객센터</h2>
-                <a class="active">공지사항</a>
-                <a href="/support-center/inquiry">문의사항</a>
+                <a href="/support-center/notice">공지사항</a>
+                <a class="active">문의사항</a>
             </div>
             
             <div class="table-container">
+            	<div class="search-board-container">
+				    <select class="search-category">
+				        <option value="all">전체</option>
+				        <option value="title">제목</option>
+				        <option value="content">내용</option>
+				    </select>
+				    <input class="search-board-box" type="text" placeholder="검색어를 입력하세요">
+				    <button class="search-board-button">검색</button>
+				</div>
+            
                 <table>
                     <thead>
                         <tr>
@@ -272,19 +281,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="notice" items="${notices}">
+                        <c:forEach var="inquiry" items="${inquirys}">
 				            <tr>
-				                <td>${notice.noticeId}</td>
-				                <td><a href="/support-center/notice/${notice.noticeId}">${notice.noticeTitle}</a></td>
-				                <td>생화24</td>
-				                <td><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></td>
+				                <td>${inquiry.inquiryId}</td>
+				                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
+				                <td>${inquiry.writer.username}</td>
+				                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 				            </tr>
 				        </c:forEach>
                     </tbody>
                 </table>
                 
-                <!-- 페이지네이션 -->
-                <div class="pagination">			        
+				<!-- 페이지네이션 -->
+                <div class="pagination">		        
 			        <c:choose>
 				        <c:when test="${count > 1}">
 				        	<c:choose>

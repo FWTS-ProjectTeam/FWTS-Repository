@@ -1,7 +1,8 @@
 package com.teamf.fwts.service;
 
-import com.teamf.fwts.dto.Users;
 import com.teamf.fwts.dao.UserDao;
+import com.teamf.fwts.entity.Users;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 권한 리스트 생성
         List<GrantedAuthority> authorities;
-        if (!user.isSuspended()) {
+        if (!user.isLimited()) {
             authorities = Collections.singletonList(new SimpleGrantedAuthority(getRoleString(user)));
         } else {
             authorities = Collections.emptyList();

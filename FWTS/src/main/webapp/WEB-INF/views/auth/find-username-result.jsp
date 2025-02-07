@@ -41,7 +41,7 @@
     }
     .username {
         font-size: 18px;
-        font-weight: bold;
+        font-weight: 600;
         color: #ff6699;
         margin-bottom: 20px;
     }
@@ -63,7 +63,9 @@
         background-color: #ff6699;
         color: #fff;
     }
-    .button-container button:hover { background-color: #ff5577; }
+    .button-container button:hover {
+    	background-color: #ff5577;
+    }
     .links-container {
         margin-top: 20px;
         font-size: 14px;
