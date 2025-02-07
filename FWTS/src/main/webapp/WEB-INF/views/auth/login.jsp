@@ -30,8 +30,11 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .login-container h1 {
-        color: #ff6699;
         margin-bottom: 20px;
+    }
+    .login-container h1 a {
+    	text-decoration: none;
+    	color: #ff6699;
     }
     .login-container input[type="text"],
     .login-container input[type="password"] {
@@ -41,7 +44,12 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         box-sizing: border-box;
+        outline: none;
     }
+    .login-container input[type="text"]:focus,
+    .login-container input[type="password"]:focus {
+		border-color: #ff6699;
+	}
     .remember-me {
         display: flex;
         align-items: center;
@@ -72,7 +80,7 @@
         font-size: 14px;
     }
     .bold-text {
-        font-weight: bold;
+        font-weight: 600;
         text-decoration: none;
         color: #333;
     }
@@ -139,7 +147,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <body>
     <div class="login-container">
-        <h1>생화24</h1>
+        <h1><a href="/">생화24</a></h1>
         <form id="login-content" action="/login" method="POST">
             <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
             <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">

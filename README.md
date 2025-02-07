@@ -22,5 +22,5 @@
 1. 애플리케이션 실행
 2. 웹 애플리케이션 접속: `http://localhost:8081`
 3. 기본 로그인 정보:
-   - ID: `null`
-   - Password: `null`
+   - ID: `test01`
+   - Password: `tester01!`

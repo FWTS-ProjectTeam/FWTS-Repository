@@ -40,7 +40,7 @@
    }
    .username {
        font-size: 18px;
-       font-weight: bold;
+       font-weight: 600;
        color: #ff6699;
        margin-bottom: 20px;
    }
@@ -86,7 +86,7 @@
         </div>
 
         <div class="links-container">
-            <a href="/find-account/id">계속 찾으러 가기</a>
+            <a href="/find-id">계속 찾으러 가기</a>
         </div>
     </div>
 </body>

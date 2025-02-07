@@ -3,6 +3,6 @@ package com.teamf.fwts.dto;
 import lombok.Data;
 
 @Data
-public class VerificationCodeDTO {
+public class VerificationCodeDto {
 	private String code;
 }

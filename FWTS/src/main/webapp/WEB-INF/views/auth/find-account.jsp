@@ -19,7 +19,6 @@
 		align-items: center;
 		height: 100vh;
 	}
-	
 	.find-container {
 		text-align: center;
 		max-width: 400px;
@@ -30,20 +29,20 @@
 		border-radius: 10px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
-	
 	.find-container h1 {
-		color: #ff6699;
 		font-weight: 600;
 		margin-bottom: 15px;
 	}
-	
+	.find-container h1 a {
+    	text-decoration: none;
+    	color: #ff6699;
+    }
 	.tabs {
 		display: flex;
 		justify-content: space-around;
 		margin-bottom: 20px;
 		border-bottom: 2px solid #ddd;
 	}
-	
 	.tab {
 		flex: 1;
 		padding: 10px 0;
@@ -52,33 +51,27 @@
 		color: #999;
 		transition: color 0.3s;
 	}
-	
 	.tab.active {
 		color: #ff6699;
 		border-bottom: 2px solid #ff6699;
 	}
-	
 	.form-content {
 		display: none;
 	}
-	
 	.form-content.active {
 		display: block;
 	}
-	
 	.input-group {
 		width: 100%;
 		text-align: left;
 		margin-bottom: 20px;
 	}
-	
 	.input-group label {
 		font-size: 14px;
 		font-weight: 600;
 		display: block;
 		margin-bottom: 5px;
 	}
-	
 	.input-group input {
 		width: 100%;
 		max-width: 100%; /* 부모 크기를 넘지 않도록 설정 */
@@ -90,17 +83,14 @@
 		transition: border-color 0.3s;
 		box-sizing: border-box; /* 패딩과 보더 포함하여 크기 설정 */
 	}
-	
 	.input-group input:focus {
 		border-color: #ff6699;
 	}
-	
 	.button-container {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
-	
 	.button-container button {
 		width: 100%;
 		padding: 12px;
@@ -113,16 +103,13 @@
 		background-color: #ff6699;
 		color: #fff;
 	}
-	
 	.button-container button:hover {
 		background-color: #ff5577;
 	}
-	
 	.links-container {
 		margin-top: 20px;
 		font-size: 14px;
 	}
-	
 	.links-container a {
 		text-decoration: none;
 		color: #555;
@@ -160,9 +147,6 @@
 		// URL 변경 (새로고침 없이) 
 		const newUrl = tab === "password" ? "/find-password" : "/find-id"; 
 		history.pushState(null, "", newUrl); 
-
-		// 제목 변경
-		document.title = tab === "password" ? "생화24 - 비밀번호 찾기" : "생화24 - 아이디 찾기";
 	}
   
 	// 아이디 찾기 요청 전 유효성 검사
@@ -240,7 +224,7 @@
 </head>
 <body>
 	<div class="find-container">
-		<h1>생화24</h1>
+		<h1><a href="/">생화24</a></h1>
 		<div class="tabs">
 			<div class="tab" id="username" onclick="switchTab('username')">아이디
 				찾기</div>

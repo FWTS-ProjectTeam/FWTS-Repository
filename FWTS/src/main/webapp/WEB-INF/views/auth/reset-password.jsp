@@ -68,14 +68,12 @@
     .input-group input:focus {
         border-color: #ff6699;
     }
-    
     .password-container {
 	    position: relative;
 	    display: flex;
 	    align-items: center;
 	    width: 100%;
 	}
-	
 	.password-container input {
 	    width: 100%;
 	    padding: 12px;
@@ -87,7 +85,6 @@
 	    box-sizing: border-box;
 	    padding-right: 40px; /* 아이콘 공간 확보 */
 	}
-	
 	.password-container i {
 	    position: absolute;
 	    right: 10px;
@@ -95,9 +92,9 @@
 	    font-size: 18px;
 	    color: #888;
 	}
-	
-	.password-container i:hover { color: #ff6699; }
-    
+	.password-container i:hover {
+		color: #ff6699;
+	}
     .button-container {
         display: flex;
         flex-direction: column;

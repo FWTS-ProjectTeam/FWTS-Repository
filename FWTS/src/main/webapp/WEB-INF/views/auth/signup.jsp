@@ -30,12 +30,12 @@
     }
     h1 {
         color: #ff6699;
-        font-weight: bold;
+        font-weight: 600;
         text-align: center;
     }
     p { text-align: center; }
     label {
-        font-weight: bold;
+        font-weight: 600;
         display: block;
         margin-top: 15px;
     }
@@ -437,8 +437,8 @@
 			
 			<!-- 업체 전화번호 입력 -->
 			<div class="input-group">
-			    <label for="company-phone">업체 전화번호 <span class="required">*</span></label>
-			    <input type="text" id="company-phone" name="companyPhoneNum" required maxlength="11"
+			    <label for="company-phone">업체 전화번호</label>
+			    <input type="text" id="company-phone" name="companyNum" required maxlength="11"
 			           onfocus="removeHyphen(this)" onblur="formatPhoneNumber(this)">
 			</div>
 	            
@@ -448,8 +448,8 @@
 	        </div>
 	            
 	        <div class="input-group">    
-	            <label for="representative">대표자명 <span class="required">*</span></label>
-	            <input type="text" id="representative" name="representativeName" class="full-width" required>
+	            <label for="ceo">대표자명 <span class="required">*</span></label>
+	            <input type="text" id="ceo" name="ceoName" class="full-width" required>
             </div>
             
             <div class="input-group">

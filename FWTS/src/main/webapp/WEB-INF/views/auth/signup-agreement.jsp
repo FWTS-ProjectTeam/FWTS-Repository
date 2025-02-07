@@ -28,14 +28,16 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		text-align: left;
 	}
-	p { text-align: center; }
+	p {
+		text-align: center;
+	}
 	h1 {
 		color: #ff6699;
-		font-weight: bold;
+		font-weight: 600;
 		text-align: center;
 	}
 	label {
-		font-weight: bold;
+		font-weight: 600;
 		display: block;
 		margin-top: 5px;
 	}
@@ -82,7 +84,9 @@
 		background-color: #ff6699;
 		cursor: pointer;
 	}
-	.button.enabled:hover { background-color: #ff5577; }
+	.button.enabled:hover {
+		background-color: #ff5577;
+	}
 </style>
 <script>
 	// 체크박스를 체크하면 버튼 활성화
