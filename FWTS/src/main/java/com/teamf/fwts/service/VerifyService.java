@@ -31,9 +31,8 @@ public class VerifyService {
 
     // 인증 코드 검증 (시간 제한 체크)
     public boolean verifyCode(String email, String inputCode) {
-        if (!codeStorage.containsKey(email)) {
+        if (!codeStorage.containsKey(email))
             return false;
-        }
 
         VerificationEntry entry = codeStorage.get(email);
         if (entry.timestamp.plusMinutes(EXPIRATION_MINUTES).isBefore(LocalDateTime.now())) {

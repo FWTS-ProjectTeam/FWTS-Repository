@@ -3,6 +3,8 @@ package com.teamf.fwts.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.NoticeListDto;
+import com.teamf.fwts.entity.InquiryBoard;
 import com.teamf.fwts.entity.NoticeBoard;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.NoticeBoardService;
@@ -28,7 +31,7 @@ public class SupportCenterController {
 	
 	// 공지사항 조회
 	@GetMapping("/notice")
-	public String noticeList(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
+	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
 	    int count = noticeBoardService.count();
 
 	    if (count > 0) {
@@ -62,28 +65,48 @@ public class SupportCenterController {
 	
 	// 문의사항 조회
 	@GetMapping("/inquiry")
-    public String inquiryAll(@RequestParam(name = "page", defaultValue = "1")  int page, Model model) {
-		int count = inquiryBoardService.count();
+    public String inquiryAll(@RequestParam(name = "category", required = false) String category,
+    	    				 @RequestParam(name = "keyword", required = false) String keyword,
+    	    				 @RequestParam(name = "page", defaultValue = "1")  Integer page,
+    						 Model model) {
+		// category 값 검증
+		category = Optional.ofNullable(category)
+                .filter(Set.of("all", "title", "content")::contains)
+                .orElse(null);
+
+		Map<String, Object> paging = new HashMap<>();
+        paging.put("category", category);
+        paging.put("keyword", keyword);
+        
+		int count = inquiryBoardService.count(paging);
 
 	    if (count > 0) {
 	        int perPage = 8; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage;
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
-	        Map<String, Object> paging = new HashMap<>();
 	        paging.put("start", startRow);
 	        paging.put("count", perPage);
 
 	        List<InquiryListDto> inquirys = inquiryBoardService.inquiryList(paging);
-
+	        
 	        model.addAttribute("inquirys", inquirys);
 	        model.addAttribute("currentPage", page);
 	        model.addAttribute("totalPages", totalPages);
-	        
-	        System.out.println(inquirys);
 	    }
-		
+	    
 	    model.addAttribute("count", count);
+	    model.addAttribute("category", category);
+	    model.addAttribute("keyword", keyword);
 		return "support/inquiry";
     }
+	
+	// 문의사항 상세 조회
+	@GetMapping("/inquiry/{id}")
+	public String inquiryDetail(@PathVariable("id") int id, Model model) {
+		InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+		
+		model.addAttribute("inquiry", inquiry);
+		return "support/inquiry-detail";
+	}
 }

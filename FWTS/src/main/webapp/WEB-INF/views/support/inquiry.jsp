@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -261,15 +262,15 @@
             </div>
             
             <div class="table-container">
-            	<div class="search-board-container">
-				    <select class="search-category">
-				        <option value="all">전체</option>
-				        <option value="title">제목</option>
-				        <option value="content">내용</option>
+            	<form class="search-board-container" action="/support-center/inquiry">
+				    <select class="search-category" name="category">
+				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
+				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
+				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
 				    </select>
-				    <input class="search-board-box" type="text" placeholder="검색어를 입력하세요">
-				    <button class="search-board-button">검색</button>
-				</div>
+				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
+				    <input type="submit" class="search-board-button" value="검색">
+				</form>
             
                 <table>
                     <thead>
@@ -285,7 +286,7 @@
 				            <tr>
 				                <td>${inquiry.inquiryId}</td>
 				                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
-				                <td>${inquiry.writer.username}</td>
+				                <td>${inquiry.username}</td>
 				                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 				            </tr>
 				        </c:forEach>
@@ -293,28 +294,43 @@
                 </table>
                 
 				<!-- 페이지네이션 -->
-                <div class="pagination">		        
-			        <c:choose>
-				        <c:when test="${count > 1}">
-				        	<c:choose>
-							    <c:when test="${currentPage > 1}">
-							        <a href="/support-center/notice?page=${currentPage - 1}">◀</a>
-							    </c:when>
-							    <c:otherwise><a>◀</a></c:otherwise>
-					        </c:choose>
-					        
-			        		<span>${currentPage} / ${totalPages}</span>
-			        		
-			        		<c:choose>
-							    <c:when test="${currentPage < totalPages}">
-							        <a href="/support-center/notice?page=${currentPage + 1}">▶</a>
-							    </c:when>
-							    <c:otherwise><a>▶</a></c:otherwise>
-							</c:choose>
-			        	</c:when>
-			        	<c:otherwise><p>아직 작성된 글이 없습니다.</p></c:otherwise>
-			        </c:choose>
-			    </div>
+				<div class="pagination">
+				    <c:choose>
+				        <c:when test="${count > 0}">
+				            <c:set var="queryString">
+							    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
+							        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+							    </c:if>
+							</c:set>
+
+				            <!-- 이전 페이지 버튼 -->
+				            <c:choose>
+				                <c:when test="${currentPage > 1}">
+				                    <a href="/support-center/inquiry?page=${currentPage - 1}${queryString}">◀</a>
+				                </c:when>
+				                <c:otherwise>
+				                    <a>◀</a>
+				                </c:otherwise>
+				            </c:choose>
+				
+				            <!-- 현재 페이지 / 전체 페이지 표시 -->
+				            <span>${currentPage} / ${totalPages}</span>
+				
+				            <!-- 다음 페이지 버튼 -->
+				            <c:choose>
+				                <c:when test="${currentPage < totalPages}">
+				                    <a href="/support-center/inquiry?page=${currentPage + 1}${queryString}">▶</a>
+				                </c:when>
+				                <c:otherwise>
+				                    <a>▶</a>
+				                </c:otherwise>
+				            </c:choose>
+				        </c:when>
+				        <c:otherwise>
+				            <p>조회된 글이 없습니다.</p>
+				        </c:otherwise>
+				    </c:choose>
+				</div>
             </div>
         </div>
     </div>

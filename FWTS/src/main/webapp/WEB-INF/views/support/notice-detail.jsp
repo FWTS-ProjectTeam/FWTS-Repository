@@ -241,7 +241,7 @@
 			        <p>${notice.noticeContent}</p>
             	</div>
 		        <div class="button-container">
-		            <button onclick="location.href='/support-center/notice'">목록</button>
+		            <button onclick="history.back()">목록</button>
 		        </div>
 		    </div>
         </div>

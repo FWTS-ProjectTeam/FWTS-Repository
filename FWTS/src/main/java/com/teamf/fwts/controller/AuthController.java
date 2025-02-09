@@ -39,9 +39,9 @@ public class AuthController {
     // 로그인 페이지
     @GetMapping("/login")
     public String loginForm(@RequestParam(name = "error", defaultValue = "false") boolean error, Model model) {
-    	if (error == true) {
+    	if (error == true)
     		model.addAttribute("errorMessage", "아이디 또는 비밀번호가 유효하지 않습니다.");
-    	}
+    	
     	return "auth/login";
     }
     
@@ -69,9 +69,8 @@ public class AuthController {
     // 회원가입 페이지
     @GetMapping("/sign-up")
     public String signupForm(@RequestParam(name = "step", defaultValue = "1") Integer step) {
-    	if (step == 1) {
+    	if (step == 1)
     		return "auth/signup-agreement"; // 약관동의 페이지
-    	}
     	return "auth/signup"; // 정보입력 페이지
     }
     
@@ -154,7 +153,7 @@ public class AuthController {
     public ResponseEntity<?> resendCode(HttpSession session) {
     	String email = (String) session.getAttribute("email");
     	
-    	// 이메일이 존재하지 않으면
+    	// 이메일이 존재하지 않으면 제한
         if (email == null) {
             return ResponseEntity.badRequest()
                     .body("{\"errorMessage\": \"잘못된 요청입니다.\"}");
@@ -177,11 +176,9 @@ public class AuthController {
     public String verifyCodeForm(HttpSession session) {
         String email = (String) session.getAttribute("email");
 
-        // 이메일이 존재하지 않으면
-        if (email == null) {
+        // 이메일이 존재하지 않으면 제한
+        if (email == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
-        }
-        
         return "auth/verify-code";
     }
 
@@ -194,12 +191,12 @@ public class AuthController {
         LocalDateTime expiryTime = (LocalDateTime) session.getAttribute("verificationCodeExpiry");
         String email = (String) session.getAttribute("email");
         
-        // 이메일이 존재하지 않거나 세션에 인증 코드가 없으면
+        // 이메일이 존재하지 않거나 세션에 인증 코드가 없으면 제한
         if (email == null || verificationCode == null) {
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
         }
 
-        // 현재 시간이 만료시간보다 늦으면 인증 실패
+        // 현재 시간이 만료시간보다 늦으면 실패
         if (LocalDateTime.now().isAfter(expiryTime)) {
             model.addAttribute("errorMessage", "만료된 인증 코드입니다.");
             
@@ -227,11 +224,9 @@ public class AuthController {
     public String resetPasswordForm(HttpSession session) {
     	String email = (String) session.getAttribute("email");
     	
-    	// 이메일이 존재하지 않으면
-        if (email == null) {
+    	// 이메일이 존재하지 않으면 제한
+        if (email == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
-        }
-    	
     	return "auth/reset-password";
     }
     
@@ -243,9 +238,8 @@ public class AuthController {
         String confirmPassword = dto.getConfirmPassword();
         
         // 유효성 검사
-        if (bindingResult.hasErrors() || !password.equals(confirmPassword)) {
+        if (bindingResult.hasErrors() || !password.equals(confirmPassword))
         	return "redirect:/find-password/reset-password"; // 비밀번호 재설정 페이지
-        }
 
         try {
             userService.resetPassword(email, password);

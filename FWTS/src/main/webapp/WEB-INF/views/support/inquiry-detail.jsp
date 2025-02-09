@@ -96,9 +96,9 @@
     	margin: 20px;
     }
     .sidebar {
-        width: 180px; /* 사이드 메뉴 너비 고정 */
+    	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
-       	max-width: 180px;
+        max-width: 180px;
         padding: 10px;
         border: 1px solid #ccc;
         background-color: #fff;
@@ -157,70 +157,45 @@
      	cursor: pointer;
      	margin-left: 10px;
  	}
-    .table-container {
-        width: 100%;
-        margin: 82px 10px 0px 10px;
+    .post-container {
+    	width: 100%;
+    	margin: 50px 10px 0px 10px;
+     	background: white;
     }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: #fff;
-    }    
-    th, td {
-        padding: 10px;
+    .post-content {
+    	padding: 20px;
+    	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
     }
-    th {
-        background-color: #ff7f9d;
-        color: #fff;
+    .title {
+        font-weight: bold;
         text-align: center;
+        margin-bottom: 10px;
     }
-    td:nth-child(2) {
-	    text-align: left; /* 제목만 왼쪽 정렬 */
-	}
-    td a {
-        text-decoration: none;
-        color: #333;
-        display: block;
-        text-align: left;
+    .write-info {
+    	display: flex;
+	    justify-content: space-between; /* 왼쪽, 오른쪽 정렬 */
+	    align-items: center; /* 수직 중앙 정렬 */
+	    color: gray;
+        font-size: 0.9em;
     }
-    th:nth-child(1), td:nth-child(1) { 
-    	width: 60px;  /* 번호 열의 너비 고정 */
-	    min-width: 60px;
-	    max-width: 60px;
-	    text-align: center;
-	}
-	th:nth-child(3), td:nth-child(3) { 
-		width: 100px; /* 작성자 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
-	}
-	th:nth-child(4), td:nth-child(4) { 
-		width: 100px; /* 작성일 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
-	}
-    .pagination {
-    	white-space: nowrap;
+    .section {
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .button-container {
         text-align: center;
         margin-top: 20px;
     }
-    .pagination a {
-       	font-size: 12px;
-        text-decoration: none;
-        color: #333;
-        margin-left: 10px;
-    }
-    .pagination a:first-child {
-	    margin-right: 5px; /* 화살표와 숫자 사이 간격 조절 */
-	}
-    .pagination span {
-        background-color: #ff7f9d;
-        padding: 5px 10px;
+    .button-container button {
+        background: #ff7f9d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
         border-radius: 5px;
-        color: #fff;
+        cursor: pointer;
     }
 </style>
 </head>
@@ -257,56 +232,23 @@
         <div class="body-container">
             <div class="sidebar">
                 <h2>고객센터</h2>
-                <a class="active">공지사항</a>
-                <a href="/support-center/inquiry">문의사항</a>
+                <a href="/support-center/notice">공지사항</a>
+                <a href="/support-center/inquiry" class="active">문의사항</a>
             </div>
             
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="notice" items="${notices}">
-				            <tr>
-				                <td>${notice.noticeId}</td>
-				                <td><a href="/support-center/notice/${notice.noticeId}">${notice.noticeTitle}</a></td>
-				                <td>생화24</td>
-				                <td><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></td>
-				            </tr>
-				        </c:forEach>
-                    </tbody>
-                </table>
-                
-                <!-- 페이지네이션 -->
-                <div class="pagination">			        
-			        <c:choose>
-				        <c:when test="${count > 1}">
-				        	<c:choose>
-							    <c:when test="${currentPage > 1}">
-							        <a href="/support-center/notice?page=${currentPage - 1}">◀</a>
-							    </c:when>
-							    <c:otherwise><a>◀</a></c:otherwise>
-					        </c:choose>
-					        
-			        		<span>${currentPage} / ${totalPages}</span>
-			        		
-			        		<c:choose>
-							    <c:when test="${currentPage < totalPages}">
-							        <a href="/support-center/notice?page=${currentPage + 1}">▶</a>
-							    </c:when>
-							    <c:otherwise><a>▶</a></c:otherwise>
-							</c:choose>
-			        	</c:when>
-			        	<c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
-			        </c:choose>
-			    </div>
-            </div>
+            <div class="post-container">
+            	<div class="post-content">
+            		<h2 class="title">${inquiry.inquiryTitle}</h2>
+            		<div class="write-info">
+					    <p class="writer">작성자: ${inquiry.writer.username}</p>
+					    <p class="date">작성일: <fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd HH:mm" /></p>
+					</div>
+			        <p>${inquiry.inquiryContent}</p>
+            	</div>
+		        <div class="button-container">
+		            <button onclick="history.back()">목록</button>
+		        </div>
+		    </div>
         </div>
     </div>
 </body>
