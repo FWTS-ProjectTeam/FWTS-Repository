@@ -115,6 +115,23 @@
 		color: #555;
 		font-weight: 600;
 	}
+	/* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	.swal2-container {
+	    align-items: center !important;
+	    justify-content: center !important;
+	    display: flex !important;
+	    position: fixed !important;
+	}
+	/* body의 높이를 강제하지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
+	/* 모달이 뜰 때도 기존 레이아웃 유지 */
+	body.modal-open {
+	    overflow: hidden !important;
+	}
 </style>
 <script>
 	// 페이지 로드 시 현재 URL에 따라 탭 자동 선택
@@ -170,6 +187,10 @@
         	alert("이메일을(를) 입력하세요.");
         	return;
       	}
+    	
+    	// 현재 body의 스타일을 저장
+	    const originalHeight = document.body.style.height;
+	    const originalOverflow = document.body.style.overflow;
 
      	// 로딩 메시지 표시
       	Swal.fire({
@@ -179,8 +200,9 @@
         	allowEscapeKey: false,
        		showConfirmButton: false,
        		didOpen: () => {
-        		Swal.showLoading(); // 로딩 애니메이션 추가
-			}
+		        Swal.showLoading(); // 로딩 애니메이션 추가
+		        document.body.style.overflow = "hidden"; // 모달 띄울 때 스크롤 막기
+	        }
 		});
 
 		// 이메일 인증 코드 요청
@@ -193,7 +215,11 @@
 		})
 		.then(response => response.json()) // JSON 응답 처리
 		.then(data => {
-			Swal.close(); // 로딩창 닫기
+			// 모달 닫기 전에 body 스타일 복구
+	        document.body.style.height = originalHeight;
+	        document.body.style.overflow = originalOverflow;
+
+	        Swal.close(); // 로딩창 닫기
 		
 			if (data.errorMessage) {
 				Swal.fire({
@@ -208,8 +234,11 @@
 			}
 	    })
 		.catch(error => {
+			// 모달 닫기 전에 body 스타일 복구
+	        document.body.style.height = originalHeight;
+	        document.body.style.overflow = originalOverflow;
+			
 			Swal.close();
-			console.error("Error:", error);
 			Swal.fire({
 				icon: 'error',
 				title: '오류 발생',

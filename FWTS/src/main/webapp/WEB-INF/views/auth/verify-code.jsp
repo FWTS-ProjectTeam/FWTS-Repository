@@ -117,6 +117,23 @@
         color: #555;
         font-weight: 600;
     }
+    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	.swal2-container {
+	    align-items: center !important;
+	    justify-content: center !important;
+	    display: flex !important;
+	    position: fixed !important;
+	}
+	/* body의 높이를 강제하지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
+	/* 모달이 뜰 때도 기존 레이아웃 유지 */
+	body.modal-open {
+	    overflow: hidden !important;
+	}
 </style>
 <script>
 	// 인증 실패 알림창
@@ -133,56 +150,69 @@
 	};
   
 	function resendCode() {
-		// 로딩 메시지 표시
-		Swal.fire({
-			title: '코드 전송 중...',
-			text: '잠시만 기다려 주세요!',
-			allowOutsideClick: false,
-			allowEscapeKey: false,
-			showConfirmButton: false,
-			didOpen: () => {
-				Swal.showLoading(); // 로딩 애니메이션 추가
-			}
-		});
-  	
-		// 이메일 인증 코드 요청
-		fetch('/find-password/resend-code', {
-			method: 'POST'
-		})
-		.then(response => response.json()) // JSON 응답 처리
-		.then(data => {
-			Swal.close(); // 로딩창 닫기
+		// 현재 body의 스타일을 저장
+	    const originalHeight = document.body.style.height;
+	    const originalOverflow = document.body.style.overflow;
 
-			if (data.errorMessage) {
-				Swal.fire({
-					icon: 'error',
-					title: '코드 전송 실패',
-					text: data.errorMessage,
-					confirmButtonColor: '#d33',
-					confirmButtonText: '확인'
- 				});
-          	}
-      	})
-      	.catch(error => {
-         	Swal.close();
-         	console.error("Error:", error);
-          	Swal.fire({
-              	icon: 'error',
-              	title: '오류 발생',
-              	text: '인증 코드를 전송할 수 없습니다. 다시 시도해 주세요.',
-              	confirmButtonColor: '#d33',
-              	confirmButtonText: '확인'
-          	});
-      	});
-  	}
- </script>
+	    // SweetAlert2 로딩 모달 표시
+	    Swal.fire({
+	        title: '코드 전송 중...',
+	        text: '잠시만 기다려 주세요!',
+	        allowOutsideClick: false,
+	        allowEscapeKey: false,
+	        showConfirmButton: false,
+	        didOpen: () => {
+	            Swal.showLoading(); // 로딩 애니메이션 추가
+	            document.body.style.overflow = "hidden"; // 모달 띄울 때 스크롤 막기
+	        }
+	    });
+
+	    // 이메일 인증 코드 요청
+	    fetch('/find-password/resend-code', {
+	        method: 'POST'
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        // 모달 닫기 전에 body 스타일 복구
+	        document.body.style.height = originalHeight;
+	        document.body.style.overflow = originalOverflow;
+
+	        Swal.close(); // 로딩창 닫기
+
+	        if (data.errorMessage) {
+	            Swal.fire({
+	                icon: 'error',
+	                title: '코드 전송 실패',
+	                text: data.errorMessage,
+	                confirmButtonColor: '#d33',
+	                confirmButtonText: '확인'
+	            });
+	        }
+	    })
+	    .catch(error => {
+	        // 모달 닫기 전에 body 스타일 복구
+	        document.body.style.height = originalHeight;
+	        document.body.style.overflow = originalOverflow;
+
+	        Swal.close();
+	        Swal.fire({
+	            icon: 'error',
+	            title: '오류 발생',
+	            text: '인증 코드를 전송할 수 없습니다. 다시 시도해 주세요.',
+	            confirmButtonColor: '#d33',
+	            confirmButtonText: '확인'
+	        });
+	    });
+	}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="find-container">
         <h1>이메일 인증</h1>
         <p class="description">
-            <strong><%= email %></strong>로 인증 코드를 전송했습니다.
+            <strong><%= email %></strong>으로 인증 코드를 전송했습니다.<br>
+            해당 인증코드는 5분간 유효합니다.
         </p>
 
         <form action="/find-password/verify-code" method="post">

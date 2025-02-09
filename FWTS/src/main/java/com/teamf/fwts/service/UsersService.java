@@ -71,13 +71,13 @@ public class UsersService {
     // 중복 확인
     public boolean isDuplicate(String type, String value) {
     	// 사업자등록번호 중복 확인
-        if ("businessNo".equals(type)) {
+        if ("businessNo".equals(type))
         	return userDao.checkBesinessNo(value) > 0;
-        }
+
         // 나머지 중복 확인
-        if ("email".equals(type) || "username".equals(type)) {
+        if ("email".equals(type) || "username".equals(type))
         	return userDao.checkEmailOrUsername(type, value) > 0;
-        }
+        	
         return false;
     }
     
