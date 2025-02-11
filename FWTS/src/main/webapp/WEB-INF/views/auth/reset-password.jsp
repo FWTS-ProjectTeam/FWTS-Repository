@@ -12,6 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 비밀번호 재설정</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -24,7 +25,7 @@
         align-items: center;
         height: 100vh;
     }
-    .find-container {
+    .container {
         text-align: center;
         max-width: 400px;
         width: 100%;
@@ -34,7 +35,7 @@
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .find-container h1 {
+    .container h1 {
         color: #ff6699;
         font-weight: 600;
         margin-bottom: 15px;
@@ -62,7 +63,6 @@
         border-radius: 6px;
         font-size: 14px;
         outline: none;
-        transition: border-color 0.3s;
         box-sizing: border-box;
     }
     .input-group input:focus {
@@ -81,7 +81,6 @@
 	    border-radius: 6px;
 	    font-size: 14px;
 	    outline: none;
-	    transition: border-color 0.3s;
 	    box-sizing: border-box;
 	    padding-right: 40px; /* 아이콘 공간 확보 */
 	}
@@ -108,12 +107,8 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        transition: background-color 0.3s;
         background-color: #ff6699;
         color: #fff;
-    }
-    .button-container button:hover {
-        background-color: #ff5577;
     }
     .error-message {
         color: red;
@@ -121,6 +116,36 @@
         margin-bottom: 10px;
     }
 </style>
+</head>
+<body>
+<div class="container">
+    <h1>비밀번호 재설정</h1>
+    <p class="description">새 비밀번호를 입력하세요.</p>
+
+    <form id="password-content" action="/find-password/reset-password" method="post"> 
+		<div class="input-group">
+		   <label for="password">비밀번호</label>
+		   <div class="password-container">
+		       <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
+		       <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
+		    </div>
+		</div>
+
+		<div class="input-group">
+		    <label for="confirm-password">비밀번호 확인</label>
+		    <div class="password-container">
+		        <input type="password" id="confirm-password" name="confirmPassword" value="${inputData.confirmPassword}" maxlength="20">
+		       <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
+		    </div>
+		</div>
+	
+	   <p class="error-message" id="error-message"></p>
+	
+	   <div class="button-container">
+	       <button type="button" onclick="validateForm()">비밀번호 변경</button>
+	    </div>
+	</form>
+</div>
 <script>    
 	// 인증 실패 알림창
   	window.onload = function() {
@@ -130,7 +155,7 @@
               	title: '오류 발생',
               	text: "${errorMessage}", 
               	confirmButtonColor: '#d33',
-              	confirmButtonText: '확인'
+				confirmButtonText: '확인'
           	});
       	</c:if>
   	};
@@ -145,8 +170,8 @@
       	// 비밀번호 정규식: 영문 + 숫자 + 특수문자 포함
       	var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]*$/;
 
-      	if (!password) {
-      		alert("비밀번호(을)를 입력해주세요.")
+      	if (!password || !confirmPassword) {
+      		alert("비밀번호를 입력해주세요.")
       		return false;
       	}
       	
@@ -183,36 +208,5 @@
          }
      }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-    <div class="find-container">
-        <h1>비밀번호 재설정</h1>
-        <p class="description">새 비밀번호를 입력하세요.</p>
-
-        <form id="password-content" action="/find-password/reset-password" method="post"> 
-		    <div class="input-group">
-			    <label for="password">비밀번호</label>
-			    <div class="password-container">
-			        <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
-			        <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
-			    </div>
-			</div>
-			
-			<div class="input-group">
-			    <label for="confirm-password">비밀번호 확인</label>
-			    <div class="password-container">
-			        <input type="password" id="confirm-password" name="confirmPassword" value="${inputData.confirmPassword}" maxlength="20">
-			        <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
-			    </div>
-			</div>
-		
-		    <p class="error-message" id="error-message"></p>
-		
-		    <div class="button-container">
-		        <button type="button" onclick="validateForm()">비밀번호 변경</button>
-		    </div>
-		</form>
-    </div>
 </body>
 </html>

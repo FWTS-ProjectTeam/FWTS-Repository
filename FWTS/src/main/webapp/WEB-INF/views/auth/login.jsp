@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 로그인</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -19,7 +20,7 @@
         align-items: center;
         height: 100vh;
     }
-    .login-container {
+    .container {
         text-align: center;
         max-width: 400px;
         width: 100%;
@@ -29,15 +30,15 @@
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .login-container h1 {
+    .container h1 {
         margin-bottom: 20px;
     }
-    .login-container h1 a {
+    .container h1 a {
     	text-decoration: none;
     	color: #ff6699;
     }
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
+    .container input[type="text"],
+    .container input[type="password"] {
         width: 100%;
         padding: 10px;
         margin: 10px 0;
@@ -46,8 +47,8 @@
         box-sizing: border-box;
         outline: none;
     }
-    .login-container input[type="text"]:focus,
-    .login-container input[type="password"]:focus {
+    .container input[type="text"]:focus,
+    .container input[type="password"]:focus {
 		border-color: #ff6699;
 	}
     .remember-me {
@@ -59,7 +60,7 @@
     .remember-me label {
         font-size: 14px;
     }
-    .login-container button {
+    .container button {
         width: 100%;
         padding: 10px;
         background-color: #ff6699;
@@ -69,9 +70,6 @@
         cursor: pointer;
         font-size: 16px;
         font-weight: 600;
-    }
-    .login-container button:hover {
-        background-color: #ff5577;
     }
     .links-container {
         display: flex;
@@ -88,8 +86,38 @@
         text-decoration: none;
         color: #333;
     }
+    
+    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
+<body>
+<div class="container">
+    <h1><a href="/">생화24</a></h1>
+    <form id="login-content" action="/login" method="POST">
+        <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
+        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+        
+        <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">아이디 저장</label>
+        </div>
+        <button type="button" onclick="validateForm()">로그인</button>
+    </form>
+    
+    <div class="links-container">
+        <a href="/sign-up" class="bold-text">회원가입</a>
+        <div>
+            <a href="/find-id" class="no-underline">아이디 찾기</a>
+            <span>|</span>
+            <a href="/find-password" class="no-underline">비밀번호 찾기</a>
+        </div>
+    </div>
+</div>
 <script>
 	//로그인 페이지 로드 시 실행
 	window.onload = function () {
@@ -110,66 +138,40 @@
 	        document.getElementById("remember").checked = true; // 체크박스 활성화
 	    }
 	};
-
-    // 쿠키 설정 함수 (아이디 저장)
-    function setCookie(name, value, days) {
-    	var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // days 일 후 만료
-        document.cookie = name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
-    }
-
-    // 쿠키 가져오기
-    function getCookie(name) {
-    	var cookies = document.cookie.split('; ');
-        for (var i = 0; i < cookies.length; i++) {
-        	var parts = cookies[i].split('=');
-            if (parts[0] === name) {
-                return parts[1];
-            }
-        }
-        return "";
-    }
-    
- 	// 유효성 검사
+	
+	// 쿠키 설정 함수 (아이디 저장)
+	function setCookie(name, value, days) {
+		var date = new Date();
+	    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // days 일 후 만료
+	    document.cookie = name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
+	}
+	
+	// 쿠키 가져오기
+	function getCookie(name) {
+		var cookies = document.cookie.split('; ');
+	    for (var i = 0; i < cookies.length; i++) {
+	    	var parts = cookies[i].split('=');
+	        if (parts[0] === name) {
+	            return parts[1];
+	        }
+	    }
+	    return "";
+	}
+	
+	// 유효성 검사
 	function validateForm() {
 		const form = document.getElementById("login-content");
 		const username = document.getElementById("username").value;
 		const password = document.getElementById("password").value;
-      
+	  
 		if (!username || !password) {
 			alert("아이디 또는 비밀번호를 입력하세요.");
 			return;
 		}
-
+	
 		form.requestSubmit(); // 폼 제출 실행
 	}
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<body>
-    <div class="login-container">
-        <h1><a href="/">생화24</a></h1>
-        <form id="login-content" action="/login" method="POST">
-            <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
-            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
-            
-            <div class="remember-me">
-                <input type="checkbox" id="remember">
-                <label for="remember">아이디 저장</label>
-            </div>
-            <button type="button" onclick="validateForm()">로그인</button>
-        </form>
-        
-        <div class="links-container">
-            <a href="/sign-up" class="bold-text">회원가입</a>
-            <div>
-                <a href="/find-id" class="no-underline">아이디 찾기</a>
-                <span>|</span>
-                <a href="/find-password" class="no-underline">비밀번호 찾기</a>
-            </div>
-        </div>
-    </div>
-</body>
-<script>
+
 	//폼 제출 시 실행되는 함수
 	document.querySelector("form").addEventListener("submit", function () {
 	    var username = document.querySelector("input[name='username']").value;
@@ -184,4 +186,5 @@
 	    form.requestSubmit(); // 폼 제출 실행
 	});
 </script>
+</body>
 </html>

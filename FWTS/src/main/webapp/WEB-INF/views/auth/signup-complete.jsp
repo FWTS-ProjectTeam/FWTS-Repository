@@ -48,18 +48,15 @@
         text-decoration: none;
         font-weight: 600;
     }
-    .button-container a:hover {
-    	background-color: #ff5577;
-    }
 </style>
 </head>
 <body>
-    <div class="container">
-        <h1>가입 완료!</h1>
-        <p>가입을 축하합니다. 이제 다양한 서비스를 이용해보세요.</p>
-        <div class="button-container">
-            <a href="/login">로그인 하기</a>
-        </div>
+<div class="container">
+    <h1>가입 완료</h1>
+    <p>가입을 축하합니다. 이제 다양한 생화24 서비스를 이용해보세요.</p>
+    <div class="button-container">
+        <a href="/login">로그인 하기</a>
     </div>
+</div>
 </body>
 </html>

@@ -2,18 +2,20 @@ package com.teamf.fwts.entity;
 
 import java.util.Date;
 
+import com.teamf.fwts.validation.NotEmptyHtml;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class InquiryBoard {
-	private int inquiryId;
+	private Integer inquiryId;
 	private Users writer;
 	@NotBlank
 	@Size(max = 64)
 	private String inquiryTitle;
-	@NotBlank
+	@NotEmptyHtml
 	private String inquiryContent;
 	private Date createdDate;
 }

@@ -25,8 +25,9 @@ public class SignupDto {
 	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\\d!@#$%^&*()_+=-]{8,20}$",
 			 message = "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.")
     private String password;
+	@NotNull
     @Min(1) @Max(2)
-    private int role;
+    private Integer role;
     
     // 상세 회원 정보
     @NotBlank

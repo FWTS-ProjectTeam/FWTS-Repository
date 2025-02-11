@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class InquiryListDto {
-	private int inquiryId;
+	private Integer inquiryId;
 	private String username;
 	private String inquiryTitle;
 	private Date createdDate;
