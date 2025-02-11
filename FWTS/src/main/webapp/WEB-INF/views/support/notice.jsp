@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -52,11 +53,11 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
-        font-size: 16px;
         margin-left: 110px;
         background-color: #fff;
     }
     .search-box {
+    	font-size: 14px;
         border: none;
         outline: none;
         flex-grow: 1;
@@ -123,43 +124,17 @@
         color: #fff;
         border-radius: 5px;
     }
-    .search-board-container {
+	.search-board-container {
+    	width: 100%;
+    	height: 40px;
     	display: flex;
-     	align-items: center;
-     	justify-content: end;
-     	margin-bottom: 20px;
- 	}
- 	.search-category {
- 		width: 80px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	background-color: #fff;
-     	margin-right: 10px;
- 	}
- 	.search-board-box {
- 		width: 280px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	outline: none;
- 	}
- 	.search-board-button {
-     	padding: 10px 15px;
-     	border: none;
-     	border-radius: 5px;
-     	background-color: #ff7f9d;
-     	color: #fff;
-     	font-size: 16px;
-     	font-weight: 600;
-     	cursor: pointer;
-     	margin-left: 10px;
- 	}
+	    align-items: center;
+	    justify-content: end;
+	    margin-bottom: 20px;
+	}
     .table-container {
         width: 100%;
-        margin: 82px 10px 0px 10px;
+        margin: 20px 10px 0px 10px;
     }
     table {
         width: 100%;
@@ -237,9 +212,17 @@
 			    </div>
             </div>
             <div class="header-right">
-                <a href="/login"><strong>로그인</strong></a>
-                <a href="/sign-up">회원가입</a>
-            </div>
+			    <!-- 로그인하지 않은 경우 -->
+			    <sec:authorize access="isAnonymous()">
+			        <a href="/login"><strong>로그인</strong></a>
+			        <a href="/sign-up">회원가입</a>
+			    </sec:authorize>
+			
+			    <!-- 로그인한 경우 -->
+			    <sec:authorize access="isAuthenticated()">
+			        <a href="/logout">로그아웃</a>
+			    </sec:authorize>
+			</div>
         </div>
         <div class="nav-container">
             <div class="nav">
@@ -249,8 +232,8 @@
                 <a href="#">기타</a>
             </div>
             <div class="nav-right">
-                <a href="#">마이페이지</a>
-                <a href="#">고객센터</a>
+                <a href="/mypage/edit-profile">마이페이지</a>
+                <a href="/support-center/notice">고객센터</a>
             </div>
         </div>
         
@@ -262,6 +245,8 @@
             </div>
             
             <div class="table-container">
+            	<div class="search-board-container"></div>
+            
                 <table>
                     <thead>
                         <tr>

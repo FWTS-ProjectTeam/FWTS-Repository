@@ -12,23 +12,28 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+	@SuppressWarnings("removal")
 	@Bean
-    SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
-		security.csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .authorizeHttpRequests(auth -> auth
-                		.requestMatchers("/mypage/**").authenticated() // 인증자 허용 경로
-                		.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 허용 경로
-                		.anyRequest().permitAll()
-                )
-				.formLogin(login -> login
-						.loginPage("/login")
-						.defaultSuccessUrl("/", true)
-						.failureUrl("/login?error=true")
-						.permitAll())
-				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/").permitAll());
-		
-        return security.build();
-    }
+	SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
+	    security.csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
+	            .authorizeHttpRequests(auth -> auth
+	                    .requestMatchers("/mypage/**").authenticated() // 인증자 허용 경로
+	                    .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 허용 경로
+	                    .anyRequest().permitAll()
+	            )
+	            .formLogin(login -> login
+	                    .loginPage("/login")
+	                    .defaultSuccessUrl("/", true)
+	                    .failureUrl("/login?error=true")
+	                    .permitAll())
+	            .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/").permitAll())
+	            .headers(headers -> headers
+	                .frameOptions().sameOrigin()  // X-Frame-Options 설정: 같은 도메인에서만 iframe 사용 가능
+	            );
+
+	    return security.build();
+	}
+
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {

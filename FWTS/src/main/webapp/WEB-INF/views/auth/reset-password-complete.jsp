@@ -18,7 +18,7 @@
        align-items: center;
        height: 100vh;
    }
-   .find-container {
+   .container {
        text-align: center;
        max-width: 400px;
        width: 100%;
@@ -28,7 +28,7 @@
        border-radius: 10px;
        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
    }
-   .find-container h1 {
+   .container h1 {
        color: #ff6699;
        font-weight: 600;
        margin-bottom: 15px;
@@ -57,14 +57,10 @@
        border: none;
        border-radius: 6px;
        cursor: pointer;
-       transition: background-color 0.3s;
        box-sizing: border-box;
-   }
-   .btn {
        background-color: #ff6699;
        color: #fff;
    }
-   .btn:hover { background-color: #ff5577; }
    .links-container {
        margin-top: 20px;
        font-size: 14px;
@@ -77,17 +73,17 @@
 </style>
 </head>
 <body>
-    <div class="find-container">
-        <h1>비밀번호 재설정 성공</h1>
-        <p class="result-message">비밀번호가 재설정되었습니다.</p>
+<div class="container">
+    <h1>재설정 완료</h1>
+    <p class="result-message">비밀번호가 재설정되었습니다.</p>
 
-        <div class="button-container">
-            <button class="btn" onclick="location.href='/login'">로그인 하기</button>
-        </div>
-
-        <div class="links-container">
-            <a href="/find-id">계속 찾으러 가기</a>
-        </div>
+    <div class="button-container">
+        <button onclick="location.href='/login'">로그인 하기</button>
     </div>
+
+    <div class="links-container">
+        <a href="/find-id">계속 찾으러 가기</a>
+    </div>
+</div>
 </body>
 </html>

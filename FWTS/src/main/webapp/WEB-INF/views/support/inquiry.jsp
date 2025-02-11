@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -53,11 +54,11 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
-        font-size: 16px;
         margin-left: 110px;
         background-color: #fff;
     }
     .search-box {
+    	font-size: 14px;
         border: none;
         outline: none;
         flex-grow: 1;
@@ -125,6 +126,8 @@
         border-radius: 5px;
     }
     .search-board-container {
+    	width: 100%;
+    	height: 40px;
     	display: flex;
 	    align-items: center;
 	    justify-content: end;
@@ -135,7 +138,7 @@
 	    padding: 10px;
 	    border: 1px solid #ccc;
 	    border-radius: 5px;
-	    font-size: 16px;
+	    font-size: 14px;
 	    background-color: #fff;
 	    margin-right: 10px;
 	}
@@ -144,7 +147,7 @@
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        font-size: 16px;
+        font-size: 14px;
         outline: none;
     }
     .search-board-button {
@@ -222,6 +225,14 @@
         border-radius: 5px;
         color: #fff;
     }
+    button {
+		background: #ff7f9d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+	}
 </style>
 </head>
 <body>
@@ -237,9 +248,17 @@
 			    </div>
             </div>
             <div class="header-right">
-                <a href="/login"><strong>로그인</strong></a>
-                <a href="/sign-up">회원가입</a>
-            </div>
+			    <!-- 로그인하지 않은 경우 -->
+			    <sec:authorize access="isAnonymous()">
+			        <a href="/login"><strong>로그인</strong></a>
+			        <a href="/sign-up">회원가입</a>
+			    </sec:authorize>
+			
+			    <!-- 로그인한 경우 -->
+			    <sec:authorize access="isAuthenticated()">
+			        <a href="/logout">로그아웃</a>
+			    </sec:authorize>
+			</div>
         </div>
         <div class="nav-container">
             <div class="nav">
@@ -249,8 +268,8 @@
                 <a href="#">기타</a>
             </div>
             <div class="nav-right">
-                <a href="#">마이페이지</a>
-                <a href="#">고객센터</a>
+                <a href="/mypage/edit-profile">마이페이지</a>
+                <a href="/support-center/notice">고객센터</a>
             </div>
         </div>
         
@@ -331,6 +350,10 @@
 				        </c:otherwise>
 				    </c:choose>
 				</div>
+				
+				<div class="button-container">
+		            <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
+		        </div>
             </div>
         </div>
     </div>

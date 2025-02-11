@@ -1,0 +1,221 @@
+package com.teamf.fwts.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.teamf.fwts.dto.InquiryListDto;
+import com.teamf.fwts.dto.NoticeListDto;
+import com.teamf.fwts.entity.InquiryBoard;
+import com.teamf.fwts.entity.NoticeBoard;
+import com.teamf.fwts.service.InquiryBoardService;
+import com.teamf.fwts.service.NoticeBoardService;
+import com.teamf.fwts.service.UsersService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/support-center")
+public class SupportController {
+	private final NoticeBoardService noticeBoardService;
+	private final InquiryBoardService inquiryBoardService;
+	private final UsersService userService;
+	
+	// 공지사항 조회
+	@GetMapping("/notice")
+	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
+	    int count = noticeBoardService.count();
+
+	    if (count > 0) {
+	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int startRow = (page - 1) * perPage; // 페이지 번호
+	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
+
+	        Map<String, Object> paging = new HashMap<>();
+	        paging.put("start", startRow);
+	        paging.put("count", perPage);
+
+	        List<NoticeListDto> notices = noticeBoardService.noticeList(paging);
+
+	        model.addAttribute("notices", notices);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", totalPages);
+	    }
+
+	    model.addAttribute("count", count);
+	    return "support/notice";
+	}
+	
+	// 공지사항 상세 조회
+	@GetMapping("/notice/{id}")
+	public String noticeDetail(@PathVariable("id") int id, Model model) {
+		NoticeBoard notice = noticeBoardService.noticeOne(id);
+		
+		model.addAttribute("notice", notice);
+		return "support/notice-detail";
+	}
+	
+	// 문의사항 조회
+	@GetMapping("/inquiry")
+    public String inquiryAll(@RequestParam(name = "category", required = false) String category,
+    	    				 @RequestParam(name = "keyword", required = false) String keyword,
+    	    				 @RequestParam(name = "page", defaultValue = "1")  Integer page,
+    						 Model model) {
+		// 카테고리 값 검증
+		category = Optional.ofNullable(category)
+                .filter(Set.of("all", "title", "content")::contains)
+                .orElse(null);
+
+		Map<String, Object> paging = new HashMap<>();
+        paging.put("category", category);
+        paging.put("keyword", keyword);
+        
+		int count = inquiryBoardService.count(paging);
+
+	    if (count > 0) {
+	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int startRow = (page - 1) * perPage; // 페이지 번호
+	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
+
+	        paging.put("start", startRow);
+	        paging.put("count", perPage);
+
+	        List<InquiryListDto> inquirys = inquiryBoardService.inquiryList(paging);
+	        
+	        model.addAttribute("inquirys", inquirys);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", totalPages);
+	    }
+	    
+	    model.addAttribute("count", count);
+	    model.addAttribute("category", category);
+	    model.addAttribute("keyword", keyword);
+		return "support/inquiry";
+    }
+	
+	// 문의사항 상세 조회
+	@GetMapping("/inquiry/{id}")
+	public String inquiryDetail(@PathVariable("id") int id, Model model) {
+		InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+		
+		model.addAttribute("inquiry", inquiry);
+		return "support/inquiry-detail";
+	}
+	
+	// 문의사항 편집 페이지
+	@GetMapping("/inquiry/edit")
+	public String inquiryEditForm(@RequestParam(name = "id", required = false) Integer id, 
+	                          	  Authentication authentication, Model model) {
+		// 로그인 체크
+	    if (authentication == null)
+	        return "redirect:/login"; // 로그인 페이지
+		
+	    // 글 수정 처리
+	    if (id != null) {
+			InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+		    if (inquiry == null)
+		    	return "redirect:/support-center/inquiry"; // 문의사항 페이지
+
+		    // 작성자 검증
+		    String writerUsername = inquiry.getWriter().getUsername();
+		    if (!writerUsername.equals(authentication.getName()))
+		        return "redirect:/support-center/inquiry"; // 문의사항 페이지
+		    
+		    model.addAttribute("inquiry", inquiry);
+	    }
+
+	    return "support/edit-inquiry";
+	}
+	
+	// 문의사항 편집
+	@PostMapping("/inquiry/edit")
+	public String inquiryEdit(@Valid InquiryBoard inquiry, BindingResult bindingResult,
+	                          Authentication authentication, Model model) {
+	    // 로그인 체크
+	    if (authentication == null)
+	        return "redirect:/login";
+
+	    // 유효성 검사
+	    if (bindingResult.hasErrors()) {
+	    	if (bindingResult.hasFieldErrors("inquiryContent"))
+	    		inquiry.setInquiryContent(null);
+	    	
+	    	model.addAttribute("errorMessage", "제목 또는 내용을 입력하세요.");
+	        model.addAttribute("inquiry", inquiry);
+	        return "support/edit-inquiry";
+	    }
+
+	    try {
+	        Integer inquiryId;
+
+	        // 글 작성
+	        if (inquiry.getInquiryId() == null) {
+	        	inquiry.setWriter(userService.findByUsername(authentication.getName()));
+	            inquiryBoardService.saveInquiry(inquiry);
+	            inquiryId = inquiry.getInquiryId();
+	        }
+	        
+	        // 글 수정
+	        else {
+	            InquiryBoard oldInquiry = inquiryBoardService.inquiryOne(inquiry.getInquiryId());
+	            String writerUsername = oldInquiry.getWriter().getUsername();
+
+	            // 작성자 검증
+	            if (!writerUsername.equals(authentication.getName()))
+	                return "redirect:/support-center/inquiry"; // 문의사항 페이지
+
+	            // 기존 글 업데이트
+	            oldInquiry.setInquiryTitle(inquiry.getInquiryTitle());
+	            oldInquiry.setInquiryContent(inquiry.getInquiryContent());
+	            inquiryBoardService.updateInquiry(oldInquiry);
+	            inquiryId = oldInquiry.getInquiryId();
+	        }
+
+	        return "redirect:/support-center/inquiry/" + inquiryId;
+	    } catch (Exception e) {
+	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+	        model.addAttribute("inquiry", inquiry);
+	        return "support/edit-inquiry";
+	    }
+	}
+
+	// 문의사항 삭제
+	@ResponseBody
+	@DeleteMapping("/inquiry/delete/{id}")
+	public Map<String, Boolean> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
+	    Map<String, Boolean> response = new HashMap<>();
+	    
+	    try {
+	    	InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+		    String currentUsername = inquiry.getWriter().getUsername();
+		    
+		    // 작성자 검증 및 처리
+		    if (currentUsername.equals(authentication.getName())) {
+		    	inquiryBoardService.deleteInquiryById(id);
+		        response.put("success", true);
+		    } else {
+		    	response.put("success", false);
+		    }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    
+	    return response;
+	}
+}

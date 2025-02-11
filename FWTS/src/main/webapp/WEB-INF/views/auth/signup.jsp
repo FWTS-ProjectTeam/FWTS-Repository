@@ -68,7 +68,6 @@
         cursor: pointer;
         white-space: nowrap;
     }
-    .input-group button:hover { background-color: #ff5577; }
     .full-width {
         width: 100%;
         padding: 10px;
@@ -134,7 +133,6 @@
         width: 100%;
         font-size: 16px;
     }
-    .button-container button:hover { background-color: #ff5577; }
   </style>
     <script>
 		// 회원가입 실패 알림창
@@ -176,45 +174,48 @@
 		        }
 		    });
 
-		    const requestUrl = "/check-duplicate?type=" + encodeURIComponent(type) + "&value=" + encodeURIComponent(value);
-		    
-		    // AJAX 요청
-		    fetch(requestUrl)
-		        .then(response => response.json()) // 서버 응답(JSON)을 파싱
-		        .then(isDuplicate => {
-		            if (isDuplicate) {
-		                // 중복된 경우
-		                Swal.fire({
-		                    icon: 'error',
-		                    title: '중복',
-		                    text: typeText + "이(가) 이미 사용 중입니다.",
-		                    confirmButtonColor: '#d33',
-		                    confirmButtonText: '확인'
-		                });
-		            } else {
-		                // 사용 가능한 경우
-		                Swal.fire({
-		                    icon: 'success',
-		                    title: '사용 가능',
-		                    text: typeText + "을(를) 사용할 수 있습니다.",
-		                    confirmButtonColor: '#3085d6',
-		                    confirmButtonText: '확인'
-		                });
-		            }
-		        })
-		        .catch(error => {
-		            // 오류 발생 시
-		            console.error("Error:", error);
-		            Swal.fire({
-		                icon: 'error',
-		                title: '오류 발생',
-		                text: "서버와 연결할 수 없습니다.",
-		                confirmButtonColor: '#d33',
-		                confirmButtonText: '확인'
-		            });
-		        });
+		 	// AJAX 요청
+			fetch("/check-duplicate", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ type: type, value: value }) // JSON 형식으로 변환
+			})
+	        .then(response => response.json()) // 서버 응답을 파싱
+	        .then(isDuplicate => {
+	            if (isDuplicate) {
+	                // 중복된 경우
+	                Swal.fire({
+	                    icon: 'error',
+	                    title: '중복',
+	                    text: typeText + "이(가) 이미 사용 중입니다.",
+	                    confirmButtonColor: '#d33',
+	                    confirmButtonText: '확인'
+	                });
+	            } else {
+	                // 사용 가능한 경우
+	                Swal.fire({
+	                    icon: 'success',
+	                    title: '사용 가능',
+	                    text: typeText + "을(를) 사용할 수 있습니다.",
+	                    confirmButtonColor: '#3085d6',
+	                    confirmButtonText: '확인'
+	                });
+	            }
+	        })
+	        .catch(error => {
+	            // 오류 발생 시
+	            console.error("Error:", error);
+	            Swal.fire({
+	                icon: 'error',
+	                title: '오류 발생',
+	                text: "서버와 연결할 수 없습니다.",
+	                confirmButtonColor: '#d33',
+	                confirmButtonText: '확인'
+	            });
+	        });
 		}
-
 	
 	    // 사업자등록번호 확인
 	    function verifyBusinessNumber() {
@@ -240,41 +241,47 @@
 
 		    const requestUrl = "/check-business-no?businessNo=" + encodeURIComponent(businessNo);
 		    
-		    // AJAX 요청
-		    fetch(requestUrl)
-		        .then(response => response.json()) // 서버 응답(JSON)을 파싱
-		        .then(isDuplicate => {
-		            if (isDuplicate) {
-		                // 중복된 경우
-		                Swal.fire({
-		                    icon: 'error',
-		                    title: '중복',
-		                    text: "사업자 등록번호이(가) 이미 사용 중입니다.",
-		                    confirmButtonColor: '#d33',
-		                    confirmButtonText: '확인'
-		                });
-		            } else {
-		                // 사용 가능한 경우
-		                Swal.fire({
-		                    icon: 'success',
-		                    title: '사용 가능',
-		                    text: "사업자 등록번호을(를) 사용할 수 있습니다.",
-		                    confirmButtonColor: '#3085d6',
-		                    confirmButtonText: '확인'
-		                });
-		            }
-		        })
-		        .catch(error => {
-		            // 오류 발생 시
-		            console.error("Error:", error);
-		            Swal.fire({
-		                icon: 'error',
-		                title: '오류 발생',
-		                text: "서버와 연결할 수 없습니다.",
-		                confirmButtonColor: '#d33',
-		                confirmButtonText: '확인'
-		            });
-		        });
+		 	// AJAX 요청
+			fetch("/check-business-no", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ type: "businessNo", value: businessNo }) // JSON 형식으로 변환
+			})
+	        .then(response => response.json()) // 서버 응답(JSON)을 파싱
+	        .then(isDuplicate => {
+	            if (isDuplicate) {
+	                // 중복된 경우
+	                Swal.fire({
+	                    icon: 'error',
+	                    title: '중복',
+	                    text: "사업자 등록번호이(가) 이미 사용 중입니다.",
+	                    confirmButtonColor: '#d33',
+	                    confirmButtonText: '확인'
+	                });
+	            } else {
+	                // 사용 가능한 경우
+	                Swal.fire({
+	                    icon: 'success',
+	                    title: '사용 가능',
+	                    text: "사업자 등록번호을(를) 사용할 수 있습니다.",
+	                    confirmButtonColor: '#3085d6',
+	                    confirmButtonText: '확인'
+	                });
+	            }
+	        })
+	        .catch(error => {
+	            // 오류 발생 시
+	            console.error("Error:", error);
+	            Swal.fire({
+	                icon: 'error',
+	                title: '오류 발생',
+	                text: "서버와 연결할 수 없습니다.",
+	                confirmButtonColor: '#d33',
+	                confirmButtonText: '확인'
+	            });
+	        });
 	    }
 	
 	    // 카카오 우편번호 검색 API를 이용한 주소 검색

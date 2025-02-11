@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class NoticeListDto {
-	private int noticeId;
+	private Integer noticeId;
 	private String noticeTitle;
 	private Date createdDate;
 }

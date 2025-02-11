@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 계정 찾기</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 	body {
 		font-family: Arial, sans-serif;
@@ -19,7 +20,7 @@
 		align-items: center;
 		height: 100vh;
 	}
-	.find-container {
+	.container {
 		text-align: center;
 		max-width: 400px;
 		width: 100%;
@@ -29,11 +30,11 @@
 		border-radius: 10px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
-	.find-container h1 {
+	.container h1 {
 		font-weight: 600;
 		margin-bottom: 15px;
 	}
-	.find-container h1 a {
+	.container h1 a {
     	text-decoration: none;
     	color: #ff6699;
     }
@@ -49,7 +50,6 @@
 		cursor: pointer;
 		font-weight: 600;
 		color: #999;
-		transition: color 0.3s;
 	}
 	.tab.active {
 		color: #ff6699;
@@ -80,7 +80,6 @@
 		border-radius: 6px;
 		font-size: 14px;
 		outline: none;
-		transition: border-color 0.3s;
 		box-sizing: border-box; /* 패딩과 보더 포함하여 크기 설정 */
 	}
 	.input-group input:focus {
@@ -99,12 +98,8 @@
 		border: none;
 		border-radius: 6px;
 		cursor: pointer;
-		transition: background-color 0.3s;
 		background-color: #ff6699;
 		color: #fff;
-	}
-	.button-container button:hover {
-		background-color: #ff5577;
 	}
 	.links-container {
 		margin-top: 20px;
@@ -116,23 +111,50 @@
 		font-weight: 600;
 	}
 	/* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
-	.swal2-container {
-	    align-items: center !important;
-	    justify-content: center !important;
-	    display: flex !important;
-	    position: fixed !important;
-	}
-	/* body의 높이를 강제하지 않도록 설정 */
 	html, body {
 	    height: auto;
 	    min-height: 100vh;
 	    overflow: auto;
 	}
-	/* 모달이 뜰 때도 기존 레이아웃 유지 */
-	body.modal-open {
-	    overflow: hidden !important;
-	}
 </style>
+</head>
+<body>
+<div class="container">
+	<h1><a href="/">생화24</a></h1>
+	<div class="tabs">
+		<div class="tab" id="username" onclick="switchTab('username')">아이디
+			찾기</div>
+		<div class="tab" id="password" onclick="switchTab('password')">비밀번호
+			찾기</div>
+	</div>
+
+	<!-- 아이디 찾기 폼 -->
+	<form id="username-content" class="form-content" action="/find-id"
+		method="post">
+		<div class="input-group">
+			<label for="email">이메일</label> <input type="email" id="email-id"
+				name="email" placeholder="가입 시 등록한 이메일을 입력하세요">
+		</div>
+		<div class="button-container">
+			<button type="button" onclick="validateBeforeFindId()">확인</button>
+		</div>
+	</form>
+
+	<!-- 비밀번호 찾기 폼 -->
+	<form id="password-content" class="form-content">
+		<div class="input-group">
+			<label for="email">이메일</label> <input type="email" id="email-pw"
+				name="email" placeholder="가입 시 등록한 이메일을 입력하세요">
+		</div>
+		<div class="button-container">
+			<button type="button" onclick="sendVerificationCode()">확인</button>
+		</div>
+	</form>
+
+	<div class="links-container">
+		<a href="/login">로그인으로 돌아가기</a>
+	</div>
+</div>
 <script>
 	// 페이지 로드 시 현재 URL에 따라 탭 자동 선택
 	window.onload = function() {
@@ -156,12 +178,12 @@
  
 	// 현재 탭에 따라 URL 및 제목 변경
 	function switchTab(tab) { 
-		document.querySelectorAll('.tab').forEach(el => el.classList.remove('active')); 
-		document.querySelectorAll('.form-content').forEach(el => el.classList.remove('active')); 
-		document.getElementById(tab).classList.add('active'); 
-		document.getElementById(tab + '-content').classList.add('active'); 
+		document.querySelectorAll(".tab").forEach(el => el.classList.remove("active")); 
+		document.querySelectorAll(".form-content").forEach(el => el.classList.remove("active")); 
+		document.getElementById(tab).classList.add("active"); 
+		document.getElementById(tab + "-content").classList.add("active"); 
 
-		// URL 변경 (새로고침 없이) 
+		// URL 변경 
 		const newUrl = tab === "password" ? "/find-password" : "/find-id"; 
 		history.pushState(null, "", newUrl); 
 	}
@@ -172,7 +194,7 @@
 		const email = document.getElementById("email-id").value;
       
 		if (!email) {
-			alert("이메일을(를) 입력하세요.");
+			alert("이메일을 입력하세요.");
 			return;
 		}
 
@@ -184,29 +206,15 @@
     	const email = document.getElementById("email-pw").value;
 
     	if (!email) {
-        	alert("이메일을(를) 입력하세요.");
+        	alert("이메일을 입력하세요.");
         	return;
       	}
     	
-    	// 현재 body의 스타일을 저장
-	    const originalHeight = document.body.style.height;
-	    const originalOverflow = document.body.style.overflow;
-
      	// 로딩 메시지 표시
-      	Swal.fire({
-        	title: '코드 전송 중...',
-        	ext: '잠시만 기다려 주세요!',
-        	allowOutsideClick: false,
-        	allowEscapeKey: false,
-       		showConfirmButton: false,
-       		didOpen: () => {
-		        Swal.showLoading(); // 로딩 애니메이션 추가
-		        document.body.style.overflow = "hidden"; // 모달 띄울 때 스크롤 막기
-	        }
-		});
+      	Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
 
 		// 이메일 인증 코드 요청
-		fetch('/find-password/send-code', {
+		fetch("/find-password/send-code", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -215,10 +223,6 @@
 		})
 		.then(response => response.json()) // JSON 응답 처리
 		.then(data => {
-			// 모달 닫기 전에 body 스타일 복구
-	        document.body.style.height = originalHeight;
-	        document.body.style.overflow = originalOverflow;
-
 	        Swal.close(); // 로딩창 닫기
 		
 			if (data.errorMessage) {
@@ -234,59 +238,16 @@
 			}
 	    })
 		.catch(error => {
-			// 모달 닫기 전에 body 스타일 복구
-	        document.body.style.height = originalHeight;
-	        document.body.style.overflow = originalOverflow;
-			
 			Swal.close();
 			Swal.fire({
 				icon: 'error',
 				title: '오류 발생',
-				text: '인증 코드를 전송할 수 없습니다. 다시 시도해 주세요.',
+				text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
 				confirmButtonColor: '#d33',
 				confirmButtonText: '확인'
 			});
 		});
 	}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-	<div class="find-container">
-		<h1><a href="/">생화24</a></h1>
-		<div class="tabs">
-			<div class="tab" id="username" onclick="switchTab('username')">아이디
-				찾기</div>
-			<div class="tab" id="password" onclick="switchTab('password')">비밀번호
-				찾기</div>
-		</div>
-
-		<!-- 아이디 찾기 폼 -->
-		<form id="username-content" class="form-content" action="/find-id"
-			method="post">
-			<div class="input-group">
-				<label for="email">이메일</label> <input type="email" id="email-id"
-					name="email" placeholder="가입 시 등록한 이메일을 입력하세요">
-			</div>
-			<div class="button-container">
-				<button type="button" onclick="validateBeforeFindId()">확인</button>
-			</div>
-		</form>
-
-		<!-- 비밀번호 찾기 폼 -->
-		<form id="password-content" class="form-content">
-			<div class="input-group">
-				<label for="email">이메일</label> <input type="email" id="email-pw"
-					name="email" placeholder="가입 시 등록한 이메일을 입력하세요">
-			</div>
-			<div class="button-container">
-				<button type="button" onclick="sendVerificationCode()">확인</button>
-			</div>
-		</form>
-
-		<div class="links-container">
-			<a href="/login">로그인으로 돌아가기</a>
-		</div>
-	</div>
 </body>
 </html>

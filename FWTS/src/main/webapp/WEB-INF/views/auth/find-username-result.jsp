@@ -19,7 +19,7 @@
         align-items: center;
         height: 100vh;
     }
-    .find-container {
+    .container {
         text-align: center;
         max-width: 400px;
         width: 100%;
@@ -29,7 +29,7 @@
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .find-container h1 {
+    .container h1 {
         color: #ff6699;
         font-weight: 600;
         margin-bottom: 15px;
@@ -58,13 +58,9 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        transition: background-color 0.3s;
         box-sizing: border-box;
         background-color: #ff6699;
         color: #fff;
-    }
-    .button-container button:hover {
-    	background-color: #ff5577;
     }
     .links-container {
         margin-top: 20px;
@@ -78,7 +74,7 @@
 </style>
 </head>
 <body>
-    <div class="find-container">
+    <div class="container">
     	<c:choose>
 	        <c:when test="${not empty username}">
 	        	<h1>아이디 찾기 성공</h1>
