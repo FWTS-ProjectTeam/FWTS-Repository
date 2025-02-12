@@ -18,4 +18,6 @@ public class InquiryBoard {
 	@NotEmptyHtml
 	private String inquiryContent;
 	private Date createdDate;
+	private String reply;
+	private Date replyDate;
 }

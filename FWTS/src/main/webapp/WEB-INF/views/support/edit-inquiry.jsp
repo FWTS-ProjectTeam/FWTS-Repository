@@ -271,14 +271,15 @@
 
 	smartEditor = function() {
 	   	console.log("Naver SmartEditor");
-       	nhn.husky.EZCreator.createInIFrame({
-           	oAppRef: oEditors,
-           	elPlaceHolder: "content",
-           	sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-           	fOnAppLoad : function() {
-        	   	oEditors.getById["content"].exec("PASTE_HTML", ["${inquiry.inquiryContent}"]);
-           	},
-           	fCreator: "createSEditor2"
+	   	nhn.husky.EZCreator.createInIFrame({
+	        oAppRef: oEditors,
+	        elPlaceHolder: "content",
+	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+	        fOnAppLoad: function() {
+                const content = `${inquiry.inquiryContent}`;
+                oEditors.getById["content"].exec("PASTE_HTML", [content]);
+	        },
+	        fCreator: "createSEditor2"
        	});
        	
      	// 유효성 검사 실패

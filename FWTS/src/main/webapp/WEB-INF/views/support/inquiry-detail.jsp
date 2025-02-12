@@ -141,7 +141,6 @@
 	    justify-content: space-between; /* 왼쪽, 오른쪽 정렬 */
 	    align-items: center; /* 수직 중앙 정렬 */
 	    color: gray;
-        font-size: 0.9em;
     }
     .comment-content {
     	padding: 20px;
@@ -163,9 +162,18 @@
         font-weight: 600;
         margin-bottom: 10px;
     }
+    .date {
+        text-align: right;
+        color: gray;
+        font-size: 0.9em;
+    }
     .button-container {
-        text-align: center;
-        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        margin: 20px auto;
+    }
+    .multiple {
+        justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
     }
     .button-container button {
         background: #ff7f9d;
@@ -235,23 +243,40 @@
 			<!-- 현재 로그인한 사용자가 작성한 글이면 버튼 표시 -->
 			<sec:authorize access="isAuthenticated()">
 			    <sec:authentication property="principal.username" var="currentUser"/>
+			
+			    <!-- 작성자일 경우: 삭제, 목록, 수정 버튼 -->
 			    <c:if test="${currentUser eq inquiry.writer.username}">
-			        <div class="button-container">
+			        <div class="button-container multiple">
 			            <button onclick="deleteInquiry()">삭제</button>
+			            <button onclick="history.back()">목록</button>
 			            <button onclick="location.href='/support-center/inquiry/edit?id=${inquiry.inquiryId}'">수정</button>
 			        </div>
 			    </c:if>
+			
+			    <!-- 작성자가 아닐 경우: 목록 버튼만 보이게 -->
+			    <c:if test="${currentUser ne inquiry.writer.username}">
+			        <div class="button-container">
+			            <button onclick="history.back()">목록</button>
+			        </div>
+			    </c:if>
+			</sec:authorize>
+			
+			<!-- 비로그인 사용자: 목록 버튼만 보이게 -->
+			<sec:authorize access="isAnonymous()">
+			    <div class="button-container">
+			        <button onclick="history.back()">목록</button>
+			    </div>
 			</sec:authorize>
       
-			<div class="comment-content">
-				<h2 class="comment-title">답변</h2>
-		       	<%-- <p>${inquiry.inquiryContent}</p> --%>
-		       	<p>안녕하세요, 고객님.<br>저희 생화24를 이용해 주셔서 감사합니다.<br>이번 시스템 점검은 간단한 작업이므로 연장될 가능성은 낮습니다.</p>
-		    </div>
-        	
-	      	<div class="button-container">
-	          	<button onclick="history.back()">목록</button>
-	      	</div>
+      		<c:if test="${not empty inquiry.reply}">
+			    <div class="comment-content">
+			        <h2 class="comment-title">답변</h2>
+			        <p class="date">작성일: 
+			            <fmt:formatDate value="${inquiry.replyDate}" pattern="yyyy.MM.dd HH:mm" />
+			        </p>
+			        <p>${inquiry.reply}</p>
+			    </div>
+			</c:if>
   		</div>
     </div>
 </div>

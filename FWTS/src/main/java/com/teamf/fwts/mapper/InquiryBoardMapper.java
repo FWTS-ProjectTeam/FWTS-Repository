@@ -33,7 +33,11 @@ public interface InquiryBoardMapper {
         "</where>",
         "</script>"
     })
-	int count(Map<String, Object> paging);
+	int count(Map<String, Object> params);
+	
+	// 문의사항 내역 수 확인
+	@Select("SELECT COUNT(*) FROM inquiry_board WHERE writer_id = #{writerId}")
+	int countByWriterId(@Param("writerId") Integer writerId);
 	
 	// 문의사항 조회
 	@Select({
@@ -54,7 +58,16 @@ public interface InquiryBoardMapper {
         "LIMIT #{start}, #{count}",
         "</script>"
     })
-	List<InquiryListDto> inquiryList(Map<String, Object> paging);
+	List<InquiryListDto> findAll(Map<String, Object> params);
+	
+	// 문의사항 내역 조회
+	@Select({"SELECT ib.inquiry_id, u.username, ib.inquiry_title, ib.created_date",
+			 "FROM inquiry_board ib",
+			 "JOIN users u ON ib.writer_id = u.user_id",
+			 "WHERE ib.writer_id = #{writerId}",
+			 "ORDER BY ib.inquiry_id DESC",
+			 "LIMIT #{start}, #{count}"})
+	List<InquiryListDto> findByWriterId(Map<String, Integer> params);
 
 	// 문의사항 상세 조회
 	@Select({"SELECT ib.*, u.user_id, u.username FROM inquiry_board ib",
@@ -64,7 +77,7 @@ public interface InquiryBoardMapper {
 	    @Result(column = "user_id", property = "writer.userId"),
 	    @Result(column = "username", property = "writer.username")
 	})
-	InquiryBoard inquiryOne(@Param("id") int id);
+	InquiryBoard findByInquiryId(@Param("id") int id);
 
 	// 문의사항 작성
 	@Insert("INSERT INTO inquiry_board (inquiry_title, inquiry_content, writer_id) " +

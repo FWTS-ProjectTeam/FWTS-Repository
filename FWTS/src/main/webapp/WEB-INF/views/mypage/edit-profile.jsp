@@ -6,8 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>생화 24 - 고객센터</title>
+<title>생화 24 - 마이페이지</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -126,15 +128,13 @@
         width: 100%;
         margin: 0px 10px;
     }
-    .info-content {
+    .info-content, .password-content {
         padding: 5px 20px;
     }
     .input-group {
         display: flex;
         flex-direction: column;
-        margin-bottom: 20px;
     }
-
     .input-group label {
         font-size: 15px;
         font-weight: 600;
@@ -163,16 +163,7 @@
         justify-content: space-between;
         padding-top: 10px;
     }
-    .address-button {
-        width: 120px;
-        background: #666;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .update-button {
+    .update-button, .address-button {
         background: #ff7f9d;
         color: white;
         border: none;
@@ -181,13 +172,14 @@
         cursor: pointer;
     }
     .delete-button {
-        background: #fff;
-        color: #ff6666;
-        border: 1px solid #ff6666;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+	    background: #fff;
+	    color: #ff6666;
+	    border: 1px solid #ff6666;
+	    padding: 6px 12px;
+	    font-size: 12px;
+	    border-radius: 4px;
+	    cursor: pointer;
+	}
     .password-container {
         position: relative;
         display: flex;
@@ -215,14 +207,28 @@
     .password-container i:hover {
         color: #ff6699;
     }
-
+    .input-field, .password-container {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    margin-bottom: 10px;
+	}
+	.row-group {
+	    display: flex;
+	    align-items: center; /* 수직 정렬 */
+	    gap: 10px; /* 요소 간 간격 */
+	}
+	.error {
+	    color: red;
+	    font-size: 12px;
+	    white-space: nowrap;
+	}
     /* hr 스타일 */
     hr {
         margin: 20px 0;
         border: none;
         border-top: 1px solid #ccc;
     }
-
 </style>
 </head>
 <body>
@@ -266,77 +272,95 @@
         <div class="body-container">
             <div class="sidebar">
                 <h2>마이페이지</h2>
-                <a href="#" class="active">내 정보 관리</a>
+                <a href="/mypage/edit-profile" class="active">내 정보 관리</a>
                 <a href="#">장바구니</a>
                 <a href="#">주문 내역</a>
-                <a href="#">문의 내역</a>
+                <a href="/mypage/inquiry-history">문의 내역</a>
             </div>
             
             <div class="info-container">
                 <h2>회원정보 수정</h2>
-                    <form class="info-content">
-                        <div class="input-group">
-                            <label for="company">업체명</label>
-                            <input type="text" id="company" name="company" value="우리 꽃집">
-                        </div>
-                        <div class="input-group">
-                            <label for="ceo">대표자명</label>
-                            <input type="text" id="ceo" name="ceo" value="김대표">
-                        </div>
-                
-                        <div class="input-group">
-                            <label for="phone">핸드폰번호</label>
-                            <input type="text" id="phone" name="phone" value="010-1234-5678">
-                        </div>
-                        <div class="input-group">
-                            <label for="company-phone">업체 전화번호</label>
-                            <input type="text" id="company-phone" name="company-phone" value="02-123-4567">
-                        </div>
-                
-                        <div class="input-group">
-                            <label for="address">주소</label>
-                            <button type="button" class="address-button"><i class="fas fa-map-marker-alt"></i> 배송지 관리</button>
-                        </div>
-                
-                        <div class="button-group">
-                            <button type="submit" class="update-button">저장</button>
-                            <button type="button" class="delete-button">회원탈퇴</button>
-                        </div>
-                    </form>
+                    <form class="info-content" onsubmit="return validateForm(event)">
+					    <div class="input-group">
+					        <label for="company">업체명</label>
+					        <div class="input-field">
+					            <input type="text" id="company" name="company" value="우리 꽃집">
+					            <span class="error" id="company-error"></span>
+					        </div>
+					        
+					        <label for="ceo">대표자명</label>
+					        <div class="input-field">
+					            <input type="text" id="ceo" name="ceo" value="김대표">
+					            <span class="error-message" id="ceo-error"></span>
+					        </div>
+					        
+					        <label for="phone">핸드폰번호</label>
+					        <div class="input-field">
+					            <input type="text" id="phone" name="phone" value="010-1234-5678">
+					            <span class="error-message" id="phone-error"></span>
+					        </div>
+					        
+					        <label for="company-phone">업체 전화번호</label>
+					        <div class="input-field">
+					            <input type="text" id="company-phone" name="company-phone" value="02-123-4567">
+					            <span class="error-message" id="company-phone-error"></span>
+					        </div>
+					        
+			                <label for="postal-code">우편번호</label>
+			                <div class="input-field row-group">
+				                <input type="text" id="postal-code" name="postalCode" class="full-width" readonly>
+				                <button type="button" class="address-button" onclick="searchAddress()">주소 찾기</button>
+				            </div>
+				            
+				            <label for="address">주소</label>
+				            <div class="row-group">
+				            	<div class="input-field">
+					            	<input type="text" id="address" name="address" class="full-width" readonly>
+					            </div>
+					            <div class="input-field">
+					            	<input type="text" id="detail-address" name="detailAddress" class="full-width" maxlength="30"> 
+					            </div>
+				            </div>
+					    </div>
+					
+					    <div class="button-group">
+					        <button type="submit" class="update-button">저장</button>
+					        <button type="button" class="delete-button">회원탈퇴</button>
+					    </div>
+					</form>
                 
                 <hr>
                 
                 <h2>비밀번호 재설정</h2>
-                <form class="info-content" id="password-content" action="/find-password/reset-password" method="post"> 
+                <form class="password-content" id="password-content"> 
                     <div class="input-group">
                         <label for="current-password">현재 비밀번호</label>
-                        <div class="password-container">
-                            <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
-                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
+                        <div class="row-group">
+	                        <div class="password-container">
+	                            <input type="password" id="current-password" value="${inputData.currentPassword}" maxlength="20">
+	                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('current-password', this)"></i>
+	                        </div>
+	                        <p class="error" id="current-password-error"></p>
                         </div>
-                    </div>
-                    
-                    <div class="input-group">
+                        
                         <label for="password">비밀번호</label>
-                        <div class="password-container">
-                            <input type="password" id="new-password" name="newPassword" value="${inputData.password}" maxlength="20">
-                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('new-password', this)"></i>
+                        <div class="row-group">
+	                        <div class="password-container">
+	                            <input type="password" id="password" value="${inputData.password}" maxlength="20">
+	                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
+	                        </div>
+	                        <p class="error" id="password-error"></p>
                         </div>
-                        <p class="error-message" id="error-message"></p>
-                    </div>
-                    
-                    <div class="input-group">
+                        
                         <label for="confirm-password">비밀번호 확인</label>
                         <div class="password-container">
-                            <input type="password" id="confirm-password" name="confirmPassword" value="${inputData.confirmPassword}" maxlength="20">
+                            <input type="password" id="confirm-password" value="${inputData.confirmPassword}" maxlength="20">
                             <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
                         </div>
-                        <p class="error-message" id="error-message"></p>
                     </div>
                 
-                    <p class="error-message" id="error-message"></p>
                     <div class="button-group">
-                    	<button type="button" class="update-button" onclick="validateForm()">저장</button>
+                    	<button type="button" class="update-button" onclick="resetPassword()">저장</button>
                     </div>
                 </form>
             </div>
@@ -344,39 +368,90 @@
     </div>
 </body>
 <script>
-	//유효성 검사
-	function validateForm() {
+	//카카오 우편번호 검색 API를 이용한 주소 검색
+	function searchAddress() {
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            document.getElementById("postal-code").value = data.zonecode; // 우편번호 입력
+	            document.getElementById("address").value = data.roadAddress; // 도로명 주소 입력
+	        }
+	    }).open();
+	}
+
+	//유효성 검사 및 비밀번호 재설정 요청
+	function resetPassword() {
 		const form = document.getElementById("password-content");
+	  	var currentPassword = document.getElementById("current-password").value;
 	  	var password = document.getElementById("password").value;
-	  	var newPassword = document.getElementById("new-password").value;
 	  	var confirmPassword = document.getElementById("confirm-password").value;
-	  	var errorMessage = document.getElementById("error-message");
+	  	var currentPasswordError = document.getElementById("current-password-error");
+	  	var passwordError = document.getElementById("password-error");
 	
 	  	// 비밀번호 정규식: 영문 + 숫자 + 특수문자 포함
 	  	var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]*$/;
-	
-	  	if (!password || !newPassword || !confirmPassword) {
+
+	  	// 오류 메시지 초기화
+	  	currentPasswordError.textContent = "";
+	  	passwordError.textContent = "";
+	  	
+	  	if (!currentPassword || !password || !confirmPassword) {
 	  		alert("비밀번호를 입력해주세요.")
 	  		return false;
 	  	}
 	  	
-	  	if (newPassword.length < 8) {
-	      	errorMessage.textContent = "비밀번호는 8~20자 이내여야 합니다.";
+	  	if (password.length < 8) {
+	  		passwordError.textContent = "비밀번호는 8~20자 이내여야 합니다.";
 	      	return false;
 	  	}
 	
-	  	if (!passwordRegex.test(newPassword)) {
-	      	errorMessage.textContent = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*()_+=-)를 포함해야 합니다.";
+	  	if (!passwordRegex.test(password)) {
+	  		passwordError.textContent = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*()_+=-)를 포함해야 합니다.";
 	      	return false;
 	  	}
 	
-	  	if (newPassword !== confirmPassword) {
-	      	errorMessage.textContent = "비밀번호가 일치하지 않습니다.";
+	  	if (password !== confirmPassword) {
+	  		passwordError.textContent = "비밀번호가 일치하지 않습니다.";
 	      	return false;
 	  	}
-	
-	  	errorMessage.textContent = "";
-	  	form.submit(); // 폼 제출
+
+	  	fetch("/mypage/reset-password", {
+	  	    method: "POST",
+	  	    headers: {
+	  	        "Content-Type": "application/json"
+	  	    },
+	  	    body: JSON.stringify({ 
+	  	    	currentPassword: currentPassword,
+	  	    	password: password, 
+	  	    	confirmPassword: confirmPassword 
+	  	    })
+	  	})
+	  	.then(response => {
+	  	    Swal.close(); // 로딩창 닫기
+	  	    
+	  	    if (response.ok) {
+	  	        location.reload();
+	  	    } else if (response.status === 400) {
+	  	    	return response.json().catch(() => null).then(data => {
+      	            if (data && data.errorMessage) {
+      	            	currentPasswordError.textContent = data.errorMessage; // 현재 비밀번호 불일치
+      	            } else {
+      	                location.reload();
+      	            }
+      	        });
+	  	    } else {
+	  	        throw new Error("서버 오류 발생");
+	  	    }
+	  	})
+	  	.catch(error => {
+	  	    Swal.close();
+	  	    Swal.fire({
+	  	        icon: 'error',
+	  	        title: '오류 발생',
+	  	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+	  	        confirmButtonColor: '#d33',
+	  	        confirmButtonText: '확인'
+	  	    });
+	  	});
 	}
 
 	// 비밀번호 표시/숨기기

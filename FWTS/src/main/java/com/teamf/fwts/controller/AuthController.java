@@ -66,7 +66,7 @@ public class AuthController {
     
     // 회원가입 페이지
     @GetMapping("/sign-up")
-    public String signupForm(@RequestParam(name = "step", defaultValue = "1") Integer step) {
+    public String signupForm(@RequestParam(name = "step", defaultValue = "1") int step) {
     	if (step == 1)
     		return "auth/signup-agreement"; // 약관동의 페이지
     	return "auth/signup"; // 정보입력 페이지
@@ -95,6 +95,13 @@ public class AuthController {
     // 중복 확인 (이메일, 아이디)
     @PostMapping("/check-duplicate")
     public ResponseEntity<Boolean> checkDuplicate(@RequestBody Map<String, String> request){
+    	String type = request.get("type");
+        String value = request.get("value");
+
+        // 유효성 검사
+        if (type == null || value == null)
+            return ResponseEntity.ok(true);
+    	
     	boolean isDuplicate = userService.isDuplicate(request.get("type"), request.get("value"));
         return ResponseEntity.ok(isDuplicate);
     }
@@ -102,7 +109,13 @@ public class AuthController {
     // 사업자등록번호 확인 (*중복 확인만 진행)
     @PostMapping("/check-business-no")
 	public ResponseEntity<Boolean> checkBusinessNo(@RequestBody Map<String, String> request) {
-		boolean isDuplicate = userService.isDuplicate(request.get("type"), request.get("value"));
+    	String value = request.get("value");
+
+        // 유효성 검사
+        if (value == null)
+            return ResponseEntity.ok(true);
+    	
+		boolean isDuplicate = userService.isDuplicate("businessNo", request.get("value"));
 		return ResponseEntity.ok(isDuplicate);
 	}
     
@@ -123,18 +136,25 @@ public class AuthController {
         return "auth/find-username-result";
     }
     
-    // 인증 코드 요청
+    // 인증 코드 요청    
     @PostMapping("/find-password/send-code")
     public ResponseEntity<?> sendCode(@RequestBody Map<String, String> request, HttpSession session) {
         String email = request.get("email");
-    	
-    	if (!userService.existsByEmail(email)) {
-            return ResponseEntity.badRequest()
-            		.body("{\"errorMessage\": \"존재하지 않는 이메일입니다.\"}");
-        }
 
-    	generateCode(email, session);
-        return ResponseEntity.ok("{\"message\": \"코드 전송 완료\"}");
+        // 유효성 검사
+        if (email == null || email.trim().isEmpty())
+            return ResponseEntity.badRequest().build();
+        
+        // 이메일 존재 여부 확인
+        if (!userService.existsByEmail(email))
+        	return ResponseEntity.badRequest().body(Map.of("errorMessage", "존재하지 않는 이메일입니다."));
+
+        try {
+            generateCode(email, session); // 인증 코드 생성 및 전송
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+        	return ResponseEntity.internalServerError().build();
+        }
     }
     
     // 인증 번호 재전송 요청
@@ -146,8 +166,12 @@ public class AuthController {
         if (email == null)
             return ResponseEntity.badRequest().build();
 
-        generateCode(email, session);
-        return ResponseEntity.ok().build();
+        try {
+            generateCode(email, session); // 인증 코드 생성 및 전송
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
     
     // 인증 코드 입력 페이지

@@ -236,126 +236,126 @@
 </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-left">
-                <h1>생화24</h1>
-                <div class="search-container">
-			        <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
-			        <button class="search-button">
-			            <i class="fas fa-search"></i>
-			        </button>
-			    </div>
-            </div>
-            <div class="header-right">
-			    <!-- 로그인하지 않은 경우 -->
-			    <sec:authorize access="isAnonymous()">
-			        <a href="/login"><strong>로그인</strong></a>
-			        <a href="/sign-up">회원가입</a>
-			    </sec:authorize>
-			
-			    <!-- 로그인한 경우 -->
-			    <sec:authorize access="isAuthenticated()">
-			        <a href="/logout">로그아웃</a>
-			    </sec:authorize>
-			</div>
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>생화24</h1>
+            <div class="search-container">
+		       <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
+		       <button class="search-button">
+		           <i class="fas fa-search"></i>
+		       </button>
+		   </div>
         </div>
-        <div class="nav-container">
-            <div class="nav">
-                <a href="#">절화</a>
-                <a href="#">난</a>
-                <a href="#">관엽</a>
-                <a href="#">기타</a>
-            </div>
-            <div class="nav-right">
-                <a href="/mypage/edit-profile">마이페이지</a>
-                <a href="/support-center/notice">고객센터</a>
-            </div>
-        </div>
+        <div class="header-right">
+		   <!-- 로그인하지 않은 경우 -->
+		   <sec:authorize access="isAnonymous()">
+		       <a href="/login"><strong>로그인</strong></a>
+		       <a href="/sign-up">회원가입</a>
+		   </sec:authorize>
+		
+		   <!-- 로그인한 경우 -->
+		   <sec:authorize access="isAuthenticated()">
+		       <a href="/logout">로그아웃</a>
+		   </sec:authorize>
+		</div>
+     </div>
+     <div class="nav-container">
+         <div class="nav">
+             <a href="#">절화</a>
+             <a href="#">난</a>
+             <a href="#">관엽</a>
+             <a href="#">기타</a>
+         </div>
+         <div class="nav-right">
+             <a href="/mypage/edit-profile">마이페이지</a>
+             <a href="/support-center/notice">고객센터</a>
+         </div>
+     </div>
+     
+     <div class="body-container">
+         <div class="sidebar">
+             <h2>고객센터</h2>
+             <a href="/support-center/notice">공지사항</a>
+             <a class="active">문의사항</a>
+         </div>
+         
+         <div class="table-container">
+         	<form class="search-board-container" action="/support-center/inquiry">
+			    <select class="search-category" name="category">
+			        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
+			        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
+			        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
+			    </select>
+			    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
+			    <input type="submit" class="search-board-button" value="검색">
+			</form>
         
-        <div class="body-container">
-            <div class="sidebar">
-                <h2>고객센터</h2>
-                <a href="/support-center/notice">공지사항</a>
-                <a class="active">문의사항</a>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="inquiry" items="${inquirys}">
+			            <tr>
+			                <td>${inquiry.inquiryId}</td>
+			                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
+			                <td>${inquiry.username}</td>
+			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
+			            </tr>
+        			</c:forEach>
+                </tbody>
+            </table>
             
-            <div class="table-container">
-            	<form class="search-board-container" action="/support-center/inquiry">
-				    <select class="search-category" name="category">
-				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
-				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
-				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
-				    </select>
-				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
-				    <input type="submit" class="search-board-button" value="검색">
-				</form>
-            
-                <table>
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="inquiry" items="${inquirys}">
-				            <tr>
-				                <td>${inquiry.inquiryId}</td>
-				                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
-				                <td>${inquiry.username}</td>
-				                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
-				            </tr>
-				        </c:forEach>
-                    </tbody>
-                </table>
-                
-				<!-- 페이지네이션 -->
-				<div class="pagination">
-				    <c:choose>
-				        <c:when test="${count > 0}">
-				            <c:set var="queryString">
-							    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-							        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-							    </c:if>
-							</c:set>
+			<!-- 페이지네이션 -->
+			<div class="pagination">
+			    <c:choose>
+			        <c:when test="${count > 0}">
+			            <c:set var="queryString">
+						    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
+						        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+						    </c:if>
+						</c:set>
+			
+			            <!-- 이전 페이지 버튼 -->
+			            <c:choose>
+			                <c:when test="${currentPage > 1}">
+			                    <a href="/support-center/inquiry?page=${currentPage - 1}${queryString}">◀</a>
+			                </c:when>
+			                <c:otherwise>
+			                    <a>◀</a>
+			                </c:otherwise>
+			            </c:choose>
+			
+			            <!-- 현재 페이지 / 전체 페이지 표시 -->
+			            <span>${currentPage} / ${totalPages}</span>
+			
+			            <!-- 다음 페이지 버튼 -->
+			            <c:choose>
+			                <c:when test="${currentPage < totalPages}">
+			                    <a href="/support-center/inquiry?page=${currentPage + 1}${queryString}">▶</a>
+			                </c:when>
+			                <c:otherwise>
+			                    <a>▶</a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:when>
+			        <c:otherwise>
+			            <p>조회된 글이 없습니다.</p>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
 
-				            <!-- 이전 페이지 버튼 -->
-				            <c:choose>
-				                <c:when test="${currentPage > 1}">
-				                    <a href="/support-center/inquiry?page=${currentPage - 1}${queryString}">◀</a>
-				                </c:when>
-				                <c:otherwise>
-				                    <a>◀</a>
-				                </c:otherwise>
-				            </c:choose>
-				
-				            <!-- 현재 페이지 / 전체 페이지 표시 -->
-				            <span>${currentPage} / ${totalPages}</span>
-				
-				            <!-- 다음 페이지 버튼 -->
-				            <c:choose>
-				                <c:when test="${currentPage < totalPages}">
-				                    <a href="/support-center/inquiry?page=${currentPage + 1}${queryString}">▶</a>
-				                </c:when>
-				                <c:otherwise>
-				                    <a>▶</a>
-				                </c:otherwise>
-				            </c:choose>
-				        </c:when>
-				        <c:otherwise>
-				            <p>조회된 글이 없습니다.</p>
-				        </c:otherwise>
-				    </c:choose>
-				</div>
-				
-				<div class="button-container">
-		            <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
-		        </div>
-            </div>
+			<div class="button-container">
+		          <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
+      		</div>
         </div>
     </div>
+</div>
 </body>
 </html>

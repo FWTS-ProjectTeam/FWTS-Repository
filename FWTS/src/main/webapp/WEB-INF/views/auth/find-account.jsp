@@ -214,39 +214,44 @@
       	Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
 
 		// 이메일 인증 코드 요청
-		fetch("/find-password/send-code", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ email: email }) // JSON 형식으로 변환
-		})
-		.then(response => response.json()) // JSON 응답 처리
-		.then(data => {
-	        Swal.close(); // 로딩창 닫기
-		
-			if (data.errorMessage) {
-				Swal.fire({
-					icon: 'error',
-					title: '코드 전송 실패',
-					text: data.errorMessage,
-					confirmButtonColor: '#d33',
-					confirmButtonText: '확인'
-				});
-			} else {
-				window.location.href = "/find-password/verify-code"; // 인증 코드 입력 페이지
-			}
-	    })
-		.catch(error => {
-			Swal.close();
-			Swal.fire({
-				icon: 'error',
-				title: '오류 발생',
-				text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
-				confirmButtonColor: '#d33',
-				confirmButtonText: '확인'
-			});
-		});
+      	fetch("/find-password/send-code", {
+      	    method: 'POST',
+      	    headers: {
+      	        'Content-Type': 'application/json'
+      	    },
+      	    body: JSON.stringify({ email: email }) // JSON 형식으로 변환
+      	})
+      	.then(response => {
+      	    if (response.ok) {
+      	        window.location.href = "/find-password/verify-code"; // 인증 코드 입력 페이지
+      	    } else if (response.status === 400) {
+      	        return response.json().catch(() => null).then(data => {
+      	            if (data && data.errorMessage) {
+      	                Swal.fire({
+      	                    icon: 'error',
+      	                    title: '코드 전송 실패',
+      	                    text: data.errorMessage,
+      	                    confirmButtonColor: '#d33',
+      	                    confirmButtonText: '확인'
+      	                });
+      	            } else {
+      	                location.reload();
+      	            }
+      	        });
+      	    } else {
+      	    	throw new Error('서버 오류 발생');
+      	    }
+      	})
+      	.catch(() => {
+      	    Swal.close();
+      	    Swal.fire({
+      	        icon: 'error',
+      	        title: '오류 발생',
+      	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+      	        confirmButtonColor: '#d33',
+      	        confirmButtonText: '확인'
+      	    });
+      	});
 	}
 </script>
 </body>
