@@ -17,8 +17,8 @@ public class NoticeBoardService {
 	private final NoticeBoardMapper noticeBoardMapper;
 
 	// 공지사항 조회
-	public List<NoticeListDto> noticeList(Map<String, Object> paging) {
-		return noticeBoardMapper.noticeList(paging);
+	public List<NoticeListDto> findAll(Map<String, Object> params) {
+		return noticeBoardMapper.findAll(params);
 	}
 	
 	// 공지사항 수 확인
@@ -27,7 +27,7 @@ public class NoticeBoardService {
 	}
 
 	// 공지사항 상세 조회
-	public NoticeBoard noticeOne(int id) {
-		return noticeBoardMapper.noticeOne(id);
+	public NoticeBoard findByNoticeId(int id) {
+		return noticeBoardMapper.findByNoticeId(id);
 	}
 }

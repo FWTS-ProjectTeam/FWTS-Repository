@@ -36,6 +36,10 @@
 		font-weight: 600;
 		text-align: center;
 	}
+	h1 a {
+    	text-decoration: none;
+    	color: #ff6699;
+    }
 	label {
 		font-weight: 600;
 		display: block;

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import util.EmailTemplateUtils;
 
 @Service
 public class EmailService {
@@ -15,14 +16,17 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendVerificationCode(String to, String code) {
+    public void sendVerificationCode(String to, String verificationCode) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(to);
-            helper.setSubject("비밀번호 찾기 인증 코드");
-            helper.setText("인증 코드: " + code, true);
+            helper.setSubject("[생화24] 비밀번호 재설정 인증 코드 전송");
+
+            // 새로운 HTML 템플릿 사용
+            String htmlContent = EmailTemplateUtils.generateVerificationCodeEmail(verificationCode);
+            helper.setText(htmlContent, true); // HTML 적용
 
             mailSender.send(message);
         } catch (MessagingException e) {

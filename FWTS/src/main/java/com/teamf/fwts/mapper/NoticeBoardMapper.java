@@ -16,7 +16,7 @@ public interface NoticeBoardMapper {
 	@Select({"SELECT notice_id, notice_title, created_date",
 			 "FROM notice_board ORDER BY notice_id DESC",
 			 "LIMIT #{start}, #{count}"})
-	List<NoticeListDto> noticeList(Map<String, Object> paging);
+	List<NoticeListDto> findAll(Map<String, Object> params);
 	
 	// 공지사항 수 확인
 	@Select("SELECT COUNT(*) FROM notice_board")
@@ -24,5 +24,5 @@ public interface NoticeBoardMapper {
 
 	// 공지사항 상세 조회
 	@Select("SELECT * FROM notice_board WHERE notice_id = #{id}")
-	NoticeBoard noticeOne(@Param("id") int id);
+	NoticeBoard findByNoticeId(@Param("id") int id);
 }

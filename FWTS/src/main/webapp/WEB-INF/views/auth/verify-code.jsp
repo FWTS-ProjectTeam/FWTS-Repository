@@ -124,8 +124,7 @@
 <div class="container">
     <h1>이메일 인증</h1>
     <p class="description">
-        <strong><%= email %></strong>으로 인증 코드를 전송했습니다.<br>
-        해당 인증 코드는 5분간 유효합니다.
+        <strong><%= email %></strong>으로 인증 코드를 전송했습니다.
     </p>
 
     <form action="/find-password/verify-code" method="post">
@@ -170,10 +169,8 @@
 	    })
 	    .then(response => {
 	        Swal.close(); // 로딩창 닫기
-	        
-	        if (!response.ok) { // HTTP 상태 코드 확인
-	            window.location.href = "/find-password"; // 비밀번호 찾기 페이지로 이동
-	        } else {
+
+	        if (response.ok) {
 	            Swal.fire({
 	                icon: 'success',
 	                title: '코드 전송 완료',
@@ -181,10 +178,13 @@
 	                confirmButtonColor: '#3085d6',
 	                confirmButtonText: '확인'
 	            });
+	        } else if (response.status === 400) {
+	            window.location.href = "/find-password"; // 비밀번호 찾기 페이지
+	        } else {
+	        	throw new Error('서버 오류 발생');
 	        }
 	    })
-	    .catch(error => {
-	        Swal.close();
+	    .catch(() => {
 	        Swal.fire({
 	            icon: 'error',
 	            title: '오류 발생',

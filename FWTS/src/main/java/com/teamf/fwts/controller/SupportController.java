@@ -39,7 +39,7 @@ public class SupportController {
 	
 	// 공지사항 조회
 	@GetMapping("/notice")
-	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
+	public String noticeAll(@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
 	    int count = noticeBoardService.count();
 
 	    if (count > 0) {
@@ -47,11 +47,11 @@ public class SupportController {
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
-	        Map<String, Object> paging = new HashMap<>();
-	        paging.put("start", startRow);
-	        paging.put("count", perPage);
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("start", startRow);
+	        params.put("count", perPage);
 
-	        List<NoticeListDto> notices = noticeBoardService.noticeList(paging);
+	        List<NoticeListDto> notices = noticeBoardService.findAll(params);
 
 	        model.addAttribute("notices", notices);
 	        model.addAttribute("currentPage", page);
@@ -65,7 +65,7 @@ public class SupportController {
 	// 공지사항 상세 조회
 	@GetMapping("/notice/{id}")
 	public String noticeDetail(@PathVariable("id") int id, Model model) {
-		NoticeBoard notice = noticeBoardService.noticeOne(id);
+		NoticeBoard notice = noticeBoardService.findByNoticeId(id);
 		
 		model.addAttribute("notice", notice);
 		return "support/notice-detail";
@@ -82,21 +82,21 @@ public class SupportController {
                 .filter(Set.of("all", "title", "content")::contains)
                 .orElse(null);
 
-		Map<String, Object> paging = new HashMap<>();
-        paging.put("category", category);
-        paging.put("keyword", keyword);
+		Map<String, Object> params = new HashMap<>();
+		params.put("category", category);
+		params.put("keyword", keyword);
         
-		int count = inquiryBoardService.count(paging);
+		int count = inquiryBoardService.count(params);
 
 	    if (count > 0) {
 	        int perPage = 8; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
-	        paging.put("start", startRow);
-	        paging.put("count", perPage);
+	        params.put("start", startRow);
+	        params.put("count", perPage);
 
-	        List<InquiryListDto> inquirys = inquiryBoardService.inquiryList(paging);
+	        List<InquiryListDto> inquirys = inquiryBoardService.findAll(params);
 	        
 	        model.addAttribute("inquirys", inquirys);
 	        model.addAttribute("currentPage", page);
@@ -112,7 +112,7 @@ public class SupportController {
 	// 문의사항 상세 조회
 	@GetMapping("/inquiry/{id}")
 	public String inquiryDetail(@PathVariable("id") int id, Model model) {
-		InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+		InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
 		
 		model.addAttribute("inquiry", inquiry);
 		return "support/inquiry-detail";
@@ -122,13 +122,9 @@ public class SupportController {
 	@GetMapping("/inquiry/edit")
 	public String inquiryEditForm(@RequestParam(name = "id", required = false) Integer id, 
 	                          	  Authentication authentication, Model model) {
-		// 로그인 체크
-	    if (authentication == null)
-	        return "redirect:/login"; // 로그인 페이지
-		
 	    // 글 수정 처리
 	    if (id != null) {
-			InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+			InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
 		    if (inquiry == null)
 		    	return "redirect:/support-center/inquiry"; // 문의사항 페이지
 
@@ -147,10 +143,6 @@ public class SupportController {
 	@PostMapping("/inquiry/edit")
 	public String inquiryEdit(@Valid InquiryBoard inquiry, BindingResult bindingResult,
 	                          Authentication authentication, Model model) {
-	    // 로그인 체크
-	    if (authentication == null)
-	        return "redirect:/login";
-
 	    // 유효성 검사
 	    if (bindingResult.hasErrors()) {
 	    	if (bindingResult.hasFieldErrors("inquiryContent"))
@@ -162,32 +154,26 @@ public class SupportController {
 	    }
 
 	    try {
-	        Integer inquiryId;
-
 	        // 글 작성
 	        if (inquiry.getInquiryId() == null) {
 	        	inquiry.setWriter(userService.findByUsername(authentication.getName()));
 	            inquiryBoardService.saveInquiry(inquiry);
-	            inquiryId = inquiry.getInquiryId();
 	        }
 	        
 	        // 글 수정
 	        else {
-	            InquiryBoard oldInquiry = inquiryBoardService.inquiryOne(inquiry.getInquiryId());
+	            InquiryBoard oldInquiry = inquiryBoardService.findByInquiryId(inquiry.getInquiryId());
 	            String writerUsername = oldInquiry.getWriter().getUsername();
 
-	            // 작성자 검증
-	            if (!writerUsername.equals(authentication.getName()))
-	                return "redirect:/support-center/inquiry"; // 문의사항 페이지
-
-	            // 기존 글 업데이트
-	            oldInquiry.setInquiryTitle(inquiry.getInquiryTitle());
-	            oldInquiry.setInquiryContent(inquiry.getInquiryContent());
-	            inquiryBoardService.updateInquiry(oldInquiry);
-	            inquiryId = oldInquiry.getInquiryId();
+	            // 작성자이면 기존 글 업데이트
+	            if (writerUsername.equals(authentication.getName())) {
+		            oldInquiry.setInquiryTitle(inquiry.getInquiryTitle());
+		            oldInquiry.setInquiryContent(inquiry.getInquiryContent());
+		            inquiryBoardService.updateInquiry(oldInquiry);
+	            }
 	        }
 
-	        return "redirect:/support-center/inquiry/" + inquiryId;
+	        return "redirect:/support-center/inquiry"; // 문의사항 페이지
 	    } catch (Exception e) {
 	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
 	        model.addAttribute("inquiry", inquiry);
@@ -202,7 +188,7 @@ public class SupportController {
 	    Map<String, Boolean> response = new HashMap<>();
 	    
 	    try {
-	    	InquiryBoard inquiry = inquiryBoardService.inquiryOne(id);
+	    	InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
 		    String currentUsername = inquiry.getWriter().getUsername();
 		    
 		    // 작성자 검증 및 처리
