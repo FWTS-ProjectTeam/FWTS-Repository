@@ -18,6 +18,7 @@
        align-items: center;
        height: 100vh;
    }
+   
    .container {
        text-align: center;
        max-width: 400px;
@@ -33,22 +34,13 @@
        font-weight: 600;
        margin-bottom: 15px;
    }
+   
    .result-message {
        font-size: 14px;
        margin-bottom: 20px;
        color: #666;
    }
-   .username {
-       font-size: 18px;
-       font-weight: 600;
-       color: #ff6699;
-       margin-bottom: 20px;
-   }
-   .button-container {
-       display: flex;
-       flex-direction: column;
-       gap: 10px;
-   }
+   
    .button-container button {
        width: 100%;
        padding: 12px;
@@ -61,6 +53,7 @@
        background-color: #ff6699;
        color: #fff;
    }
+   
    .links-container {
        margin-top: 20px;
        font-size: 14px;

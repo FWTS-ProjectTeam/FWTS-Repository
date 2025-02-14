@@ -25,6 +25,7 @@
         align-items: center;
         height: 100vh;
     }
+    
     .container {
         text-align: center;
         max-width: 400px;
@@ -40,11 +41,13 @@
         font-weight: 600;
         margin-bottom: 15px;
     }
+    
     .description {
         font-size: 14px;
         color: #666;
         margin-bottom: 20px;
     }
+    
     .input-group {
         width: 100%;
         text-align: left;
@@ -68,6 +71,7 @@
     .input-group input:focus {
         border-color: #ff6699;
     }
+    
     .password-field {
 	    position: relative;
 	    display: flex;
@@ -94,11 +98,7 @@
 	.password-field i:hover {
 		color: #ff6699;
 	}
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+
     .button-container button {
         width: 100%;
         padding: 12px;
@@ -110,6 +110,7 @@
         background-color: #ff6699;
         color: #fff;
     }
+    
     .error-message {
         color: red;
         font-size: 12px;

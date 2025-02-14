@@ -406,7 +406,7 @@
 
             <div class="input-group">
                 <label for="username">아이디 <span class="required">*</span></label>
-                <input type="text" id="username" name="username" required minlength="4" maxlength="20">
+                <input type="text" id="username" name="username" maxlength="20">
                 <button type="button" onclick="checkDuplicate('username')">중복 확인</button>
             </div>
             
@@ -414,7 +414,7 @@
 			<div class="input-group">
 			    <label for="password">비밀번호 <span class="required">*</span></label>
 			    <div class="password-container">
-			        <input type="password" id="password" name="password" required minlength="8" maxlength="20">
+			        <input type="password" id="password" name="password" maxlength="20">
 			        <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
 			    </div>
 			</div>
@@ -422,7 +422,7 @@
 			<div class="input-group">
 			    <label for="confirm-password">비밀번호 확인 <span class="required">*</span></label>
 			    <div class="password-container">
-			        <input type="password" id="confirm-password" required>
+			        <input type="password" id="confirm-password">
 			        <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
 			    </div>
 			</div>
@@ -430,7 +430,7 @@
             <!-- 사업자등록번호 입력  -->
 			<div class="input-group">
 			    <label for="business-number">사업자등록번호 <span class="required">*</span></label>
-			    <input type="text" id="business-number" name="businessNo" required maxlength="10"
+			    <input type="text" id="business-number" name="businessNo" placeholder="- 포함" maxlength="10"
 			    	   onfocus="removeHyphen(this)" onblur="formatBusinessNumber(this)">
 			    <button type="button" onclick="verifyBusinessNumber()">확인</button>
 			</div>
@@ -438,14 +438,14 @@
 			<!-- 휴대폰 번호 입력 -->
 			<div class="input-group">
 			    <label for="phone">휴대폰 번호 <span class="required">*</span></label>
-			    <input type="text" id="phone" name="phoneNum" required maxlength="11"
+			    <input type="text" id="phone" name="phoneNum" placeholder="- 포함" maxlength="13"
 			           onfocus="removeHyphen(this)" onblur="formatPhoneNumber(this)">
 			</div>
 			
 			<!-- 업체 전화번호 입력 -->
 			<div class="input-group">
 			    <label for="company-phone">업체 전화번호</label>
-			    <input type="text" id="company-phone" name="companyNum" required maxlength="11"
+			    <input type="text" id="company-phone" name="companyNum" placeholder="- 포함" maxlength="13"
 			           onfocus="removeHyphen(this)" onblur="formatPhoneNumber(this)">
 			</div>
 	            

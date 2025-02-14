@@ -2,6 +2,7 @@ package com.teamf.fwts.controller;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import com.teamf.fwts.dto.SignupDto;
 import com.teamf.fwts.dto.UserDto;
 import com.teamf.fwts.dto.VerificationCodeDto;
 import com.teamf.fwts.service.EmailService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
-    private final UsersService userService;
+    private final UserService userService;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
 
@@ -102,7 +103,7 @@ public class AuthController {
         if (type == null || value == null)
             return ResponseEntity.ok(true);
     	
-    	boolean isDuplicate = userService.isDuplicate(request.get("type"), request.get("value"));
+    	boolean isDuplicate = userService.isDuplicate(type, value);
         return ResponseEntity.ok(isDuplicate);
     }
     
@@ -129,10 +130,13 @@ public class AuthController {
     @PostMapping("/find-id")
     public String findUsername(UserDto dto, Model model) {
     	String email = dto.getEmail();
-    	String username = userService.findUsernameByEmail(email);
+    	
+    	// 유효성 검사
+    	if (email == null)
+    		return "redirect:/find-id";
     	
     	model.addAttribute("email", email);
-        model.addAttribute("username", username);
+        model.addAttribute("username", userService.findUsernameByEmail(email));
         return "auth/find-username-result";
     }
     
@@ -142,7 +146,7 @@ public class AuthController {
         String email = request.get("email");
 
         // 유효성 검사
-        if (email == null || email.trim().isEmpty())
+        if (email == null)
             return ResponseEntity.badRequest().build();
         
         // 이메일 존재 여부 확인
@@ -150,7 +154,8 @@ public class AuthController {
         	return ResponseEntity.badRequest().body(Map.of("errorMessage", "존재하지 않는 이메일입니다."));
 
         try {
-            generateCode(email, session); // 인증 코드 생성 및 전송
+        	String verificationCode = emailService.generateCode(email, session);  // 인증 코드 생성
+        	emailService.sendVerificationCode(email, verificationCode);  // 인증 코드 전송
             return ResponseEntity.ok().build();
         } catch (Exception e) {
         	return ResponseEntity.internalServerError().build();
@@ -161,13 +166,10 @@ public class AuthController {
     @PostMapping("/find-password/resend-code")
     public ResponseEntity<Void> resendCode(HttpSession session) {
         String email = (String) session.getAttribute("email");
-        
-        // 이메일이 존재하지 않으면 제한
-        if (email == null)
-            return ResponseEntity.badRequest().build();
 
         try {
-            generateCode(email, session); // 인증 코드 생성 및 전송
+        	String verificationCode = emailService.generateCode(email, session);  // 인증 코드 생성
+        	emailService.sendVerificationCode(email, verificationCode);  // 인증 코드 전송
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -192,15 +194,15 @@ public class AuthController {
         
     	String verificationCode = (String) session.getAttribute("verificationCode");
         LocalDateTime expiryTime = (LocalDateTime) session.getAttribute("verificationCodeExpiry");
-        String email = (String) session.getAttribute("email");
         
-        // 세션에 이메일이나 인증 코드가 없으면 제한
-        if (email == null || verificationCode == null)
+        // 유효성 검사
+        if (verificationCode == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
 
         // 현재 시간이 만료시간보다 늦으면 실패
         if (LocalDateTime.now().isAfter(expiryTime)) {
             model.addAttribute("errorMessage", "만료된 인증 코드입니다.");
+            model.addAttribute("code", verificationCode);
             
             // 만료된 인증 코드 삭제
             session.removeAttribute("verificationCode");
@@ -210,7 +212,7 @@ public class AuthController {
         }
 
         // 인증 코드가 일치하는지 확인
-        if (!verificationCode.equals(code)) {
+        if (!Objects.equals(verificationCode, code)) {
             model.addAttribute("errorMessage", "잘못된 인증 코드입니다.");
             return "auth/verify-code"; // 인증 코드 입력 페이지
         }
@@ -248,17 +250,5 @@ public class AuthController {
         	model.addAttribute("errorMessage", "비밀번호를 재설정을 할 수 없습니다. 다시 시도해 주세요.");
             return "auth/reset-password";
         }
-    }
-    
-    // 인증 코드 전송
-    private void generateCode(String email, HttpSession session) {
-    	String verificationCode = String.valueOf((int) (Math.random() * 900000) + 100000); // 인증 코드 생성
-    	LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(5); // 5분 후 만료
-    	
-        session.setAttribute("verificationCode", verificationCode);
-        session.setAttribute("verificationCodeExpiry", expiryTime);
-        session.setAttribute("email", email);
-        
-        emailService.sendVerificationCode(email, verificationCode);
     }
 }

@@ -18,6 +18,7 @@
 		align-items: center;
 		height: 100vh;
 	}
+	
 	.container {
 		max-width: 500px;
 		width: 100%;
@@ -28,11 +29,11 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		text-align: left;
 	}
+	
 	p {
 		text-align: center;
 	}
 	h1 {
-		color: #ff6699;
 		font-weight: 600;
 		text-align: center;
 	}
@@ -40,11 +41,13 @@
     	text-decoration: none;
     	color: #ff6699;
     }
+    
 	label {
 		font-weight: 600;
 		display: block;
 		margin-top: 5px;
 	}
+	
 	.terms-box {
 		width: 100%;
 		padding: 10px;
@@ -59,6 +62,7 @@
 		font-size: 12.5px;
 		line-height: 1.4;
 	}
+	
 	.checkbox-container {
 		display: flex;
 		align-items: center;
@@ -73,6 +77,7 @@
 		vertical-align: middle;
 	}
 	.checkbox-container label { line-height: 18px; }
+	
 	.button {
 		width: 100%;
 		padding: 10px;

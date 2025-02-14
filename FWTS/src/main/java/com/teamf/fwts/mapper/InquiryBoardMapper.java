@@ -19,20 +19,6 @@ import com.teamf.fwts.entity.InquiryBoard;
 @Mapper
 public interface InquiryBoardMapper {
 	// 문의사항 수 확인
-	@Select({
-        "<script>",
-        "SELECT COUNT(*) FROM inquiry_board",
-        "<where>",
-        "  <if test='category != null and keyword != null'>",
-        "    <choose>",
-        "      <when test='category == \"title\"'>AND inquiry_title LIKE CONCAT('%', #{keyword}, '%')</when>",
-        "      <when test='category == \"content\"'>AND inquiry_content LIKE CONCAT('%', #{keyword}, '%')</when>",
-        "      <otherwise>AND (inquiry_title LIKE CONCAT('%', #{keyword}, '%') OR inquiry_content LIKE CONCAT('%', #{keyword}, '%'))</otherwise>",
-        "    </choose>",
-        "  </if>",
-        "</where>",
-        "</script>"
-    })
 	int count(Map<String, Object> params);
 	
 	// 문의사항 내역 수 확인
@@ -40,24 +26,6 @@ public interface InquiryBoardMapper {
 	int countByWriterId(@Param("writerId") Integer writerId);
 	
 	// 문의사항 조회
-	@Select({
-        "<script>",
-        "SELECT ib.inquiry_id, u.username, ib.inquiry_title, ib.created_date",
-        "FROM inquiry_board ib",
-        "JOIN users u ON ib.writer_id = u.user_id",
-        "<where>",
-        "  <if test='category != null and keyword != null'>",
-        "    <choose>",
-        "      <when test='category == \"title\"'>AND ib.inquiry_title LIKE CONCAT('%', #{keyword}, '%')</when>",
-        "      <when test='category == \"content\"'>AND ib.inquiry_content LIKE CONCAT('%', #{keyword}, '%')</when>",
-        "      <otherwise>AND (ib.inquiry_title LIKE CONCAT('%', #{keyword}, '%') OR ib.inquiry_content LIKE CONCAT('%', #{keyword}, '%'))</otherwise>",
-        "    </choose>",
-        "  </if>",
-        "</where>",
-        "ORDER BY ib.inquiry_id DESC",
-        "LIMIT #{start}, #{count}",
-        "</script>"
-    })
 	List<InquiryListDto> findAll(Map<String, Object> params);
 	
 	// 문의사항 내역 조회

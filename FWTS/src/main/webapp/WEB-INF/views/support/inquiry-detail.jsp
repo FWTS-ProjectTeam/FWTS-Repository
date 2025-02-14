@@ -17,10 +17,12 @@
         background-color: #fff;
         color: #333;
     }
+    
     .container {
         width: 80%;
         margin: 0 auto;
     }
+    
     .header {
         display: flex;
         justify-content: space-between;
@@ -47,6 +49,7 @@
         color: #333;
         margin-left: 10px;
     }
+    
     .search-container {
     	width: 240px;
         display: flex;
@@ -72,6 +75,7 @@
         color: #ff3366;
         padding: 5px;
     }
+    
     .nav-container {
         display: flex;
         justify-content: space-between;
@@ -94,10 +98,12 @@
         font-weight: 600;
         margin-left: 10px;
     }
+    
     .body-container {
     	display: flex;
     	margin: 20px;
     }
+    
     .sidebar {
     	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
@@ -126,6 +132,7 @@
         color: #fff;
         border-radius: 5px;
     }
+    
     .post-container {
     	width: 100%;
     	margin: 50px 10px 0px 10px;
@@ -136,12 +143,28 @@
     	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
     }
-    .write-info {
+    .post-content .write-info {
     	display: flex;
 	    justify-content: space-between; /* 왼쪽, 오른쪽 정렬 */
 	    align-items: center; /* 수직 중앙 정렬 */
 	    color: gray;
     }
+    .post-content img {
+	    max-width: 100%; /* 이미지가 컨테이너를 초과하지 않도록 설정 */
+	    height: auto; /* 비율에 맞게 이미지 크기 조정 */
+	}
+    
+    .title {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .date {
+        text-align: right;
+        color: gray;
+        font-size: 0.9em;
+    }
+    
     .comment-content {
     	padding: 20px;
     	border-top: 1px solid #ccc;
@@ -153,27 +176,14 @@
         color: gray;
         font-size: 0.9em;
     }
-    .title {
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 10px;
+    .comment-content .title {
+    	text-align: left;
     }
-    .comment-title {
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    .date {
-        text-align: right;
-        color: gray;
-        font-size: 0.9em;
-    }
+    
     .button-container {
         display: flex;
         justify-content: center;
         margin: 20px auto;
-    }
-    .multiple {
-        justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
     }
     .button-container button {
         background: #ff7f9d;
@@ -182,6 +192,10 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+    
+    .multiple {
+        justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
     }
 </style>
 </head>
@@ -248,7 +262,7 @@
 			    <c:if test="${currentUser eq inquiry.writer.username}">
 			        <div class="button-container multiple">
 			            <button onclick="deleteInquiry()">삭제</button>
-			            <button onclick="history.back()">목록</button>
+			            <button onclick="location.href='/support-center/inquiry'">목록</button>
 			            <button onclick="location.href='/support-center/inquiry/edit?id=${inquiry.inquiryId}'">수정</button>
 			        </div>
 			    </c:if>
@@ -256,7 +270,7 @@
 			    <!-- 작성자가 아닐 경우: 목록 버튼만 보이게 -->
 			    <c:if test="${currentUser ne inquiry.writer.username}">
 			        <div class="button-container">
-			            <button onclick="history.back()">목록</button>
+			            <button onclick="location.href='/support-center/inquiry'">목록</button>
 			        </div>
 			    </c:if>
 			</sec:authorize>
@@ -264,13 +278,13 @@
 			<!-- 비로그인 사용자: 목록 버튼만 보이게 -->
 			<sec:authorize access="isAnonymous()">
 			    <div class="button-container">
-			        <button onclick="history.back()">목록</button>
+			        <button onclick="location.href='/support-center/inquiry'">목록</button>
 			    </div>
 			</sec:authorize>
       
       		<c:if test="${not empty inquiry.reply}">
 			    <div class="comment-content">
-			        <h2 class="comment-title">답변</h2>
+			        <h2 class="title">답변</h2>
 			        <p class="date">작성일: 
 			            <fmt:formatDate value="${inquiry.replyDate}" pattern="yyyy.MM.dd HH:mm" />
 			        </p>

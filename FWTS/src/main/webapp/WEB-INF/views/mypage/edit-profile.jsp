@@ -153,10 +153,8 @@
     .input-group input:focus {
         border-color: #ff6699;
     }
-    .full-width {
-        display: flex;
-        align-items: left;
-        justify-content: space-between;
+    .input-group #postal-code {
+    	width: 192px;
     }
     .button-group {
         display: flex;
@@ -172,13 +170,17 @@
         cursor: pointer;
     }
     .delete-button {
-	    background: #fff;
+	    background-color: #fff;
 	    color: #ff6666;
 	    border: 1px solid #ff6666;
 	    padding: 6px 12px;
 	    font-size: 12px;
 	    border-radius: 4px;
 	    cursor: pointer;
+	}
+	.delete-button:hover {
+	    background: #ff6666;
+	    color: #fff;
 	}
     .password-container {
         position: relative;
@@ -187,7 +189,7 @@
         width: 300px;
     }
     .password-container input {
-        width: 100%;
+        width: 300px;
         padding: 12px;
         border: 1px solid #ddd;
         border-radius: 6px;
@@ -207,23 +209,17 @@
     .password-container i:hover {
         color: #ff6699;
     }
-    .input-field, .password-container {
+    .input-field {
 	    display: flex;
 	    align-items: center;
 	    gap: 10px;
 	    margin-bottom: 10px;
-	}
-	.row-group {
-	    display: flex;
-	    align-items: center; /* 수직 정렬 */
-	    gap: 10px; /* 요소 간 간격 */
 	}
 	.error {
 	    color: red;
 	    font-size: 12px;
 	    white-space: nowrap;
 	}
-    /* hr 스타일 */
     hr {
         margin: 20px 0;
         border: none;
@@ -280,46 +276,43 @@
             
             <div class="info-container">
                 <h2>회원정보 수정</h2>
-                    <form class="info-content" onsubmit="return validateForm(event)">
+                    <form class="info-content" onsubmit="return validateForm(event);">
 					    <div class="input-group">
 					        <label for="company">업체명</label>
 					        <div class="input-field">
-					            <input type="text" id="company" name="company" value="우리 꽃집">
-					            <span class="error" id="company-error"></span>
+					            <input type="text" id="company" name="company" value="${userDetails.companyName}">
+					            <p class="error" id="company-error"></p>
 					        </div>
 					        
 					        <label for="ceo">대표자명</label>
 					        <div class="input-field">
-					            <input type="text" id="ceo" name="ceo" value="김대표">
-					            <span class="error-message" id="ceo-error"></span>
+					            <input type="text" id="ceo" name="ceo" value="${userDetails.ceoName}">
+					            <p class="error" id="ceo-error"></p>
 					        </div>
 					        
 					        <label for="phone">핸드폰번호</label>
 					        <div class="input-field">
-					            <input type="text" id="phone" name="phone" value="010-1234-5678">
-					            <span class="error-message" id="phone-error"></span>
+					            <input type="text" id="phone" name="phone" value="${userDetails.phoneNum}">
+					            <p class="error" id="phone-error"></p>
 					        </div>
 					        
 					        <label for="company-phone">업체 전화번호</label>
 					        <div class="input-field">
-					            <input type="text" id="company-phone" name="company-phone" value="02-123-4567">
-					            <span class="error-message" id="company-phone-error"></span>
+					            <input type="text" id="company-phone" name="company-phone" value="${userDetails.ceoName}">
+					            <p class="error" id="company-phone-error"></p>
 					        </div>
 					        
 			                <label for="postal-code">우편번호</label>
-			                <div class="input-field row-group">
-				                <input type="text" id="postal-code" name="postalCode" class="full-width" readonly>
+			                <div class="input-field">
+				                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
 				                <button type="button" class="address-button" onclick="searchAddress()">주소 찾기</button>
+				                <p class="error" id="address-error"></p>
 				            </div>
 				            
 				            <label for="address">주소</label>
-				            <div class="row-group">
-				            	<div class="input-field">
-					            	<input type="text" id="address" name="address" class="full-width" readonly>
-					            </div>
-					            <div class="input-field">
-					            	<input type="text" id="detail-address" name="detailAddress" class="full-width" maxlength="30"> 
-					            </div>
+			            	<div class="input-field">
+				            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
+				            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30"> 
 				            </div>
 					    </div>
 					
@@ -332,10 +325,10 @@
                 <hr>
                 
                 <h2>비밀번호 재설정</h2>
-                <form class="password-content" id="password-content"> 
+                <form class="password-content" id="password-content">
                     <div class="input-group">
                         <label for="current-password">현재 비밀번호</label>
-                        <div class="row-group">
+                        <div class="input-field">
 	                        <div class="password-container">
 	                            <input type="password" id="current-password" value="${inputData.currentPassword}" maxlength="20">
 	                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('current-password', this)"></i>
@@ -344,7 +337,7 @@
                         </div>
                         
                         <label for="password">비밀번호</label>
-                        <div class="row-group">
+                        <div class="input-field">
 	                        <div class="password-container">
 	                            <input type="password" id="password" value="${inputData.password}" maxlength="20">
 	                            <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
@@ -353,7 +346,7 @@
                         </div>
                         
                         <label for="confirm-password">비밀번호 확인</label>
-                        <div class="password-container">
+                        <div class="password-container input-field">
                             <input type="password" id="confirm-password" value="${inputData.confirmPassword}" maxlength="20">
                             <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
                         </div>
@@ -378,7 +371,7 @@
 	    }).open();
 	}
 
-	//유효성 검사 및 비밀번호 재설정 요청
+	// 비밀번호 재설정 요청
 	function resetPassword() {
 		const form = document.getElementById("password-content");
 	  	var currentPassword = document.getElementById("current-password").value;

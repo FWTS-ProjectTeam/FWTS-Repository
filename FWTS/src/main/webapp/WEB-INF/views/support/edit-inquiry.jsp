@@ -18,10 +18,12 @@
         background-color: #fff;
         color: #333;
     }
+    
     .container {
         width: 80%;
         margin: 0 auto;
     }
+    
     .header {
         display: flex;
         justify-content: space-between;
@@ -48,6 +50,7 @@
         color: #333;
         margin-left: 10px;
     }
+    
     .search-container {
     	width: 240px;
         display: flex;
@@ -72,6 +75,7 @@
         color: #ff3366;
         padding: 5px;
     }
+    
     .nav-container {
         display: flex;
         justify-content: space-between;
@@ -94,10 +98,12 @@
         font-weight: 600;
         margin-left: 10px;
     }
+    
     .body-container {
     	display: flex;
     	margin: 20px;
     }
+    
     .sidebar {
     	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
@@ -126,6 +132,7 @@
         color: #fff;
         border-radius: 5px;
     }
+    
     .search-board-container {
     	display: flex;
      	align-items: center;
@@ -160,35 +167,35 @@
      	cursor: pointer;
      	margin-left: 10px;
  	}
-    .post-container {
-    	width: 100%;
-    	margin: 50px 10px 0px 10px;
-     	background: white;
-    }
-    .post-content {
-    	padding: 20px;
-    	border-top: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-    }
-    .title {
-    	width: 100%;
-    	padding: 10px;
-    	font-size: 24px;
-    	border: 1px solid #ccc;
-    	outline: none;
-        font-weight: 600;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-    }
-	textarea {
-		width: 100%;
+ 	
+	.post-container {
+	    width: 100%;
+	    margin: 50px 10px 0px 10px;
+	    background: white;
+	    display: block;
 	}
-    .section {
-        background: #f0f0f0;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
+	.post-content {
+	    padding: 20px;
+	    border-top: 1px solid #ccc;
+	    border-bottom: 1px solid #ccc;
+	}
+	
+	.title {
+	    width: 100%;
+	    padding: 10px;
+	    font-size: 24px;
+	    border: 1px solid #ccc;
+	    outline: none;
+	    font-weight: 600;
+	    margin-bottom: 16px;
+	    box-sizing: border-box;
+	}
+
+	textarea {
+	    width: 99.6%;
+	    box-sizing: border-box; /* 패딩을 포함해 전체 너비 100%로 설정 */
+	}
+
     .button-container {
 	    display: flex;
 	    justify-content: space-between;  /* 버튼들을 양쪽 끝에 배치 */
@@ -260,15 +267,15 @@
 	     		</div>
         	</div>
 	  		<div class="button-container">
-	  			<button type="button" onclick="history.back()">뒤로</button>
+	  			<button type="button" onclick="cancelAction()">취소</button>
 	  			<button type="button" onclick="submitPostForm()">저장</button>
 	      	</div>
   		</form>
     </div>
 </div>
 <script>
-	let oEditors = [];
-
+	var oEditors = [];
+	
 	smartEditor = function() {
 	   	console.log("Naver SmartEditor");
 	   	nhn.husky.EZCreator.createInIFrame({
@@ -298,7 +305,19 @@
 	   
 	   oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 	   form.requestSubmit(); // 폼 제출 실행
-   }
+   	}
+	
+	// 취소 버튼 클릭 시 실행
+	function cancelAction() {
+		const inquiryId = "${inquiry.inquiryId}";
+		
+	    // 글 작성인지, 수정인지에 따라 처리
+	    if (inquiryId) {
+            window.location.href = "/support-center/inquiry/" + inquiryId;
+        } else {
+            window.location.href = "/support-center/inquiry";
+        }
+	}
 </script>
 </body>
 </html>
