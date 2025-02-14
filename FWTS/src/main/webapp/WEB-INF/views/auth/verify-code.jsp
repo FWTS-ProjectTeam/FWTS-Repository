@@ -133,8 +133,8 @@
         <div class="input-group">
 		   <label for="code">인증 코드</label>
 		   <div class="row-group">
-		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력하세요" 
-		       		  maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력하세요" maxlength="6"
+		       		  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 		       <button type="button" class="resend-code" onclick="resendCode()">재전송</button>
 		    </div>
 		</div>
@@ -182,7 +182,7 @@
 	    // 로딩 메시지 표시
 	    Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
 
-	    // 이메일 인증 코드 요청
+	 	// API 요청
 	    fetch("/find-password/resend-code", {
 	        method: 'POST'
 	    })

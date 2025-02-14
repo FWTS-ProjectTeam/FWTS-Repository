@@ -21,10 +21,20 @@ public class InquiryBoardService {
 	public int count(Map<String, Object> paging) {
 	    return inquiryBoardMapper.count(paging);
 	}
+	
+	// 문의사항 내역 수 확인
+	public int countByWriterId(Map<String, Integer> params) {
+		return inquiryBoardMapper.countByWriterId(params.get("writerId"));
+	}
 
 	// 문의사항 조회
 	public List<InquiryListDto> findAll(Map<String, Object> paging) {
 	    return inquiryBoardMapper.findAll(paging);
+	}
+	
+	// 문의사항 내역 조회
+	public List<InquiryListDto> findByWriterId(Map<String, Integer> params) {
+		return inquiryBoardMapper.findByWriterId(params);
 	}
 
 	// 문의사항 상세 조회
@@ -48,15 +58,5 @@ public class InquiryBoardService {
 	@Transactional
 	public void deleteInquiryById(int id) {
 		inquiryBoardMapper.deleteInquiryById(id);
-	}
-
-	// 문의사항 내역 수 확인
-	public int countByWriterId(Map<String, Integer> params) {
-		return inquiryBoardMapper.countByWriterId(params.get("writerId"));
-	}
-	
-	// 문의사항 내역 조회
-	public List<InquiryListDto> findByWriterId(Map<String, Integer> params) {
-		return inquiryBoardMapper.findByWriterId(params);
 	}
 }

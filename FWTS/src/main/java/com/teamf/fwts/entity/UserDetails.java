@@ -9,11 +9,9 @@ import lombok.Data;
 @Data
 public class UserDetails {
     private Integer userId;
-    @NotBlank
-    @Size(min = 13, max = 13)
+    @NotNull
     @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$")
     private String phoneNum;
-    @Size(min = 9, max = 13)
     @Pattern(regexp = "^(\\d{2,3}-\\d{3,4}-\\d{4}|\\d{4}-\\d{4})$")
     private String companyNum;
     private String businessNo;

@@ -124,11 +124,11 @@
         color: #fff;
         border-radius: 5px;
     }
-    .info-container {
+    .profile-container {
         width: 100%;
         margin: 0px 10px;
     }
-    .info-content, .password-content {
+    .profile-content, .password-content {
         padding: 5px 20px;
     }
     .input-group {
@@ -274,31 +274,31 @@
                 <a href="/mypage/inquiry-history">문의 내역</a>
             </div>
             
-            <div class="info-container">
+            <div class="profile-container">
                 <h2>회원정보 수정</h2>
-                    <form class="info-content" onsubmit="return validateForm(event);">
+                    <form class="profile-content" id="profile-content">
 					    <div class="input-group">
 					        <label for="company">업체명</label>
 					        <div class="input-field">
-					            <input type="text" id="company" name="company" value="${userDetails.companyName}">
-					            <p class="error" id="company-error"></p>
+					            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
 					        </div>
 					        
 					        <label for="ceo">대표자명</label>
 					        <div class="input-field">
-					            <input type="text" id="ceo" name="ceo" value="${userDetails.ceoName}">
-					            <p class="error" id="ceo-error"></p>
+					            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
 					        </div>
 					        
 					        <label for="phone">핸드폰번호</label>
 					        <div class="input-field">
-					            <input type="text" id="phone" name="phone" value="${userDetails.phoneNum}">
+					            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
+					            	placeholder="02-1234-5678 (- 포함)" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 					            <p class="error" id="phone-error"></p>
 					        </div>
 					        
 					        <label for="company-phone">업체 전화번호</label>
 					        <div class="input-field">
-					            <input type="text" id="company-phone" name="company-phone" value="${userDetails.ceoName}">
+					            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
+					            	 placeholder="010-1234-5678 (- 포함)" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 					            <p class="error" id="company-phone-error"></p>
 					        </div>
 					        
@@ -306,18 +306,18 @@
 			                <div class="input-field">
 				                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
 				                <button type="button" class="address-button" onclick="searchAddress()">주소 찾기</button>
-				                <p class="error" id="address-error"></p>
 				            </div>
 				            
 				            <label for="address">주소</label>
 			            	<div class="input-field">
 				            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
-				            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30"> 
+				            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30"
+				            		placeholder="상세 주소 (선택)" > 
 				            </div>
 					    </div>
 					
 					    <div class="button-group">
-					        <button type="submit" class="update-button">저장</button>
+					        <button type="button" class="update-button" onclick="editProfile()">저장</button>
 					        <button type="button" class="delete-button">회원탈퇴</button>
 					    </div>
 					</form>
@@ -370,63 +370,169 @@
 	        }
 	    }).open();
 	}
+	
+	// 회원정보 수정 요청
+	function editProfile() {
+		const form = document.getElementById("profile-content");
+		
+		// 입력 필드
+	    var companyName = document.getElementById("company").value.trim();
+	    var ceoName = document.getElementById("ceo").value.trim();
+	    var phoneNum = document.getElementById("phone").value.trim();
+	    var companyNum = document.getElementById("company-phone").value.trim();
+	    var postalCode = document.getElementById("postal-code").value.trim();
+	    var address = document.getElementById("address").value.trim();
+	    var detailAddress = document.getElementById("detail-address").value.trim();
+	    
+	 	// 오류 메시지 필드
+	    var errorFields = {
+            companyName: document.getElementById("company-error"),
+            ceoName: document.getElementById("ceo-error"),
+            phoneNum: document.getElementById("phone-error"),
+            companyNum: document.getElementById("company-phone-error"),
+            postalCode: document.getElementById("postal-code-error"),
+            address: document.getElementById("address-error"),
+            detailAddress: document.getElementById("detail-address-error")
+        };
+	    
+		// 유효성 검사: 1. 입력 여부   
+	    if (!companyName) {
+	    	alert("업체명을 입력하세요.");
+	    	return false;
+	    } else if (!ceoName) {
+	    	alert("대표자명을 입력하세요.");
+	    	return false;
+	    } else if (!phoneNum) {
+	    	alert("핸드폰 번호를 입력하세요.");
+	    	return false;
+	    } else if (!postalCode) {
+	    	alert("주소를 입력하세요.");
+	    	return false;
+	    }
+	 	
+	    // 유효성 검사: 2. 입력 형식
+	    var isValid = true;
+	 	
+	 	// 오류 메시지 초기화
+	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; });
+	    
+	    if (!/^(010)-\d{4}-\d{4}$/.test(phoneNum)) {
+	        errorFields.phoneNum.textContent = "올바른 핸드폰 번호 형식이 아닙니다.";
+	        isValid = false;
+	    }
+
+	    if (companyNum && !/^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/.test(companyNum)) {
+	        errorFields.companyNum.textContent = "올바른 업체 전화번호 형식이 아닙니다.";
+	        isValid = false;
+	    }
+
+	    if (!isValid) {
+	        return false;
+	    }
+
+	    // API 요청
+	    fetch("/mypage/edit-profile", {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify({
+	            companyName, ceoName, phoneNum, companyNum, postalCode, address, detailAddress
+	        })
+	    })
+	    .then(response => {
+	        if (response.ok) {
+	            Swal.fire({
+	                icon: "success",
+	                title: "수정 완료",
+	                text: "회원 정보가 성공적으로 수정되었습니다.",
+	                confirmButtonColor: "#3085d6",
+	                confirmButtonText: "확인"
+	            }).then(() => location.reload());
+	        } else {
+	            return response.json().then(data => {
+	                throw new Error(data.errorMessage || "회원 정보 수정 실패");
+	            });
+	        }
+	    })
+	    .catch(error => {
+	  	    Swal.fire({
+	  	        icon: 'error',
+	  	        title: '오류 발생',
+	  	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+	  	        confirmButtonColor: '#d33',
+	  	        confirmButtonText: '확인'
+	  	    });
+	  	});
+	}
 
 	// 비밀번호 재설정 요청
 	function resetPassword() {
 		const form = document.getElementById("password-content");
+		
+		// 입력 필드
 	  	var currentPassword = document.getElementById("current-password").value;
 	  	var password = document.getElementById("password").value;
 	  	var confirmPassword = document.getElementById("confirm-password").value;
-	  	var currentPasswordError = document.getElementById("current-password-error");
-	  	var passwordError = document.getElementById("password-error");
+	  	
+	  	// 오류 메시지 필드
+	    var errorFields = {
+	    	currentPassword: document.getElementById("current-password-error"),
+	    	password: document.getElementById("password-error")
+	    }
 	
 	  	// 비밀번호 정규식: 영문 + 숫자 + 특수문자 포함
 	  	var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]*$/;
 
-	  	// 오류 메시지 초기화
-	  	currentPasswordError.textContent = "";
-	  	passwordError.textContent = "";
-	  	
 	  	if (!currentPassword || !password || !confirmPassword) {
 	  		alert("비밀번호를 입력해주세요.")
 	  		return false;
 	  	}
 	  	
+	 	// 오류 메시지 초기화
+	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; });
+	  	
+	  	
 	  	if (password.length < 8) {
-	  		passwordError.textContent = "비밀번호는 8~20자 이내여야 합니다.";
+	  		errorFields.password.textContent = "비밀번호는 8~20자 이내여야 합니다.";
 	      	return false;
 	  	}
 	
 	  	if (!passwordRegex.test(password)) {
-	  		passwordError.textContent = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*()_+=-)를 포함해야 합니다.";
+	  		errorFields.password.textContent = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*()_+=-)를 포함해야 합니다.";
 	      	return false;
 	  	}
 	
 	  	if (password !== confirmPassword) {
-	  		passwordError.textContent = "비밀번호가 일치하지 않습니다.";
+	  		errorFields.password.textContent = "비밀번호가 일치하지 않습니다.";
 	      	return false;
 	  	}
 
+	 	// API 요청
 	  	fetch("/mypage/reset-password", {
 	  	    method: "POST",
 	  	    headers: {
 	  	        "Content-Type": "application/json"
 	  	    },
 	  	    body: JSON.stringify({ 
-	  	    	currentPassword: currentPassword,
-	  	    	password: password, 
-	  	    	confirmPassword: confirmPassword 
-	  	    })
+	  	    	currentPassword, password, confirmPassword
+			})
 	  	})
 	  	.then(response => {
-	  	    Swal.close(); // 로딩창 닫기
-	  	    
 	  	    if (response.ok) {
-	  	        location.reload();
+	  	    	Swal.fire({
+	                icon: "success",
+	                title: "재설정 완료",
+	                text: "비밀번호가 성공적으로 재설정되었습니다.",
+	                confirmButtonColor: "#3085d6",
+	                confirmButtonText: "확인"
+	            });
+	  	    	
+	  	   		// 입력 필드 초기화
+	  	    	document.querySelectorAll("#password-content input")
+	  	    		.forEach(input => input.value = "");
 	  	    } else if (response.status === 400) {
 	  	    	return response.json().catch(() => null).then(data => {
       	            if (data && data.errorMessage) {
-      	            	currentPasswordError.textContent = data.errorMessage; // 현재 비밀번호 불일치
+      	            	errorFields.currentPassword.textContent = data.errorMessage; // 현재 비밀번호 불일치
       	            } else {
       	                location.reload();
       	            }
@@ -436,7 +542,6 @@
 	  	    }
 	  	})
 	  	.catch(error => {
-	  	    Swal.close();
 	  	    Swal.fire({
 	  	        icon: 'error',
 	  	        title: '오류 발생',

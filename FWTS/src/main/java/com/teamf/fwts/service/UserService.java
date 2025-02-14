@@ -106,4 +106,15 @@ public class UserService {
 	public boolean checkPassword(String inputPassword, String currentPassword) {
 		return passwordEncoder.matches(inputPassword, currentPassword);
 	}
+
+	// 회원 상세 수정
+	@Transactional
+	public void updateUserDetails(UserDetails userDetails) {
+		// 빈 문자열이면 NULL로 변환
+		userDetails.setDetailAddress(
+				userDetails.getDetailAddress().isBlank() ? null : userDetails.getDetailAddress()
+        );
+		
+		userMapper.updateUserDetails(userDetails);
+	}
 }

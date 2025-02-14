@@ -120,7 +120,7 @@ public class SupportController {
 	
 	// 문의사항 편집 페이지
 	@GetMapping("/inquiry/edit")
-	public String inquiryEditForm(@RequestParam(name = "id", required = false) Integer id, 
+	public String editInquiryForm(@RequestParam(name = "id", required = false) Integer id, 
 	                          	  Authentication authentication, Model model) {
 	    // 글 수정 처리
 	    if (id != null) {
@@ -141,7 +141,7 @@ public class SupportController {
 	
 	// 문의사항 편집
 	@PostMapping("/inquiry/edit")
-	public String inquiryEdit(@Valid InquiryBoard inquiry, BindingResult bindingResult,
+	public String editInquiry(@Valid InquiryBoard inquiry, BindingResult bindingResult,
 	                          Authentication authentication, Model model) {
 	    // 유효성 검사
 	    if (bindingResult.hasErrors()) {

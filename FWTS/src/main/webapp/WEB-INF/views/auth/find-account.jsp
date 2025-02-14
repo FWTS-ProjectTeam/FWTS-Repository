@@ -226,15 +226,17 @@
      	// 로딩 메시지 표시
       	Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
 
-		// 이메일 인증 코드 요청
+		// API 요청
       	fetch("/find-password/send-code", {
       	    method: 'POST',
       	    headers: {
       	        'Content-Type': 'application/json'
       	    },
-      	    body: JSON.stringify({ email: email }) // JSON 형식으로 변환
+      	    body: JSON.stringify({ email }) // JSON 형식으로 변환
       	})
       	.then(response => {
+      		Swal.close();
+      		
       	    if (response.ok) {
       	        window.location.href = "/find-password/verify-code"; // 인증 코드 입력 페이지
       	    } else if (response.status === 400) {
@@ -256,7 +258,7 @@
       	    }
       	})
       	.catch(() => {
-      	    Swal.close();
+      		Swal.close();
       	    Swal.fire({
       	        icon: 'error',
       	        title: '오류 발생',
