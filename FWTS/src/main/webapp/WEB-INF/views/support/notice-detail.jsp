@@ -16,10 +16,12 @@
         background-color: #fff;
         color: #333;
     }
+    
     .container {
         width: 80%;
         margin: 0 auto;
     }
+    
     .header {
         display: flex;
         justify-content: space-between;
@@ -46,6 +48,7 @@
         color: #333;
         margin-left: 10px;
     }
+    
     .search-container {
     	width: 240px;
         display: flex;
@@ -71,6 +74,7 @@
         color: #ff3366;
         padding: 5px;
     }
+    
     .nav-container {
         display: flex;
         justify-content: space-between;
@@ -93,10 +97,12 @@
         font-weight: 600;
         margin-left: 10px;
     }
+    
     .body-container {
     	display: flex;
     	margin: 20px;
     }
+    
     .sidebar {
     	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
@@ -125,6 +131,7 @@
         color: #fff;
         border-radius: 5px;
     }
+    
     .post-container {
     	width: 100%;
     	margin: 50px 10px 0px 10px;
@@ -135,22 +142,22 @@
     	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
     }
-    .title {
+    
+    .post-content .title {
         font-weight: bold;
         text-align: center;
         margin-bottom: 10px;
     }
-    .date {
+    .post-content .date {
         text-align: right;
         color: gray;
         font-size: 0.9em;
     }
-    .section {
-        background: #f0f0f0;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
+    .post-content img {
+	    max-width: 100%; /* 이미지가 컨테이너를 초과하지 않도록 설정 */
+	    height: auto; /* 비율에 맞게 이미지 크기 조정 */
+	}
+    
     .button-container {
         text-align: center;
         margin-top: 20px;

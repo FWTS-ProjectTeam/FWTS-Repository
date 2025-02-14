@@ -18,10 +18,12 @@
         background-color: #fff;
         color: #333;
     }
+    
     .container {
         width: 80%;
         margin: 0 auto;
     }
+    
     .header {
         display: flex;
         justify-content: space-between;
@@ -48,6 +50,7 @@
         color: #333;
         margin-left: 10px;
     }
+    
     .search-container {
         width: 240px;
         display: flex;
@@ -72,6 +75,7 @@
         color: #ff3366;
         padding: 5px;
     }
+    
     .nav-container {
         display: flex;
         justify-content: space-between;
@@ -94,10 +98,12 @@
         font-weight: 600;
         margin-left: 10px;
     }
+    
     .body-container {
     	display: flex;
     	margin: 20px;
     }
+    
     .sidebar {
         width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
@@ -126,6 +132,7 @@
         color: #fff;
         border-radius: 5px;
     }
+    
     .search-board-container {
     	width: 100%;
     	height: 40px;
@@ -134,6 +141,7 @@
 	    justify-content: end;
 	    margin-bottom: 20px;
 	}
+	
     .table-container {
         width: 100%;
         margin: 20px 10px 0px 10px;
@@ -179,6 +187,12 @@
 	    max-width: 100px;
 	    text-align: center;
 	}
+	
+	.reply {
+		font-weight: 600;
+		color: #ffb6c1;
+	}
+	
     .pagination {
         text-align: center;
         margin-top: 20px;
@@ -263,7 +277,7 @@
                         <c:forEach var="inquiry" items="${inquirys}">
 				            <tr>
 				                <td>${inquiry.inquiryId}</td>
-				                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
+				                <td><a href="/support-center/inquiry/${inquiry.inquiryId}"><c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
 				                <td>${inquiry.username}</td>
 				                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 				            </tr>

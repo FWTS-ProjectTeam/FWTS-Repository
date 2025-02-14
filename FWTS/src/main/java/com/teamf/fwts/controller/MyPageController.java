@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.ResetPasswordDto;
+import com.teamf.fwts.entity.UserDetails;
 import com.teamf.fwts.entity.Users;
 import com.teamf.fwts.service.InquiryBoardService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +29,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/mypage")
 public class MyPageController {
-	private final UsersService userService;
+	private final UserService userService;
 	private final InquiryBoardService inquiryBoardService;
 	
 	// 내 정보 수정 페이지
 	@GetMapping("/edit-profile")
-	public String profilEditeForm() {
+	public String profilEditeForm(Authentication authentication, Model model) {
+		Users user = userService.findByUsername(authentication.getName());
+		UserDetails userDetails = userService.findByUserId(user.getUserId());
+		
+		model.addAttribute("userDetails", userDetails);
 		return "mypage/edit-profile";
 	}
 	
 	// 회원정보 수정
-	
+	@PostMapping("/edit-profile")
+	public String profilEdite(@Valid UserDetails userDetails, BindingResult bindingResult, Authentication authentication) {
+		// 유효성 검사
+//        if (bindingResult.hasErrors() || !password.equals(dto.getConfirmPassword()))
+//        	return ResponseEntity.badRequest().build();
+		
+		return "";
+	}
 	
 	// 비밀번호 재설정
 	@PostMapping("/reset-password")
@@ -66,8 +78,7 @@ public class MyPageController {
 	// 문의사항 내역 조회
 	@GetMapping("/inquiry-history")
 	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page, Authentication authentication, Model model) {
-	    String username = authentication.getName();
-	    Users user = userService.findByUsername(username);
+	    Users user = userService.findByUsername(authentication.getName());
 		
 	    Map<String, Integer> params = new HashMap<>();
 	    params.put("writerId", user.getUserId());

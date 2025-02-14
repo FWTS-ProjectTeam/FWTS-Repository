@@ -24,7 +24,7 @@ import com.teamf.fwts.entity.InquiryBoard;
 import com.teamf.fwts.entity.NoticeBoard;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.NoticeBoardService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class SupportController {
 	private final NoticeBoardService noticeBoardService;
 	private final InquiryBoardService inquiryBoardService;
-	private final UsersService userService;
+	private final UserService userService;
 	
 	// 공지사항 조회
 	@GetMapping("/notice")
@@ -154,10 +154,13 @@ public class SupportController {
 	    }
 
 	    try {
+	    	Integer inquiryId;
+	    	
 	        // 글 작성
 	        if (inquiry.getInquiryId() == null) {
 	        	inquiry.setWriter(userService.findByUsername(authentication.getName()));
 	            inquiryBoardService.saveInquiry(inquiry);
+	            inquiryId = inquiry.getInquiryId();
 	        }
 	        
 	        // 글 수정
@@ -171,9 +174,11 @@ public class SupportController {
 		            oldInquiry.setInquiryContent(inquiry.getInquiryContent());
 		            inquiryBoardService.updateInquiry(oldInquiry);
 	            }
+	            
+	            inquiryId = oldInquiry.getInquiryId();
 	        }
 
-	        return "redirect:/support-center/inquiry"; // 문의사항 페이지
+	        return "redirect:/support-center/inquiry/" + inquiryId; // 문의사항 페이지
 	    } catch (Exception e) {
 	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
 	        model.addAttribute("inquiry", inquiry);

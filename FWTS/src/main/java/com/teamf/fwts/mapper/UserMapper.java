@@ -45,5 +45,9 @@ public interface UserMapper {
 	
 	// 회원 조회
 	@Select("SELECT * FROM users WHERE username = #{username}")
-    Users findByUsername(String username);
+    Users findByUsername(@Param("username") String username);
+
+	// 회원 상세 조회
+	@Select("SELECT * FROM user_details WHERE user_id = #{userId}")
+	UserDetails findByUserId(@Param("userId") Integer userId);
 }

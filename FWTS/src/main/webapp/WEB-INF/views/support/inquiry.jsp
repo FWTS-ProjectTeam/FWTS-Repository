@@ -17,10 +17,12 @@
 	    background-color: #fff;
 	    color: #333;
 	}
+	
 	.container {
 	    width: 80%;
 	    margin: 0 auto;
 	}
+	
     .header {
         display: flex;
         justify-content: space-between;
@@ -47,6 +49,7 @@
        color: #333;
        margin-left: 10px;
    	}
+   	
     .search-container {
     	width: 240px;
         display: flex;
@@ -71,6 +74,7 @@
         color: #ff3366;
         padding: 5px;
     }
+    
     .nav-container {
         display: flex;
         justify-content: space-between;
@@ -93,10 +97,12 @@
         font-weight: 600;
         margin-left: 10px;
     }
+    
     .body-container {
     	display: flex;
     	margin: 20px;
     }
+    
     .sidebar {
     	width: 180px; /* 사이드 메뉴 너비 고정 */
         min-width: 180px;
@@ -125,13 +131,28 @@
         color: #fff;
         border-radius: 5px;
     }
-    .search-board-container {
-    	width: 100%;
-    	height: 40px;
-    	display: flex;
+    
+    .table-top-container {
+	    display: flex;
+	    justify-content: space-between;
 	    align-items: center;
-	    justify-content: end;
+	    width: 100%;
 	    margin-bottom: 20px;
+	}
+	
+	.button-container button {
+	    background: #ff7f9d;
+	    color: white;
+	    padding: 10px 20px;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	}
+	
+	.search-board-container {
+		height: 40px;
+	    display: flex;
+	    align-items: center;
 	}
 	.search-category {
 	 	width: 80px;
@@ -141,7 +162,12 @@
 	    font-size: 14px;
 	    background-color: #fff;
 	    margin-right: 10px;
+	    outline: none; /* 클릭 시 검은색 강조 제거 */
+	    appearance: none; /* 기본 드롭다운 스타일 제거 */
+	    -webkit-appearance: none;
+	    -moz-appearance: none;
 	}
+	
     .search-board-box {
     	width: 280px;
         padding: 10px;
@@ -157,10 +183,10 @@
         background-color: #ff7f9d;
         color: #fff;
         font-size: 16px;
-        font-weight: 600;
         cursor: pointer;
         margin-left: 10px;
     }
+    
     .table-container {
         width: 100%;
         margin: 20px 10px 0px 10px;
@@ -206,6 +232,12 @@
 	    max-width: 100px;
 	    text-align: center;
 	}
+	
+	.reply {
+		font-weight: 600;
+		color: #ffb6c1;
+	}
+	
     .pagination {
         text-align: center;
         margin-top: 20px;
@@ -225,14 +257,6 @@
         border-radius: 5px;
         color: #fff;
     }
-    button {
-		background: #ff7f9d;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-	}
 </style>
 </head>
 <body>
@@ -281,15 +305,21 @@
          </div>
          
          <div class="table-container">
-         	<form class="search-board-container" action="/support-center/inquiry">
-			    <select class="search-category" name="category">
-			        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
-			        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
-			        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
-			    </select>
-			    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
-			    <input type="submit" class="search-board-button" value="검색">
-			</form>
+         	<div class="table-top-container">
+         		<div class="button-container">
+		          <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
+	   			</div>
+	         
+	         	<form class="search-board-container" action="/support-center/inquiry">
+				    <select class="search-category" name="category">
+				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
+				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
+				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
+				    </select>
+				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
+				    <input type="submit" class="search-board-button" value="검색">
+				</form>
+         	</div>
         
             <table>
                 <thead>
@@ -304,7 +334,7 @@
                     <c:forEach var="inquiry" items="${inquirys}">
 			            <tr>
 			                <td>${inquiry.inquiryId}</td>
-			                <td><a href="/support-center/inquiry/${inquiry.inquiryId}">${inquiry.inquiryTitle}</a></td>
+			                <td><a href="/support-center/inquiry/${inquiry.inquiryId}"><c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
 			                <td>${inquiry.username}</td>
 			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 			            </tr>
@@ -350,10 +380,6 @@
 			        </c:otherwise>
 			    </c:choose>
 			</div>
-
-			<div class="button-container">
-		          <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
-      		</div>
         </div>
     </div>
 </div>

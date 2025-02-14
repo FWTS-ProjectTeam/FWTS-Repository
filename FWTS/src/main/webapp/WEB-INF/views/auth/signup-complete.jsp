@@ -18,6 +18,16 @@
         align-items: center;
         height: 100vh;
     }
+    
+    h1 {
+        color: #ff6699;
+        font-weight: 600;
+    }
+    p {
+        font-size: 16px;
+        margin: 15px 0;
+    }
+    
     .container {
         max-width: 600px;
         width: 100%;
@@ -28,14 +38,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
-    h1 {
-        color: #ff6699;
-        font-weight: 600;
-    }
-    p {
-        font-size: 16px;
-        margin: 15px 0;
-    }
+    
     .button-container {
     	margin-top: 30px;
     }

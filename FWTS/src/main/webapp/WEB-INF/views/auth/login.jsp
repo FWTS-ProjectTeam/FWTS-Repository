@@ -20,6 +20,7 @@
         align-items: center;
         height: 100vh;
     }
+    
     .container {
         text-align: center;
         max-width: 400px;
@@ -51,15 +52,6 @@
     .container input[type="password"]:focus {
 		border-color: #ff6699;
 	}
-    .remember-me {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin: 10px 0;
-    }
-    .remember-me label {
-        font-size: 14px;
-    }
     .container button {
         width: 100%;
         padding: 10px;
@@ -71,20 +63,30 @@
         font-size: 16px;
         font-weight: 600;
     }
+	
+    .remember-me {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 10px 0;
+    }
+    .remember-me label {
+        font-size: 14px;
+    }
+    
     .links-container {
         display: flex;
         justify-content: space-between;
         margin-top: 15px;
         font-size: 14px;
     }
-    .bold-text {
-        font-weight: 600;
+    .links-container a {
         text-decoration: none;
         color: #333;
     }
-    .no-underline {
-        text-decoration: none;
-        color: #333;
+    
+    .bold {
+        font-weight: 600;
     }
     
     /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
@@ -110,11 +112,11 @@
     </form>
     
     <div class="links-container">
-        <a href="/sign-up" class="bold-text">회원가입</a>
+        <a href="/sign-up" class="bold">회원가입</a>
         <div>
-            <a href="/find-id" class="no-underline">아이디 찾기</a>
+            <a href="/find-id">아이디 찾기</a>
             <span>|</span>
-            <a href="/find-password" class="no-underline">비밀번호 찾기</a>
+            <a href="/find-password">비밀번호 찾기</a>
         </div>
     </div>
 </div>
