@@ -211,10 +211,10 @@
 <body>
 <div class="container">
 	<div class="header">
-         <div class="header-left">
-             <h1>생화24</h1>
-             <div class="search-container">
-		        <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
+		<div class="header-left">
+        	<h1>생화24</h1>
+            <div class="search-container">
+		    	<input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
 		        <button class="search-button">
 		            <i class="fas fa-search"></i>
 		        </button>
@@ -256,53 +256,52 @@
         <div class="table-container">
         	<div class="search-board-container"></div>
         
-	            <table>
-	                <thead>
-	                    <tr>
-	                        <th>번호</th>
-	                        <th>제목</th>
-	                        <th>작성자</th>
-	                        <th>작성일</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <c:forEach var="notice" items="${notices}">
-				            <tr>
-				                <td>${notice.noticeId}</td>
-				                <td><a href="/support-center/notice/${notice.noticeId}">${notice.noticeTitle}</a></td>
-				                <td>생화24</td>
-				                <td><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></td>
-				            </tr>
-				        </c:forEach>
-					</tbody>
-	            </table>
-            
-	            <!-- 페이지네이션 -->
-	            <div class="pagination">			        
-			       	<c:choose>
-				        <c:when test="${count > 0}">
-				        	<c:choose>
-							    <c:when test="${currentPage > 1}">
-							        <a href="/support-center/notice?page=${currentPage - 1}">◀</a>
-							    </c:when>
-							    <c:otherwise><a>◀</a></c:otherwise>
-					        </c:choose>
-			        
-			       			<span>${currentPage} / ${totalPages}</span>
-			       		
-				       		<c:choose>
-							    <c:when test="${currentPage < totalPages}">
-							        <a href="/support-center/notice?page=${currentPage + 1}">▶</a>
-							    </c:when>
-							    <c:otherwise><a>▶</a></c:otherwise>
-							</c:choose>
-		       			</c:when>
-	       				<c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
-			       	</c:choose>
-			   	</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="notice" items="${notices}">
+			            <tr>
+			                <td>${notice.noticeId}</td>
+			                <td><a href="/support-center/notice/${notice.noticeId}">${notice.noticeTitle}</a></td>
+			                <td>생화24</td>
+			                <td><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></td>
+			            </tr>
+			        </c:forEach>
+				</tbody>
+            </table>
+           
+            <!-- 페이지네이션 -->
+            <div class="pagination">			        
+		       	<c:choose>
+			        <c:when test="${count > 0}">
+			        	<c:choose>
+						    <c:when test="${currentPage > 1}">
+						        <a href="/support-center/notice?page=${currentPage - 1}">◀</a>
+						    </c:when>
+						    <c:otherwise><a>◀</a></c:otherwise>
+				        </c:choose>
+		        
+		       			<span>${currentPage} / ${totalPages}</span>
+		       		
+			       		<c:choose>
+						    <c:when test="${currentPage < totalPages}">
+						        <a href="/support-center/notice?page=${currentPage + 1}">▶</a>
+						    </c:when>
+						    <c:otherwise><a>▶</a></c:otherwise>
+						</c:choose>
+	       			</c:when>
+       				<c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
+		       	</c:choose>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

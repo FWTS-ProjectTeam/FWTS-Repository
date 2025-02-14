@@ -34,7 +34,7 @@ public class MyPageController {
 	
 	// 내 정보 수정 페이지
 	@GetMapping("/edit-profile")
-	public String profilEditeForm(Authentication authentication, Model model) {
+	public String editProfilForm(Authentication authentication, Model model) {
 		Users user = userService.findByUsername(authentication.getName());
 		UserDetails userDetails = userService.findByUserId(user.getUserId());
 		
@@ -44,12 +44,20 @@ public class MyPageController {
 	
 	// 회원정보 수정
 	@PostMapping("/edit-profile")
-	public String profilEdite(@Valid UserDetails userDetails, BindingResult bindingResult, Authentication authentication) {
-		// 유효성 검사
-//        if (bindingResult.hasErrors() || !password.equals(dto.getConfirmPassword()))
-//        	return ResponseEntity.badRequest().build();
+	public ResponseEntity<?> editProfile(@Valid @RequestBody UserDetails userDetails, BindingResult bindingResult, Authentication authentication) {
+		Users user = userService.findByUsername(authentication.getName());
 		
-		return "";
+		// 유효성 검사
+        if (bindingResult.hasErrors())
+        	return ResponseEntity.badRequest().build();
+        
+        try {
+        	userDetails.setUserId(user.getUserId());
+        	userService.updateUserDetails(userDetails);
+        	return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().build();
+		}
 	}
 	
 	// 비밀번호 재설정
