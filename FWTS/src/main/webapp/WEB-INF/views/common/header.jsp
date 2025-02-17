@@ -2,7 +2,7 @@
 
 <div class="header">
     <div class="header-left">
-        <h1>생화24</h1>
+		<a href="/FWTS" class="special-font">생화24</a>
         <div class="search-container">
             <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
             <button class="search-button">
@@ -24,11 +24,14 @@
 
 <div class="nav-container">
     <div class="nav">
-        <a href="#">절화</a>
-        <a href="#">난</a>
-        <a href="#">관엽</a>
-        <a href="#">기타</a>
-    </div>
+				<a href="/products" class="${category == 'all' ? 'active' : ''}">
+					<span style="color: var(--main4);">ALL</span>
+				</a>
+				<a href="/products?category=1" class="${category == 1 ? 'active' : ''}">절화</a>
+				<a href="/products?category=2" class="${category == 2 ? 'active' : ''}">난</a>
+				<a href="/products?category=3" class="${category == 3 ? 'active' : ''}">관엽</a>
+				<a href="/products?category=4" class="${category == 4 ? 'active' : ''}">기타</a>
+			</div>
     <div class="nav-right">
         <a href="/mypage/edit-profile">마이페이지</a>
         <a href="/support-center/notice">고객센터</a>
