@@ -48,13 +48,15 @@ public interface InquiryBoardMapper {
 	InquiryBoard findByInquiryId(@Param("id") int id);
 
 	// 문의사항 작성
-	@Insert("INSERT INTO inquiry_board (inquiry_title, inquiry_content, writer_id) " +
-            "VALUES (#{inquiryTitle}, #{inquiryContent}, #{writer.userId})")
+	@Insert({"INSERT INTO inquiry_board (inquiry_title, inquiry_content, writer_id)",
+            "VALUES (#{inquiryTitle}, #{inquiryContent}, #{writer.userId})"})
 	@Options(useGeneratedKeys = true, keyProperty = "inquiryId")
 	void saveInquiry(InquiryBoard newInquiry);
 	
 	// 문의사항 수정
-	@Update("UPDATE inquiry_board SET inquiry_title = #{inquiryTitle}, inquiry_content = #{inquiryContent} WHERE inquiry_id = #{inquiryId}")
+	@Update({"UPDATE inquiry_board SET",
+			"inquiry_title = #{inquiryTitle}, inquiry_content = #{inquiryContent}",
+			"WHERE inquiry_id = #{inquiryId}"})
     void updateInquiry(InquiryBoard oldInquiry);
 	
 	// 문의사항 삭제

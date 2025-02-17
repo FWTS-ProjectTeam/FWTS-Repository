@@ -116,7 +116,7 @@
 	    color: #555;
 	}
 	
-	/* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
 	html, body {
 	    height: auto;
 	    min-height: 100vh;
@@ -128,13 +128,11 @@
 <div class="container">
 	<h1><a href="/">생화24</a></h1>
 	<div class="tabs">
-		<div class="tab" id="username" onclick="switchTab('username')">아이디
-			찾기</div>
-		<div class="tab" id="password" onclick="switchTab('password')">비밀번호
-			찾기</div>
+		<div class="tab" id="username" onclick="switchTab('username')">아이디 찾기</div>
+		<div class="tab" id="password" onclick="switchTab('password')">비밀번호 찾기</div>
 	</div>
 
-	<!-- 아이디 찾기 폼 -->
+	<!-- 아이디 찾기 -->
 	<form id="username-content" class="form-content" action="/find-id" method="post" onsubmit="return validateBeforeFindId()">
 		<div class="input-group">
 			<label for="email">이메일</label>
@@ -145,7 +143,7 @@
 		</div>
 	</form>
 
-	<!-- 비밀번호 찾기 폼 -->
+	<!-- 비밀번호 찾기 -->
 	<form id="password-content" class="form-content">
 		<div class="input-group">
 			<label for="email">이메일</label>
@@ -254,7 +252,7 @@
       	            }
       	        });
       	    } else {
-      	    	throw new Error('서버 오류 발생');
+      	    	throw new Error('서버 오류');
       	    }
       	})
       	.catch(() => {

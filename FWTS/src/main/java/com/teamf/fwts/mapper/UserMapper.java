@@ -23,13 +23,13 @@ public interface UserMapper {
 			"VALUES (#{userId}, #{phoneNum}, #{companyNum}, #{businessNo}, #{companyName}, #{ceoName}, #{postalCode}, #{address}, #{detailAddress})"})
     void insertUserDetail(UserDetails userDetail);
 	
-	// 회원 상세 수정
+	// 회원 상세 정보 수정
 	@Update({"UPDATE user_details SET",
 		    "phone_num = #{phoneNum}, company_num = #{companyNum},",
 		    "company_name = #{companyName}, ceo_name = #{ceoName},",
 		    "postal_code = #{postalCode}, address = #{address}, detail_address = #{detailAddress}",
 		    "WHERE user_id = #{userId}"})
-	void updateUserDetails(UserDetails userDetails);
+	void updateUserDetails(UserDetails dto);
 	
 	// 비밀번호 재설정
 	@Update("UPDATE users SET password = #{password} WHERE email = #{email}")
@@ -51,11 +51,11 @@ public interface UserMapper {
 	@Select("SELECT COUNT(*) FROM user_details WHERE business_no = #{value}")
     int checkBesinessNo(@Param("value") String value);
 	
-	// 회원 조회
+	// 회원 정보 조회
 	@Select("SELECT * FROM users WHERE username = #{username}")
     Users findByUsername(@Param("username") String username);
 
-	// 회원 상세 조회
+	// 회원 상세 정보 조회
 	@Select("SELECT * FROM user_details WHERE user_id = #{userId}")
 	UserDetails findByUserId(@Param("userId") Integer userId);
 }

@@ -116,6 +116,13 @@
         font-size: 12px;
         margin-bottom: 10px;
     }
+    
+    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>
@@ -207,7 +214,7 @@
              icon.classList.remove("fa-eye-slash");
              icon.classList.add("fa-eye");
          }
-     }
+	}
 </script>
 </body>
 </html>

@@ -98,7 +98,7 @@ public class AuthController {
     public ResponseEntity<Boolean> checkDuplicate(@RequestBody Map<String, String> request){
     	String type = request.get("type");
         String value = request.get("value");
-
+        
         // 유효성 검사
         if (type == null || value == null)
             return ResponseEntity.ok(true);
@@ -107,7 +107,7 @@ public class AuthController {
         return ResponseEntity.ok(isDuplicate);
     }
     
-    // 사업자등록번호 확인 (*중복 확인만 진행)
+    // 사업자등록번호 확인 (*수정 필요)
     @PostMapping("/check-business-no")
 	public ResponseEntity<Boolean> checkBusinessNo(@RequestBody Map<String, String> request) {
     	String value = request.get("value");
@@ -116,7 +116,7 @@ public class AuthController {
         if (value == null)
             return ResponseEntity.ok(true);
     	
-		boolean isDuplicate = userService.isDuplicate("businessNo", request.get("value"));
+		boolean isDuplicate = userService.isDuplicate("businessNo", value);
 		return ResponseEntity.ok(isDuplicate);
 	}
     
@@ -179,10 +179,8 @@ public class AuthController {
     // 인증 코드 입력 페이지
     @GetMapping("/find-password/verify-code")
     public String verifyCodeForm(HttpSession session) {
-        String email = (String) session.getAttribute("email");
-
         // 이메일이 존재하지 않으면 제한
-        if (email == null)
+        if (session.getAttribute("email") == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
         return "auth/verify-code";
     }
@@ -190,8 +188,6 @@ public class AuthController {
     // 인증 코드 확인 처리
     @PostMapping("/find-password/verify-code")
     public String verifyCode(VerificationCodeDto dto, HttpSession session, Model model) {
-        String code = dto.getCode();
-        
     	String verificationCode = (String) session.getAttribute("verificationCode");
         LocalDateTime expiryTime = (LocalDateTime) session.getAttribute("verificationCodeExpiry");
         
@@ -207,12 +203,12 @@ public class AuthController {
             // 만료된 인증 코드 삭제
             session.removeAttribute("verificationCode");
             session.removeAttribute("verificationCodeExpiry");
-            
+
             return "auth/verify-code"; // 인증 코드 입력 페이지
         }
 
         // 인증 코드가 일치하는지 확인
-        if (!Objects.equals(verificationCode, code)) {
+        if (!Objects.equals(verificationCode, dto.getCode())) {
             model.addAttribute("errorMessage", "잘못된 인증 코드입니다.");
             return "auth/verify-code"; // 인증 코드 입력 페이지
         }
@@ -223,10 +219,8 @@ public class AuthController {
     // 비밀번호 재설정 페이지
     @GetMapping("/find-password/reset-password")
     public String resetPasswordForm(HttpSession session) {
-    	String email = (String) session.getAttribute("email");
-    	
     	// 세션에 이메일이 없으면 제한
-        if (email == null)
+        if (session.getAttribute("email") == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
     	return "auth/reset-password";
     }
