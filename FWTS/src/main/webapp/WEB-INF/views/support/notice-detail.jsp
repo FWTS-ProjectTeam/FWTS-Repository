@@ -10,8 +10,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 고객센터</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     .sidebar .notice-active {
     	font-weight: 600;
@@ -30,7 +30,6 @@
     	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
     }
-    
     .post-content .title {
         font-weight: bold;
         text-align: center;
@@ -47,8 +46,9 @@
 	}
     
     .button-container {
-        text-align: center;
-        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        margin: 20px auto;
     }
     .button-container button {
         background: #ff7f9d;
@@ -57,6 +57,10 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+    
+    .multiple {
+        justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
     }
 </style>
 </head>
@@ -75,11 +79,69 @@
 		       	<p class="date">작성일: <fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd HH:mm" /></p>
 		       	<p>${notice.noticeContent}</p>
         	</div>
-	      	<div class="button-container">
-	          	<button onclick="location.href='/support-center/notice'">목록</button>
-	      	</div>
+	      	
+			<!-- 관리자일 경우: 삭제, 수정 버튼 -->
+			<div class="button-container multiple">
+	    		<sec:authorize access="hasRole('ROLE_ADMIN')">
+		            <button onclick="deleteNotice()">삭제</button>
+				</sec:authorize>
+				
+				<button onclick="location.href='/support-center/notice'">목록</button>
+				
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+	            	<button onclick="location.href='/support-center/notice/edit?id=${notice.noticeId}'">수정</button>
+            	</sec:authorize>
+			</div>
   		</div>
     </div>
 </div>
+<script>
+	function deleteNotice(noticeId) {
+	    Swal.fire({
+	        title: "정말로 삭제하시겠습니까?",
+	        text: "이 작업은 되돌릴 수 없습니다!",
+	        icon: "warning",
+	        showCancelButton: true,
+	        confirmButtonColor: "#d33",
+	        cancelButtonColor: "#aaa",
+	        confirmButtonText: "삭제",
+	        cancelButtonText: "취소"
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            const requestUrl = `/support-center/notice/delete/${notice.noticeId}`;
+	
+	            fetch(requestUrl, { method: "DELETE" })
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('서버 오류');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                if (data.success) {
+	                    window.location.href = "/support-center/notice";
+	                } else {
+	                    Swal.fire({
+	                        icon: 'error',
+	                        title: '삭제 실패',
+	                        text: '존재하지 않는 글입니다.',
+	                        confirmButtonColor: '#d33',
+	                        confirmButtonText: '확인'
+	                    });
+	                }
+	            })
+	            .catch(error => {
+	                Swal.fire({
+	                    icon: 'error',
+	                    title: '오류 발생',
+	                    text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+	                    confirmButtonColor: '#d33',
+	                    confirmButtonText: '확인'
+	                });
+	            });
+	        }
+	    });
+	}
+</script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 <div class="header">
     <div class="header-left">
         <h1>생화24</h1>
+        
+        <!-- 검색 -->
         <div class="search-container">
             <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
             <button class="search-button">
@@ -30,7 +32,16 @@
         <a href="#">기타</a>
     </div>
     <div class="nav-right">
-        <a href="/mypage/edit-profile">마이페이지</a>
+    	<!-- 관리자 항목 -->
+    	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		    <a href="/manage-page/user">관리페이지</a>
+		</sec:authorize>
+		
+		<!-- 비관리자 항목 -->
+		<sec:authorize access="!hasRole('ROLE_ADMIN')">
+		    <a href="/my-page/info">마이페이지</a>
+		</sec:authorize>
+		
         <a href="/support-center/notice">고객센터</a>
     </div>
 </div>

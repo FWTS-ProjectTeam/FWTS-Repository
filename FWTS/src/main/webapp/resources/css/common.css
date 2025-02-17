@@ -9,6 +9,7 @@ body {
     margin: 0 auto;
 }
 
+/* 헤더 */
 .header {
     display: flex;
     justify-content: space-between;
@@ -87,4 +88,28 @@ body {
 .body-container {
     display: flex;
     margin: 20px;
+}
+
+/* 사이드바 */
+.sidebar {
+    width: 180px; /* 너비 고정 */
+    min-width: 180px;
+    max-width: 180px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-right: 20px;
+    align-self: flex-start; /* 내부 콘텐츠 크기만큼 높이 조정 */
+}
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
 }

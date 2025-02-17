@@ -10,7 +10,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 고객센터</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
     .sidebar .notice-active {
@@ -20,12 +19,21 @@
         border-radius: 5px;
     }
     
-	.search-board-container {
+    .button-container button {
+	    background: #ff7f9d;
+	    color: white;
+	    padding: 10px 20px;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	}
+    
+    .table-top-container {
     	width: 100%;
-    	height: 40px;
-    	display: flex;
+	    height: 40px;
+	    display: flex;
+	    justify-content: space-between;
 	    align-items: center;
-	    justify-content: end;
 	    margin-bottom: 20px;
 	}
 	
@@ -107,7 +115,14 @@
     	<%@ include file="/WEB-INF/views/common/support-sidebar.jsp" %>
         
         <div class="table-container">
-        	<div class="search-board-container"></div>
+        	<div class="table-top-container">
+        		<!-- 관리자 항목 -->
+		    	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		        	<div class="button-container">
+			        	<button onclick="location.href='/support-center/notice/edit'">작성</button>
+		   			</div>
+	        	</sec:authorize>
+        	</div>
         
             <table>
                 <thead>

@@ -8,7 +8,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 마이페이지</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -27,6 +26,7 @@
     .profile-content, .password-content {
         padding: 5px 20px;
     }
+    
     .input-group {
         display: flex;
         flex-direction: column;
@@ -52,12 +52,19 @@
     .input-group #postal-code {
     	width: 192px;
     }
-    .button-group {
-        display: flex;
+    .input-field {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    margin-bottom: 10px;
+	}
+    
+    .button-container {
+	    display: flex;
         justify-content: space-between;
         padding-top: 10px;
-    }
-    .update-button, .address-button {
+	}
+    button {
         background: #ff7f9d;
         color: white;
         border: none;
@@ -78,6 +85,7 @@
 	    background: #ff6666;
 	    color: #fff;
 	}
+	
     .password-container {
         position: relative;
         display: flex;
@@ -105,11 +113,9 @@
     .password-container i:hover {
         color: #ff6699;
     }
-    .input-field {
-	    display: flex;
-	    align-items: center;
-	    gap: 10px;
-	    margin-bottom: 10px;
+    
+	.required {
+		color: red;
 	}
 	.error {
 	    color: red;
@@ -136,46 +142,60 @@
             <h2>회원정보 수정</h2>
                 <form class="profile-content" id="profile-content">
 	    			<div class="input-group">
-				        <label for="company">업체명</label>
+				        <label for="company">업체 <span class="required">*</span></label>
 				        <div class="input-field">
 				            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
 				        </div>
 	        
-				        <label for="ceo">대표자명</label>
+				        <label for="ceo">대표자 <span class="required">*</span></label>
 				        <div class="input-field">
 				            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
 				        </div>
 	        
-				        <label for="phone">핸드폰번호</label>
+				        <label for="phone">핸드폰번호 <span class="required">*</span></label>
 				        <div class="input-field">
 				            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
-				            	placeholder="02-1234-5678 (- 포함)" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
+				            	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 				            <p class="error" id="phone-error"></p>
 				        </div>
 	        
-				        <label for="company-phone">업체 전화번호</label>
+				        <label for="company-phone">업체전화번호</label>
 				        <div class="input-field">
 				            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
-				            	 placeholder="010-1234-5678 (- 포함)" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
+				            	 placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 				            <p class="error" id="company-phone-error"></p>
 				        </div>
 	        
-		               <label for="postal-code">우편번호</label>
+		               <label for="postal-code">우편번호 <span class="required">*</span></label>
 		               <div class="input-field">
 		                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
-		                <button type="button" class="address-button" onclick="searchAddress()">주소 찾기</button>
+		                <button type="button" class="button" onclick="searchAddress()">주소 찾기</button>
 		            </div>
             
-		            <label for="address">주소</label>
+		            <label for="address">주소 <span class="required">*</span></label>
 		           	<div class="input-field">
 		            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
-		            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30"
-		            		placeholder="상세 주소 (선택)" > 
+		            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
             		</div>
+            		
+            		<!-- 도매업자 항목 -->
+					<sec:authorize access="hasRole('ROLE_SELLER')">
+						<label for="bank">은행 <span class="required">*</span></label>
+			           	<div class="input-field">
+			            	<input type="text" id="bank" name="bankName" value="${bankAccount.bankName}" maxlength="10">
+	            		</div>
+	            		
+	            		<label for="account">계좌번호 <span class="required">*</span></label>
+			           	<div class="input-field">
+			            	<input type="text" id="account" name="accountNum" value="${bankAccount.accountNum}" maxlength="17"
+			            		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
+			            	<p class="error" id="account-error"></p>
+	            		</div>
+					</sec:authorize>
 	    		</div>
 	
-			    <div class="button-group">
-			        <button type="button" class="update-button" onclick="editProfile()">저장</button>
+			    <div class="button-container">
+			        <button type="button" class="button" onclick="editProfile()">저장</button>
 			        <button type="button" class="delete-button">회원탈퇴</button>
 			    </div>
 			</form>
@@ -188,7 +208,7 @@
                     <label for="current-password">현재 비밀번호</label>
                     <div class="input-field">
 	                	<div class="password-container">
-	                    	<input type="password" id="current-password" value="${inputData.currentPassword}" maxlength="20">
+	                    	<input type="password" id="current-password" maxlength="20">
 	                    	<i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('current-password', this)"></i>
 	                	</div>
 	                	<p class="error" id="current-password-error"></p>
@@ -197,22 +217,22 @@
                     <label for="password">비밀번호</label>
                     <div class="input-field">
                      	<div class="password-container">
-                         	<input type="password" id="password" value="${inputData.password}" maxlength="20">
+                         	<input type="password" id="password" maxlength="20">
                          	<i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
                      	</div>
                      	<p class="error" id="password-error"></p>
                     </div>
                     
                     <label for="confirm-password">비밀번호 확인</label>
-                    <div class="password-container input-field">
-                        <input type="password" id="confirm-password" value="${inputData.confirmPassword}" maxlength="20">
+                    <div class="input-field password-container">
+                        <input type="password" id="confirm-password" maxlength="20">
                         <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
                     </div>
                 </div>
-            
-                <div class="button-group">
-                	<button type="button" class="update-button" onclick="resetPassword()">저장</button>
-                </div>
+                
+            	<div class="button-container">
+            		<button type="button" onclick="resetPassword()">저장</button>
+            	</div>
             </form>
         </div>
     </div>
@@ -233,7 +253,7 @@
 	function editProfile() {
 		const form = document.getElementById("profile-content");
 		
-		// 입력 필드
+		// 입력 필드 값
 	    var companyName = document.getElementById("company").value.trim();
 	    var ceoName = document.getElementById("ceo").value.trim();
 	    var phoneNum = document.getElementById("phone").value.trim();
@@ -241,47 +261,73 @@
 	    var postalCode = document.getElementById("postal-code").value.trim();
 	    var address = document.getElementById("address").value.trim();
 	    var detailAddress = document.getElementById("detail-address").value.trim();
+
+	    // 도매업자일 경우
+	    const bankNameField = document.getElementById("bank");
+	    const accountNumField = document.getElementById("account");
+	    const isSeller = bankNameField !== null && accountNumField !== null;
 	    
+	    var bankName = isSeller ? bankNameField.value.trim() : "";
+	    var accountNum = isSeller ? accountNumField.value.trim() : "";
+	 	
 	 	// 오류 메시지 필드
 	    var errorFields = {
-            companyName: document.getElementById("company-error"),
-            ceoName: document.getElementById("ceo-error"),
             phoneNum: document.getElementById("phone-error"),
-            companyNum: document.getElementById("company-phone-error"),
-            postalCode: document.getElementById("postal-code-error"),
-            address: document.getElementById("address-error"),
-            detailAddress: document.getElementById("detail-address-error")
+            companyNum: document.getElementById("company-phone-error")
         };
+	 	
+	    if (isSeller) {
+	        errorFields.accountNum = document.getElementById("account-error");
+	    }
 	    
 		// 유효성 검사: 1. 입력 여부   
 	    if (!companyName) {
-	    	alert("업체명을 입력하세요.");
+	    	alert("업체를 입력하세요.");
 	    	return false;
 	    } else if (!ceoName) {
-	    	alert("대표자명을 입력하세요.");
+	    	alert("대표자를 입력하세요.");
 	    	return false;
 	    } else if (!phoneNum) {
-	    	alert("핸드폰 번호를 입력하세요.");
+	    	alert("핸드폰번호를 입력하세요.");
 	    	return false;
 	    } else if (!postalCode) {
 	    	alert("주소를 입력하세요.");
 	    	return false;
 	    }
 	 	
+	 	if (isSeller) {
+	 		if (!bankName) {
+	 			alert("은행을 입력하세요.");
+		    	return false;
+		    } else if (!accountNum) {
+		    	alert("계좌번호를 입력하세요.");
+		    	return false;
+		    }
+	 	}
+	 	
 	    // 유효성 검사: 2. 입력 형식
 	    var isValid = true;
 	 	
-	 	// 오류 메시지 초기화
-	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; });
+	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; }); // 오류 메시지 초기화
 	    
 	    if (!/^(010)-\d{4}-\d{4}$/.test(phoneNum)) {
-	        errorFields.phoneNum.textContent = "올바른 핸드폰 번호 형식이 아닙니다.";
+	        errorFields.phoneNum.textContent = "올바른 핸드폰번호 형식이 아닙니다.";
 	        isValid = false;
 	    }
 
 	    if (companyNum && !/^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/.test(companyNum)) {
-	        errorFields.companyNum.textContent = "올바른 업체 전화번호 형식이 아닙니다.";
+	        errorFields.companyNum.textContent = "올바른 업체전화번호 형식이 아닙니다.";
 	        isValid = false;
+	    }
+	    
+	    if (companyNum && !/^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/.test(companyNum)) {
+	        errorFields.companyNum.textContent = "올바른 업체전화번호 형식이 아닙니다.";
+	        isValid = false;
+	    }
+	    
+	    if (accountNum && (!/^\d[\d-]*\d$/.test(accountNum) || /--/.test(accountNum))) {
+	    	errorFields.accountNum.textContent = "올바른 계좌번호 형식이 아닙니다.";
+	    	isValid = false;
 	    }
 
 	    if (!isValid) {
@@ -289,11 +335,12 @@
 	    }
 
 	    // API 요청
-	    fetch("/mypage/edit-profile", {
+	    fetch("/my-page/edit-profile", {
 	        method: "POST",
 	        headers: { "Content-Type": "application/json" },
 	        body: JSON.stringify({
-	            companyName, ceoName, phoneNum, companyNum, postalCode, address, detailAddress
+	        	companyName, ceoName, phoneNum, companyNum, postalCode, address, detailAddress,
+	            ...(isSeller ? { bankName, accountNum } : {}) // 도매업자일 경우 은행 정보 추가
 	        })
 	    })
 	    .then(response => {
@@ -304,13 +351,13 @@
 	                text: "회원 정보가 성공적으로 수정되었습니다.",
 	                confirmButtonColor: "#3085d6",
 	                confirmButtonText: "확인"
-	            }).then(() => location.reload());
-	        } else {
-	            return response.json().then(data => {
-	                throw new Error(data.errorMessage || "회원 정보 수정 실패");
 	            });
+	        } else if (response.status === 400) {
+	        	location.reload();
+	        } else {
+	        	throw new Error("서버 오류 발생");
 	        }
-	    })
+	    })	    
 	    .catch(error => {
 	  	    Swal.fire({
 	  	        icon: 'error',
@@ -365,7 +412,7 @@
 	  	}
 
 	 	// API 요청
-	  	fetch("/mypage/reset-password", {
+	  	fetch("/my-page/reset-password", {
 	  	    method: "POST",
 	  	    headers: {
 	  	        "Content-Type": "application/json"
@@ -385,8 +432,7 @@
 	            });
 	  	    	
 	  	   		// 입력 필드 초기화
-	  	    	document.querySelectorAll("#password-content input")
-	  	    		.forEach(input => input.value = "");
+	  	    	document.querySelectorAll("#password-content input").forEach(input => input.value = "");
 	  	    } else if (response.status === 400) {
 	  	    	return response.json().catch(() => null).then(data => {
       	            if (data && data.errorMessage) {
