@@ -34,7 +34,7 @@
     <div class="nav-right">
     	<!-- 관리자 항목 -->
     	<sec:authorize access="hasRole('ROLE_ADMIN')">
-		    <a href="/manage-page/user">관리페이지</a>
+		    <a href="/manage-page/users">관리페이지</a>
 		</sec:authorize>
 		
 		<!-- 비관리자 항목 -->
@@ -42,6 +42,6 @@
 		    <a href="/my-page/info">마이페이지</a>
 		</sec:authorize>
 		
-        <a href="/support-center/notice">고객센터</a>
+        <a href="/support-center/notices">고객센터</a>
     </div>
 </div>

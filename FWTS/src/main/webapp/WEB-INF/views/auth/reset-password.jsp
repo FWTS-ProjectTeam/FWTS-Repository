@@ -11,37 +11,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 비밀번호 재설정</title>
+<link rel="stylesheet" href="/resources/css/auth.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-        color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    
-    .container {
-        text-align: center;
-        max-width: 400px;
-        width: 100%;
-        background-color: #fefefe;
-        border: 1px solid #ddd;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .container h1 {
-        color: #ff6699;
-        font-weight: 600;
-        margin-bottom: 15px;
-    }
-    
     .description {
         font-size: 14px;
         color: #666;
@@ -108,21 +81,8 @@
         border-radius: 6px;
         cursor: pointer;
         background-color: #ff6699;
-        color: #fff;
+        color: white;
     }
-    
-    .error-message {
-        color: red;
-        font-size: 12px;
-        margin-bottom: 10px;
-    }
-    
-    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
-	html, body {
-	    height: auto;
-	    min-height: 100vh;
-	    overflow: auto;
-	}
 </style>
 </head>
 <body>

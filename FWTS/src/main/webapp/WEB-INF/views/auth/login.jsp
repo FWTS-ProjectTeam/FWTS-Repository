@@ -7,30 +7,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 로그인</title>
+<link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-        color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    
-    .container {
-        text-align: center;
-        max-width: 400px;
-        width: 100%;
-        background-color: #fefefe;
-        border: 1px solid #ddd;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
     .container h1 {
         margin-bottom: 20px;
     }
@@ -38,30 +17,12 @@
     	text-decoration: none;
     	color: #ff6699;
     }
-    .container input[type="text"],
-    .container input[type="password"] {
+    
+    .input-group input {
         width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        margin: 5px 0;
         box-sizing: border-box;
         outline: none;
-    }
-    .container input[type="text"]:focus,
-    .container input[type="password"]:focus {
-		border-color: #ff6699;
-	}
-    .container button {
-        width: 100%;
-        padding: 10px;
-        background-color: #ff6699;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
     }
 	
     .remember-me {
@@ -75,34 +36,21 @@
     }
     
     .links-container {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-        font-size: 14px;
+    	justify-content: space-between;
     }
-    .links-container a {
-        text-decoration: none;
-        color: #333;
+    .links-container .normal {
+        font-weight: normal;
     }
-    
-    .bold {
-        font-weight: 600;
-    }
-    
-    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
-	html, body {
-	    height: auto;
-	    min-height: 100vh;
-	    overflow: auto;
-	}
 </style>
 </head>
 <body>
 <div class="container">
     <h1><a href="/">생화24</a></h1>
     <form id="login-content" action="/login" method="POST">
-        <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
-        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+    	<div class="input-group">
+    		<input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
+        	<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+    	</div>
         
         <div class="remember-me">
             <input type="checkbox" id="remember">
@@ -112,16 +60,16 @@
     </form>
     
     <div class="links-container">
-        <a href="/sign-up" class="bold">회원가입</a>
+        <a href="/sign-up">회원가입</a>
         <div>
-            <a href="/find-id">아이디 찾기</a>
+            <a href="/find-id" class="normal">아이디 찾기</a>
             <span>|</span>
-            <a href="/find-password">비밀번호 찾기</a>
+            <a href="/find-password" class="normal">비밀번호 찾기</a>
         </div>
     </div>
 </div>
 <script>
-	//로그인 페이지 로드 시 실행
+	// 페이지 로드 시 실행
 	window.onload = function () {
 		// 로그인 실패 알림창
 		<c:if test="${not empty errorMessage}">

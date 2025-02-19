@@ -6,27 +6,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 회원가입</title>
+<link rel="stylesheet" href="/resources/css/auth.css">
 <style>
-	body {
-		font-family: Arial, sans-serif;
-		margin: 0;
-		padding: 0;
-		background-color: #fff;
-		color: #333;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-	}
-	
 	.container {
 		max-width: 500px;
-		width: 100%;
-		background-color: #fefefe;
-		border: 1px solid #ddd;
-		padding: 20px;
-		border-radius: 10px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		text-align: left;
 	}
 	
@@ -34,13 +17,8 @@
 		text-align: center;
 	}
 	h1 {
-		font-weight: 600;
 		text-align: center;
 	}
-	h1 a {
-    	text-decoration: none;
-    	color: #ff6699;
-    }
     
 	label {
 		font-weight: 600;
@@ -79,19 +57,13 @@
 	.checkbox-container label { line-height: 18px; }
 	
 	.container button {
-		width: 100%;
-		padding: 10px;
 		background-color: #ffb6c1;
-		color: #fff;
-		border: none;
-		border-radius: 5px;
+		color: white;
 		cursor: not-allowed;
-		font-size: 16px;
-		font-weight: 600;
 		margin-top: 20px;
 	}
 	.container button.enabled {
-		background-color: #ff6699;
+		background-color: #ff7f9d;
 		cursor: pointer;
 	}
 </style>
@@ -150,8 +122,7 @@
 	            document.open(); // 기존 문서 비우기
 	            document.write(html); // 서버에서 받은 새로운 JSP 내용 삽입
 	            document.close();
-	        })
-	        .catch(error => console.error("페이지 로드 중 오류 발생:", error));
+	        });
 	});
 </script>
 </html>

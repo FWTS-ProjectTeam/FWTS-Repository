@@ -17,10 +17,10 @@ public class SecurityConfig {
 	    security.csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
 	            .authorizeHttpRequests(auth -> auth
 	                    .requestMatchers(
-	                    		"/my-page/**", "/support-center/inquiry/edit/**", "/support-center/inquiry/delete/**"
+	                    		"/my-page/**", "/support-center/inquirys/edit/**", "/support-center/inquirys/delete/**"
 	                    ).authenticated() // 인증자 허용 경로
 	                    .requestMatchers(
-	                    		"/manage-page/**", "/support-center/notice/edit/**", "/support-center/notice/delete/**"
+	                    		"/manage-page/**", "/support-center/notices/edit/**", "/support-center/notices/delete/**"
 	                    ).hasRole("ADMIN") // 관리자 허용 경로
 	                    .anyRequest().permitAll()
 	            )

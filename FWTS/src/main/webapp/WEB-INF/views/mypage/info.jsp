@@ -15,15 +15,15 @@
     .sidebar .profile-active {
         font-weight: 600;
         background-color: #ff7f9d;
-        color: #fff;
+        color: white;
         border-radius: 5px;
     }
     
     .profile-container {
         width: 100%;
-        margin: 0px 10px;
+        margin: 0 10px;
     }
-    .profile-content, .password-content {
+    .profile-form, .password-form {
         padding: 5px 20px;
     }
     
@@ -60,20 +60,11 @@
 	}
     
     .button-container {
-	    display: flex;
         justify-content: space-between;
         padding-top: 10px;
 	}
-    button {
-        background: #ff7f9d;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
     .delete-button {
-	    background-color: #fff;
+	    background-color: white;
 	    color: #ff6666;
 	    border: 1px solid #ff6666;
 	    padding: 6px 12px;
@@ -83,7 +74,7 @@
 	}
 	.delete-button:hover {
 	    background: #ff6666;
-	    color: #fff;
+	    color: white;
 	}
 	
     .password-container {
@@ -140,54 +131,54 @@
         
         <div class="profile-container">
             <h2>회원정보 수정</h2>
-                <form class="profile-content" id="profile-content">
-	    			<div class="input-group">
-				        <label for="company">업체 <span class="required">*</span></label>
-				        <div class="input-field">
-				            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
-				        </div>
-	        
-				        <label for="ceo">대표자 <span class="required">*</span></label>
-				        <div class="input-field">
-				            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
-				        </div>
-	        
-				        <label for="phone">핸드폰번호 <span class="required">*</span></label>
-				        <div class="input-field">
-				            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
-				            	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
-				            <p class="error" id="phone-error"></p>
-				        </div>
-	        
-				        <label for="company-phone">업체전화번호</label>
-				        <div class="input-field">
-				            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
-				            	 placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
-				            <p class="error" id="company-phone-error"></p>
-				        </div>
-	        
-		               <label for="postal-code">우편번호 <span class="required">*</span></label>
-		               <div class="input-field">
+               <form class="profile-form" id="profile-form">
+    			<div class="input-group">
+			        <label for="company">업체 <span class="required">*</span></label>
+			        <div class="input-field">
+			            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
+			        </div>
+        
+			        <label for="ceo">대표자 <span class="required">*</span></label>
+			        <div class="input-field">
+			            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
+			        </div>
+        
+			        <label for="phone">핸드폰번호 <span class="required">*</span></label>
+			        <div class="input-field">
+			            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
+			            	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
+			            <p class="error" id="phone-error"></p>
+			        </div>
+        
+			        <label for="company-phone">업체전화번호</label>
+			        <div class="input-field">
+			            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
+			            	 placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
+			            <p class="error" id="company-phone-error"></p>
+			        </div>
+        
+	               <label for="postal-code">우편번호 <span class="required">*</span></label>
+	               <div class="input-field">
 		                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
 		                <button type="button" class="button" onclick="searchAddress()">주소 찾기</button>
 		            </div>
-            
+           
 		            <label for="address">주소 <span class="required">*</span></label>
 		           	<div class="input-field">
 		            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
 		            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
             		</div>
-            		
+           		
             		<!-- 도매업자 항목 -->
 					<sec:authorize access="hasRole('ROLE_SELLER')">
 						<label for="bank">은행 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="bank" name="bankName" value="${bankAccount.bankName}" maxlength="10">
+			            	<input type="text" id="bank" name="bankName" value="${account.bankName}" maxlength="10">
 	            		</div>
 	            		
 	            		<label for="account">계좌번호 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="account" name="accountNum" value="${bankAccount.accountNum}" maxlength="17"
+			            	<input type="text" id="account" name="accountNum" value="${account.accountNum}" maxlength="17"
 			            		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            	<p class="error" id="account-error"></p>
 	            		</div>
@@ -203,7 +194,7 @@
             <hr>
             
             <h2>비밀번호 재설정</h2>
-            <form class="password-content" id="password-content">
+            <form class="password-form" id="password-form">
                 <div class="input-group">
                     <label for="current-password">현재 비밀번호</label>
                     <div class="input-field">
@@ -231,7 +222,7 @@
                 </div>
                 
             	<div class="button-container">
-            		<button type="button" onclick="resetPassword()">저장</button>
+            		<button type="button" class="button" onclick="resetPassword()">저장</button>
             	</div>
             </form>
         </div>
@@ -251,7 +242,7 @@
 	
 	// 회원정보 수정 요청
 	function editProfile() {
-		const form = document.getElementById("profile-content");
+		const form = document.getElementById("profile-form");
 		
 		// 입력 필드 값
 	    var companyName = document.getElementById("company").value.trim();
@@ -371,7 +362,7 @@
 
 	// 비밀번호 재설정 요청
 	function resetPassword() {
-		const form = document.getElementById("password-content");
+		const form = document.getElementById("password-form");
 		
 		// 입력 필드
 	  	var currentPassword = document.getElementById("current-password").value;
@@ -432,7 +423,7 @@
 	            });
 	  	    	
 	  	   		// 입력 필드 초기화
-	  	    	document.querySelectorAll("#password-content input").forEach(input => input.value = "");
+	  	    	document.querySelectorAll("#password-form input").forEach(input => input.value = "");
 	  	    } else if (response.status === 400) {
 	  	    	return response.json().catch(() => null).then(data => {
       	            if (data && data.errorMessage) {

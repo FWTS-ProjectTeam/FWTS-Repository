@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class SignupDto {
-	// 기본 회원 정보
+	// 회원 기본 정보
 	@NotBlank
     @Size(max=320)
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
@@ -29,7 +29,7 @@ public class SignupDto {
     @Min(1) @Max(2)
     private Integer role;
     
-    // 상세 회원 정보
+    // 회원 상세 정보
     @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$", message = "유효한 휴대폰 번호 형식을 입력하세요.")
     private String phoneNum;
     @Pattern(regexp = "^(\\d{2,3}-\\d{3,4}-\\d{4}|\\d{4}-\\d{4})?$",

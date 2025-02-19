@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.NoticeListDto;
+import com.teamf.fwts.dto.ReplyDto;
 import com.teamf.fwts.entity.InquiryBoard;
 import com.teamf.fwts.entity.NoticeBoard;
 import com.teamf.fwts.service.InquiryBoardService;
@@ -38,7 +39,7 @@ public class SupportController {
 	private final UserService userService;
 	
 	// 공지사항 조회
-	@GetMapping("/notice")
+	@GetMapping("/notices")
 	public String noticeAll(@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
 	    int count = noticeBoardService.count();
 
@@ -63,7 +64,7 @@ public class SupportController {
 	}
 	
 	// 공지사항 상세 조회
-	@GetMapping("/notice/{id}")
+	@GetMapping("/notices/{id}")
 	public String noticeDetail(@PathVariable("id") int id, Model model) {
 		NoticeBoard notice = noticeBoardService.findByNoticeId(id);
 		
@@ -72,14 +73,14 @@ public class SupportController {
 	}
 	
 	// 공지사항 편집 페이지
-	@GetMapping("/notice/edit")
+	@GetMapping("/notices/edit")
 	public String editNoticeForm(@RequestParam(name = "id", required = false) Integer id, Model model) {
 	    // 글 수정 처리
 	    if (id != null) {
 			NoticeBoard notice = noticeBoardService.findByNoticeId(id);
 			
 			if (notice == null)
-		    	return "redirect:/support-center/notice"; // 공지사항 페이지
+		    	return "redirect:/support-center/notices"; // 공지사항 페이지
 			
 		    model.addAttribute("notice", notice);
 	    }
@@ -88,14 +89,14 @@ public class SupportController {
 	}
 	
 	// 공지사항 편집
-	@PostMapping("/notice/edit")
+	@PostMapping("/notices/edit")
 	public String editNotice(@Valid NoticeBoard notice, BindingResult bindingResult, Model model) {
 	    // 유효성 검사
 	    if (bindingResult.hasErrors()) {
-	    	if (bindingResult.hasFieldErrors("inquiryContent"))
+	    	if (bindingResult.hasFieldErrors("noticeContent"))
 	    		notice.setNoticeContent(null);
 	    	
-	    	model.addAttribute("errorMessage", "제목 또는 내용을 입력하세요.");
+	    	model.addAttribute("validMessage", "제목 또는 내용을 입력하세요.");
 	        model.addAttribute("notice", notice);
 	        return "support/edit-notice";
 	    }
@@ -120,7 +121,7 @@ public class SupportController {
 	            noticeId = oldNotice.getNoticeId();
 	        }
 
-	        return "redirect:/support-center/notice/" + noticeId; // 문의사항 페이지
+	        return "redirect:/support-center/notices/" + noticeId; // 문의사항 페이지
 	    } catch (Exception e) {
 	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
 	        model.addAttribute("notice", notice);
@@ -130,7 +131,7 @@ public class SupportController {
 	
 	// 공지사항 삭제
 	@ResponseBody
-	@DeleteMapping("/notice/delete/{id}")
+	@DeleteMapping("/notices/delete/{id}")
 	public Map<String, Boolean> deleteNotice(@PathVariable("id") int id) {
 	    Map<String, Boolean> response = new HashMap<>();
 	    
@@ -145,7 +146,7 @@ public class SupportController {
 	}
 	
 	// 문의사항 조회
-	@GetMapping("/inquiry")
+	@GetMapping("/inquirys")
     public String inquiryAll(@RequestParam(name = "category", required = false) String category,
     	    				 @RequestParam(name = "keyword", required = false) String keyword,
     	    				 @RequestParam(name = "page", defaultValue = "1")  Integer page,
@@ -183,7 +184,7 @@ public class SupportController {
     }
 	
 	// 문의사항 상세 조회
-	@GetMapping("/inquiry/{id}")
+	@GetMapping("/inquirys/{id}")
 	public String inquiryDetail(@PathVariable("id") int id, Model model) {
 		InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
 		
@@ -192,7 +193,7 @@ public class SupportController {
 	}
 	
 	// 문의사항 편집 페이지
-	@GetMapping("/inquiry/edit")
+	@GetMapping("/inquirys/edit")
 	public String editInquiryForm(@RequestParam(name = "id", required = false) Integer id, 
 	                          	  Authentication authentication, Model model) {
 	    // 글 수정 처리
@@ -213,7 +214,7 @@ public class SupportController {
 	}
 	
 	// 문의사항 편집
-	@PostMapping("/inquiry/edit")
+	@PostMapping("/inquirys/edit")
 	public String editInquiry(@Valid InquiryBoard inquiry, BindingResult bindingResult,
 	                          Authentication authentication, Model model) {
 	    // 유효성 검사
@@ -221,7 +222,7 @@ public class SupportController {
 	    	if (bindingResult.hasFieldErrors("inquiryContent"))
 	    		inquiry.setInquiryContent(null);
 	    	
-	    	model.addAttribute("errorMessage", "제목 또는 내용을 입력하세요.");
+	    	model.addAttribute("validMessage", "제목 또는 내용을 입력하세요.");
 	        model.addAttribute("inquiry", inquiry);
 	        return "support/edit-inquiry";
 	    }
@@ -251,7 +252,7 @@ public class SupportController {
 	            inquiryId = oldInquiry.getInquiryId();
 	        }
 
-	        return "redirect:/support-center/inquiry/" + inquiryId; // 문의사항 페이지
+	        return "redirect:/support-center/inquirys/" + inquiryId; // 문의사항 페이지
 	    } catch (Exception e) {
 	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
 	        model.addAttribute("inquiry", inquiry);
@@ -261,7 +262,7 @@ public class SupportController {
 
 	// 문의사항 삭제
 	@ResponseBody
-	@DeleteMapping("/inquiry/delete/{id}")
+	@DeleteMapping("/inquirys/delete/{id}")
 	public Map<String, Boolean> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
 	    Map<String, Boolean> response = new HashMap<>();
 	    
@@ -281,5 +282,30 @@ public class SupportController {
 	    }
 	    
 	    return response;
+	}
+	
+	// 답변 편집
+	@PostMapping("/inquirys/reply/{id}")
+	public String editReply(@PathVariable("id") int id, ReplyDto dto, Model model) {
+		InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
+		inquiry.setReply(dto.getReply());
+		
+		try {
+			// 답변 작성
+			if (inquiry.getReplyDate() == null)
+				inquiryBoardService.saveReply(inquiry);
+			
+			// 답변 수정
+			else {
+				inquiry.setReplyDate(dto.getReplyDate());
+				inquiryBoardService.updateReply(inquiry);
+			}
+			
+			return "redirect:/support-center/inquirys/" + id;
+		} catch (Exception e) {
+	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+	        model.addAttribute("inquiry", inquiry);
+	        return "support/inquiry-detail";
+	    }
 	}
 }
