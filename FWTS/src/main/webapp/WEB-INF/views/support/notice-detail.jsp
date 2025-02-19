@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -16,7 +16,7 @@
     .sidebar .notice-active {
     	font-weight: 600;
         background-color: #ff7f9d;
-        color: #fff;
+        color: white;
         border-radius: 5px;
     }
     
@@ -33,30 +33,21 @@
     .post-content .title {
         font-weight: bold;
         text-align: center;
-        margin-bottom: 10px;
+        margin: 16px 0 10px 0;
     }
     .post-content .date {
         text-align: right;
         color: gray;
-        font-size: 0.9em;
+        font-size: 14px;
     }
+    
     .post-content img {
 	    max-width: 100%; /* 이미지가 컨테이너를 초과하지 않도록 설정 */
 	    height: auto; /* 비율에 맞게 이미지 크기 조정 */
 	}
     
     .button-container {
-        display: flex;
-        justify-content: center;
         margin: 20px auto;
-    }
-    .button-container button {
-        background: #ff7f9d;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
     }
     
     .multiple {
@@ -83,20 +74,21 @@
 			<!-- 관리자일 경우: 삭제, 수정 버튼 -->
 			<div class="button-container multiple">
 	    		<sec:authorize access="hasRole('ROLE_ADMIN')">
-		            <button onclick="deleteNotice()">삭제</button>
+		            <button class="button" onclick="deleteNotice()">삭제</button>
 				</sec:authorize>
 				
-				<button onclick="location.href='/support-center/notice'">목록</button>
+				<button class="button" onclick="location.href='/support-center/notices'">목록</button>
 				
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
-	            	<button onclick="location.href='/support-center/notice/edit?id=${notice.noticeId}'">수정</button>
+	            	<button class="button" onclick="location.href='/support-center/notices/edit?id=${notice.noticeId}'">수정</button>
             	</sec:authorize>
 			</div>
   		</div>
     </div>
 </div>
 <script>
-	function deleteNotice(noticeId) {
+	// 글 삭제
+	function deleteNotice() {
 	    Swal.fire({
 	        title: "정말로 삭제하시겠습니까?",
 	        text: "이 작업은 되돌릴 수 없습니다!",
@@ -108,7 +100,7 @@
 	        cancelButtonText: "취소"
 	    }).then((result) => {
 	        if (result.isConfirmed) {
-	            const requestUrl = `/support-center/notice/delete/${notice.noticeId}`;
+	            const requestUrl = "/support-center/notices/delete/" + ${notice.noticeId};
 	
 	            fetch(requestUrl, { method: "DELETE" })
 	            .then(response => {
@@ -119,7 +111,7 @@
 	            })
 	            .then(data => {
 	                if (data.success) {
-	                    window.location.href = "/support-center/notice";
+	                    window.location.href = "/support-center/notices";
 	                } else {
 	                    Swal.fire({
 	                        icon: 'error',

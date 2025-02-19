@@ -92,7 +92,12 @@ public class AuthController {
             return "auth/signup"; // 정보입력 페이지
         }
     }
-
+    
+    @GetMapping("/sign-up/clear")
+    public String test() {
+    	return "auth/signup-complete"; //가입완료 페이지
+    }
+    
     // 중복 확인 (이메일, 아이디)
     @PostMapping("/check-duplicate")
     public ResponseEntity<Boolean> checkDuplicate(@RequestBody Map<String, String> request){
