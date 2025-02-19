@@ -400,21 +400,20 @@
             
             <div class="input-group">
                 <label for="email">이메일 <span class="required">*</span></label>
-                <input type="email" id="email" name="email" required maxlength="320">
+                <input type="email" id="email" name="email" value="${inputData.email}" required maxlength="320">
                 <button type="button" onclick="checkDuplicate('email')">중복 확인</button>
             </div>
 
             <div class="input-group">
                 <label for="username">아이디 <span class="required">*</span></label>
-                <input type="text" id="username" name="username" maxlength="20">
+                <input type="text" id="username" name="username" value="${inputData.username}" maxlength="20">
                 <button type="button" onclick="checkDuplicate('username')">중복 확인</button>
             </div>
             
-            <!-- 비밀번호 입력 -->
 			<div class="input-group">
 			    <label for="password">비밀번호 <span class="required">*</span></label>
 			    <div class="password-container">
-			        <input type="password" id="password" name="password" maxlength="20">
+			        <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
 			        <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
 			    </div>
 			</div>
@@ -427,36 +426,33 @@
 			    </div>
 			</div>
 
-            <!-- 사업자등록번호 입력  -->
 			<div class="input-group">
 			    <label for="business-number">사업자등록번호 <span class="required">*</span></label>
-			    <input type="text" id="business-number" name="businessNo" placeholder="- 포함" maxlength="10"
+			    <input type="text" id="business-number" name="businessNo" value="${inputData.businessNo}" placeholder="- 포함" maxlength="10"
 			    	   onfocus="removeHyphen(this)" onblur="formatBusinessNumber(this)">
 			    <button type="button" onclick="verifyBusinessNumber()">확인</button>
 			</div>
 			
-			<!-- 휴대폰 번호 입력 -->
 			<div class="input-group">
-			    <label for="phone">휴대폰 번호 <span class="required">*</span></label>
-			    <input type="text" id="phone" name="phoneNum" placeholder="- 포함" maxlength="13"
+			    <label for="phone">휴대폰번호 <span class="required">*</span></label>
+			    <input type="text" id="phone" name="phoneNum" value="${inputData.phoneNum}" placeholder="- 포함" maxlength="13"
 			           onfocus="removeHyphen(this)" onblur="formatPhoneNumber(this)">
 			</div>
 			
-			<!-- 업체 전화번호 입력 -->
 			<div class="input-group">
-			    <label for="company-phone">업체 전화번호</label>
-			    <input type="text" id="company-phone" name="companyNum" placeholder="- 포함" maxlength="13"
+			    <label for="company-phone">업체전화번호</label>
+			    <input type="text" id="company-phone" name="companyNum" value="${inputData.companyNum}" placeholder="- 포함" maxlength="13"
 			           onfocus="removeHyphen(this)" onblur="formatPhoneNumber(this)">
 			</div>
 	            
 	        <div class="input-group">
-	            <label for="company">업체명 <span class="required">*</span></label>
-	            <input type="text" id="company" name="companyName" class="full-width" required>
+	            <label for="company">업체 <span class="required">*</span></label>
+	            <input type="text" id="company" name="companyName" value="${inputData.companyName}" class="full-width" required>
 	        </div>
 	            
 	        <div class="input-group">    
-	            <label for="ceo">대표자명 <span class="required">*</span></label>
-	            <input type="text" id="ceo" name="ceoName" class="full-width" required>
+	            <label for="ceo">대표자 <span class="required">*</span></label>
+	            <input type="text" id="ceo" name="ceoName" value="${inputData.ceoName}" class="full-width" required>
             </div>
             
             <div class="input-group">
@@ -471,7 +467,7 @@
             </div>
             
             <div class="input-group"> 
-	            <label for="detail-address">상세 주소</label>
+	            <label for="detail-address">상세주소</label>
 	            <input type="text" id="detail-address" name="detailAddress" class="full-width" maxlength="30">
 	        </div>       
             

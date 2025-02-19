@@ -71,6 +71,79 @@ public class SupportController {
 		return "support/notice-detail";
 	}
 	
+	// 공지사항 편집 페이지
+	@GetMapping("/notice/edit")
+	public String editNoticeForm(@RequestParam(name = "id", required = false) Integer id, Model model) {
+	    // 글 수정 처리
+	    if (id != null) {
+			NoticeBoard notice = noticeBoardService.findByNoticeId(id);
+			
+			if (notice == null)
+		    	return "redirect:/support-center/notice"; // 공지사항 페이지
+			
+		    model.addAttribute("notice", notice);
+	    }
+
+	    return "support/edit-notice";
+	}
+	
+	// 공지사항 편집
+	@PostMapping("/notice/edit")
+	public String editNotice(@Valid NoticeBoard notice, BindingResult bindingResult, Model model) {
+	    // 유효성 검사
+	    if (bindingResult.hasErrors()) {
+	    	if (bindingResult.hasFieldErrors("inquiryContent"))
+	    		notice.setNoticeContent(null);
+	    	
+	    	model.addAttribute("errorMessage", "제목 또는 내용을 입력하세요.");
+	        model.addAttribute("notice", notice);
+	        return "support/edit-notice";
+	    }
+
+	    try {
+	    	Integer noticeId;
+	    	
+	        // 글 작성
+	        if (notice.getNoticeId() == null) {
+	        	noticeBoardService.saveNotice(notice);
+	            noticeId = notice.getNoticeId();
+	        }
+	        
+	        // 글 수정
+	        else {
+	            NoticeBoard oldNotice = noticeBoardService.findByNoticeId(notice.getNoticeId());
+
+	            oldNotice.setNoticeTitle(notice.getNoticeTitle());
+	            oldNotice.setNoticeContent(notice.getNoticeContent());
+	            noticeBoardService.updateNotice(oldNotice);
+	            
+	            noticeId = oldNotice.getNoticeId();
+	        }
+
+	        return "redirect:/support-center/notice/" + noticeId; // 문의사항 페이지
+	    } catch (Exception e) {
+	        model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+	        model.addAttribute("notice", notice);
+	        return "support/edit-notice";
+	    }
+	}
+	
+	// 공지사항 삭제
+	@ResponseBody
+	@DeleteMapping("/notice/delete/{id}")
+	public Map<String, Boolean> deleteNotice(@PathVariable("id") int id) {
+	    Map<String, Boolean> response = new HashMap<>();
+	    
+	    try {
+	    	noticeBoardService.deleteNoticeById(id);
+	        response.put("success", true);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    
+	    return response;
+	}
+	
 	// 문의사항 조회
 	@GetMapping("/inquiry")
     public String inquiryAll(@RequestParam(name = "category", required = false) String category,

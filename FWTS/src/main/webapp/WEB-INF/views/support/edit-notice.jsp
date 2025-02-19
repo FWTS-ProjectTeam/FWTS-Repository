@@ -14,7 +14,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
-    .sidebar .inquiry-active {
+    .sidebar .notice-active {
     	font-weight: 600;
         background-color: #ff7f9d;
         color: #fff;
@@ -107,13 +107,13 @@
         <!-- 사이드바 -->
     	<%@ include file="/WEB-INF/views/common/support-sidebar.jsp" %>
         
-        <form class="post-container" id="post-container" action="/support-center/inquiry/edit" method="post">
-        	<input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
+        <form class="post-container" id="post-container" action="/support-center/notice/edit" method="post">
+        	<input type="hidden" name="noticeId" value="${notice.noticeId}">
         	
         	<div class="post-content">
-        		<input class="title" name="inquiryTitle" value="${inquiry.inquiryTitle}" maxlength="64" placeholder="제목을 입력하세요"/>
+        		<input class="title" name="noticeTitle" value="${notice.noticeTitle}" maxlength="64" placeholder="제목을 입력하세요"/>
        			<div id="smarteditor">
-		      		<textarea id="content" name="inquiryContent" rows="20"></textarea>
+		      		<textarea id="content" name="noticeContent" rows="20"></textarea>
 	     		</div>
         	</div>
 	  		<div class="button-container">
@@ -133,7 +133,7 @@
 	        elPlaceHolder: "content",
 	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
 	        fOnAppLoad: function() {
-                const content = `${inquiry.inquiryContent}`;
+                const content = `${notice.noticeContent}`;
                 oEditors.getById["content"].exec("PASTE_HTML", [content]);
 	        },
 	        fCreator: "createSEditor2"
@@ -159,13 +159,13 @@
 	
 	// 취소 버튼 클릭 시 실행
 	function cancelAction() {
-		const inquiryId = "${inquiry.inquiryId}";
+		const noticeId = "${notice.noticeId}";
 		
 	    // 글 작성인지, 수정인지에 따라 처리
-	    if (inquiryId) {
-            window.location.href = "/support-center/inquiry/" + inquiryId;
+	    if (noticeId) {
+            window.location.href = "/support-center/notice/" + noticeId;
         } else {
-            window.location.href = "/support-center/inquiry";
+            window.location.href = "/support-center/notice";
         }
 	}
 </script>
