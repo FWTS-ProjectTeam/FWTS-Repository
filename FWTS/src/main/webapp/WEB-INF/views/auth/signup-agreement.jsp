@@ -78,7 +78,7 @@
 	}
 	.checkbox-container label { line-height: 18px; }
 	
-	.button {
+	.container button {
 		width: 100%;
 		padding: 10px;
 		background-color: #ffb6c1;
@@ -87,9 +87,10 @@
 		border-radius: 5px;
 		cursor: not-allowed;
 		font-size: 16px;
+		font-weight: 600;
 		margin-top: 20px;
 	}
-	.button.enabled {
+	.container button.enabled {
 		background-color: #ff6699;
 		cursor: pointer;
 	}
@@ -123,14 +124,14 @@
 		<input type="checkbox" id="agree" name="privacy-consent" onclick="toggleButton()"> <label for="agree">개인정보 수집에 동의합니다.</label>
 	</div>
 
-	<button id="nextButton" class="button" disabled>다음</button>
+	<button id="next-button" disabled>다음</button>
 </div>
 </body>
 <script>
 	// 체크박스를 체크하면 버튼 활성화
 	function toggleButton() {
 		var checkbox = document.getElementById("agree");
-		var button = document.getElementById("nextButton");
+		var button = document.getElementById("next-button");
 		if (checkbox.checked) {
 			button.classList.add("enabled");
 			button.disabled = false;
@@ -141,7 +142,7 @@
 	}
 
 	//다음 페이지 이동
-	document.getElementById("nextButton").addEventListener("click", function() {
+	document.getElementById("next-button").addEventListener("click", function() {
 		fetch("/sign-up?step=2") // 서버에서 다음 단계로 변경된 JSP를 요청
 	        .then(response => response.text())
 	        .then(html => {

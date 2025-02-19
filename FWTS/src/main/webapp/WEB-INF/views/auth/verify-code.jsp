@@ -192,7 +192,7 @@
 	        if (response.ok) {
 	        	messageElement.innerHTML = `<strong>${email}</strong>으로 인증 코드를 전송했습니다.`;
 	        } else {
-	        	throw new Error('서버 오류 발생');
+	        	throw new Error('서버 오류');
 	        }
 	    })
 	    .catch(() => {

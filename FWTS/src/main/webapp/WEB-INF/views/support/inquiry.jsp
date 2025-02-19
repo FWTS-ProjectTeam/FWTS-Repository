@@ -11,7 +11,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 고객센터</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
     .sidebar .inquiry-active {
@@ -20,14 +19,6 @@
         color: #fff;
         border-radius: 5px;
     }
-    
-    .table-top-container {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    width: 100%;
-	    margin-bottom: 20px;
-	}
 	
 	.button-container button {
 	    background: #ff7f9d;
@@ -38,8 +29,16 @@
 	    cursor: pointer;
 	}
 	
+    .table-top-container {
+    	width: 100%;
+	    height: 40px;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    margin-bottom: 20px;
+	}
+	
 	.search-board-container {
-		height: 40px;
 	    display: flex;
 	    align-items: center;
 	}
@@ -66,13 +65,6 @@
         outline: none;
     }
     .search-board-button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        background-color: #ff7f9d;
-        color: #fff;
-        font-size: 16px;
-        cursor: pointer;
         margin-left: 10px;
     }
     
@@ -122,11 +114,6 @@
 	    text-align: center;
 	}
 	
-	.reply {
-		font-weight: 600;
-		color: #ffb6c1;
-	}
-	
     .pagination {
         text-align: center;
         margin-top: 20px;
@@ -146,6 +133,14 @@
         border-radius: 5px;
         color: #fff;
     }
+    
+    .reply {
+		font-weight: 600;
+		color: #ffb6c1;
+	}
+	.hidden {
+		visibility: hidden;
+	}
 </style>
 </head>
 <body>
@@ -159,10 +154,19 @@
          
         <div class="table-container">
         	<div class="table-top-container">
-         		<div class="button-container">
-		          <button onclick="location.href='/support-center/inquiry/edit'">작성</button>
-	   			</div>
+        		<div class="button-container">
+	        		<!-- 관리자 항목 -->
+			    	<sec:authorize access="hasRole('ROLE_ADMIN')">
+			        	<button class="hidden">작성</button>
+					</sec:authorize>
+					
+					<!-- 비관리자 항목 -->
+					<sec:authorize access="!hasRole('ROLE_ADMIN')">
+			        	<button onclick="location.href='/support-center/inquiry/edit'">작성</button>
+					</sec:authorize>
+				</div>
 	         
+	         	<!-- 게시글 검색 -->
 	         	<form class="search-board-container" action="/support-center/inquiry">
 				    <select class="search-category" name="category">
 				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
@@ -170,7 +174,9 @@
 				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
 				    </select>
 				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
-				    <input type="submit" class="search-board-button" value="검색">
+				    <div class="button-container">
+			        	<button type="submit" class="search-board-button">검색</button>
+		   			</div>
 				</form>
          	</div>
         

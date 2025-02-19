@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.teamf.fwts.dto.InquiryListDto;
+import com.teamf.fwts.dto.ProfileDto;
 import com.teamf.fwts.dto.ResetPasswordDto;
+import com.teamf.fwts.entity.BankAccount;
 import com.teamf.fwts.entity.UserDetails;
 import com.teamf.fwts.entity.Users;
+import com.teamf.fwts.service.BankAccountService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.UserService;
 
@@ -27,33 +30,45 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/mypage")
+@RequestMapping("/my-page")
 public class MyPageController {
 	private final UserService userService;
+	private final BankAccountService bankAccountService;
 	private final InquiryBoardService inquiryBoardService;
 	
-	// 내 정보 수정 페이지
-	@GetMapping("/edit-profile")
+	// 내 정보 관리 페이지
+	@GetMapping("/info")
 	public String editProfilForm(Authentication authentication, Model model) {
 		Users user = userService.findByUsername(authentication.getName());
 		UserDetails userDetails = userService.findByUserId(user.getUserId());
+
+		// 도매업자 처리
+		if (user.getRole() == 1) {
+			BankAccount bankAccount = bankAccountService.findByUserId(user.getUserId());
+			model.addAttribute("bankAccount", bankAccount);
+		}
 		
 		model.addAttribute("userDetails", userDetails);
-		return "mypage/edit-profile";
+		return "mypage/info";
 	}
 	
 	// 회원정보 수정
 	@PostMapping("/edit-profile")
-	public ResponseEntity<?> editProfile(@Valid @RequestBody UserDetails userDetails, BindingResult bindingResult, Authentication authentication) {
+	public ResponseEntity<?> editProfile(@Valid @RequestBody ProfileDto dto, BindingResult bindingResult, Authentication authentication) {
 		Users user = userService.findByUsername(authentication.getName());
-		
+
 		// 유효성 검사
         if (bindingResult.hasErrors())
         	return ResponseEntity.badRequest().build();
         
         try {
-        	userDetails.setUserId(user.getUserId());
-        	userService.updateUserDetails(userDetails);
+        	dto.setUserId(user.getUserId());
+        	userService.updateProfile(dto);
+        	
+        	// 도매업자 처리
+        	if (user.getRole() == 1)
+        		bankAccountService.updateBankAccount(dto);
+
         	return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
@@ -85,7 +100,8 @@ public class MyPageController {
 	
 	// 문의사항 내역 조회
 	@GetMapping("/inquiry-history")
-	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page, Authentication authentication, Model model) {
+	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page,
+							 Authentication authentication, Model model) {
 	    Users user = userService.findByUsername(authentication.getName());
 		
 	    Map<String, Integer> params = new HashMap<>();

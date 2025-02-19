@@ -168,7 +168,7 @@
 	  
 		if (!username || !password) {
 			alert("아이디 또는 비밀번호를 입력하세요.");
-			return;
+			return false;
 		}
 	
 		form.requestSubmit(); // 폼 제출 실행

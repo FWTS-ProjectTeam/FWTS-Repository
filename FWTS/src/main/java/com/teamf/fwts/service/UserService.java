@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.teamf.fwts.dto.ProfileDto;
 import com.teamf.fwts.dto.SignupDto;
 import com.teamf.fwts.entity.UserDetails;
 import com.teamf.fwts.entity.Users;
@@ -16,18 +17,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	private static final Pattern BUSINESS_NO_PATTERN = Pattern.compile("^\\d{3}-\\d{2}-\\d{5}$");
-	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$");
-	
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final BankAccountService bankAccountService;
+    
+    private static final Pattern BUSINESS_NO_PATTERN = Pattern.compile("^\\d{3}-\\d{2}-\\d{5}$");
+	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
     // 회원가입
     @Transactional
     public void signup(SignupDto dto) {
     	String hashedPassword = hashPassword(dto.getPassword());
 
-        // User 객체 생성
+        // User 추가
         Users user = new Users();
         user.setEmail(dto.getEmail());
         user.setUsername(dto.getUsername());
@@ -35,8 +37,8 @@ public class UserService {
         user.setRole(dto.getRole());
 
         userMapper.insertUser(user);
-
-        // UserDetail 객체 생성
+        
+        // UserDetail 추가
         UserDetails userDetail = new UserDetails();
         userDetail.setUserId(user.getUserId());
         userDetail.setPhoneNum(dto.getPhoneNum());       
@@ -55,13 +57,15 @@ public class UserService {
         );
         
         userMapper.insertUserDetail(userDetail);
+        
+        // BackAccount 추가
+        bankAccountService.insertBankAccount(user.getUserId());
     }
     
     // 비밀번호 재설정
     @Transactional
     public void resetPassword(String email, String password) {
-        String hashedPassword = hashPassword(password);
-        userMapper.resetPassword(email, hashedPassword);
+        userMapper.resetPassword(email, hashPassword(password));
     }
     
     // 비밀번호 암호화
@@ -92,12 +96,12 @@ public class UserService {
         return userMapper.existsByEmail(email) > 0;
     }
 
-    // 회원 조회
+    // 회원 정보 조회
 	public Users findByUsername(String name) {
 		return userMapper.findByUsername(name);
 	}
 	
-	// 회원 상세 조회
+	// 회원 상세 정보 조회
 	public UserDetails findByUserId(Integer userId) {
 		return userMapper.findByUserId(userId);
 	}
@@ -107,14 +111,26 @@ public class UserService {
 		return passwordEncoder.matches(inputPassword, currentPassword);
 	}
 
-	// 회원 상세 수정
+	// 회원 상세 정보 수정
 	@Transactional
-	public void updateUserDetails(UserDetails userDetails) {
+	public void updateProfile(ProfileDto dto) {
+        UserDetails userDetail = new UserDetails();
+        userDetail.setUserId(dto.getUserId());
+        userDetail.setPhoneNum(dto.getPhoneNum());       
+        userDetail.setBusinessNo(dto.getBusinessNo());
+        userDetail.setCompanyName(dto.getCompanyName());
+        userDetail.setCeoName(dto.getCeoName());
+        userDetail.setPostalCode(dto.getPostalCode());
+        userDetail.setAddress(dto.getAddress());
+		
 		// 빈 문자열이면 NULL로 변환
-		userDetails.setDetailAddress(
-				userDetails.getDetailAddress().isBlank() ? null : userDetails.getDetailAddress()
+        userDetail.setCompanyNum(
+        		dto.getCompanyNum().isBlank() ? null : dto.getCompanyNum()
+        );
+        userDetail.setDetailAddress(
+				dto.getDetailAddress().isBlank() ? null : dto.getDetailAddress()
         );
 		
-		userMapper.updateUserDetails(userDetails);
+        userMapper.updateUserDetails(userDetail);
 	}
 }

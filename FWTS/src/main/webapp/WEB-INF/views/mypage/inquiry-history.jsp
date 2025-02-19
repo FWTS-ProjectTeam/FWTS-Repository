@@ -11,7 +11,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 마이페이지</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
@@ -22,12 +21,21 @@
         border-radius: 5px;
     }
     
-    .search-board-container {
+    .button-container button {
+	    background: #ff7f9d;
+	    color: white;
+	    padding: 10px 20px;
+	    border: none;
+	    border-radius: 5px;
+	    cursor: pointer;
+	}
+    
+    .table-top-container {
     	width: 100%;
-    	height: 40px;
-    	display: flex;
+	    height: 40px;
+	    display: flex;
+	    justify-content: space-between;
 	    align-items: center;
-	    justify-content: end;
 	    margin-bottom: 20px;
 	}
 	
@@ -77,11 +85,6 @@
 	    text-align: center;
 	}
 	
-	.reply {
-		font-weight: 600;
-		color: #ffb6c1;
-	}
-	
     .pagination {
         text-align: center;
         margin-top: 20px;
@@ -101,6 +104,11 @@
         border-radius: 5px;
         color: #fff;
     }
+    
+   	.reply {
+		font-weight: 600;
+		color: #ffb6c1;
+	}
 </style>
 </head>
 <body>
@@ -113,7 +121,7 @@
     		<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
 
 			<div class="table-container">
-            	<div class="search-board-container"></div>
+            	<div class="table-top-container"></div>
             
                 <table>
                     <thead>
@@ -142,7 +150,7 @@
 				        <c:when test="${count > 0}">
 				        	<c:choose>
 							    <c:when test="${currentPage > 1}">
-							        <a href="/mypage/inquiry-history?page=${currentPage - 1}">◀</a>
+							        <a href="/my-page/inquiry-history?page=${currentPage - 1}">◀</a>
 							    </c:when>
 							    <c:otherwise><a>◀</a></c:otherwise>
 					        </c:choose>
@@ -151,7 +159,7 @@
 			       		
 				       		<c:choose>
 							    <c:when test="${currentPage < totalPages}">
-							        <a href="/mypage/inquiry-history?page=${currentPage + 1}">▶</a>
+							        <a href="/my-page/inquiry-history?page=${currentPage + 1}">▶</a>
 							    </c:when>
 							    <c:otherwise><a>▶</a></c:otherwise>
 							</c:choose>

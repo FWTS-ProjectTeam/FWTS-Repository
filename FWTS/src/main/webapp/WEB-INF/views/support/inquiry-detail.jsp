@@ -10,7 +10,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 고객센터</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
@@ -42,12 +41,12 @@
 	    height: auto; /* 비율에 맞게 이미지 크기 조정 */
 	}
     
-    .title {
+    .post-container .title {
         font-weight: 600;
         text-align: center;
         margin-bottom: 10px;
     }
-    .date {
+    .post-container .date {
         text-align: right;
         color: gray;
         font-size: 0.9em;
@@ -63,9 +62,6 @@
         text-align: right;
         color: gray;
         font-size: 0.9em;
-    }
-    .comment-content .title {
-    	text-align: left;
     }
     
     .button-container {
@@ -106,28 +102,21 @@
 			    <p>${inquiry.inquiryContent}</p>
 			</div>
 	
-			<!-- 현재 로그인한 사용자가 작성한 글이면 버튼 표시 -->
+			<!-- 로그인 사용자 - 작성자일 경우: 삭제, 수정 버튼 -->
 			<sec:authorize access="isAuthenticated()">
 			    <sec:authentication property="principal.username" var="currentUser"/>
-			
-			    <!-- 작성자일 경우: 삭제, 목록, 수정 버튼 -->
-			    <c:if test="${currentUser eq inquiry.writer.username}">
-			        <div class="button-container multiple">
+			    <div class="button-container ${currentUser eq inquiry.writer.username ? 'multiple' : ''}">
+			        <c:if test="${currentUser eq inquiry.writer.username}">
 			            <button onclick="deleteInquiry()">삭제</button>
-			            <button onclick="location.href='/support-center/inquiry'">목록</button>
+			        </c:if>
+			        <button onclick="location.href='/support-center/inquiry'">목록</button>
+					<c:if test="${currentUser eq inquiry.writer.username}">
 			            <button onclick="location.href='/support-center/inquiry/edit?id=${inquiry.inquiryId}'">수정</button>
-			        </div>
-			    </c:if>
-			
-			    <!-- 작성자가 아닐 경우: 목록 버튼만 보이게 -->
-			    <c:if test="${currentUser ne inquiry.writer.username}">
-			        <div class="button-container">
-			            <button onclick="location.href='/support-center/inquiry'">목록</button>
-			        </div>
-			    </c:if>
+			        </c:if>
+			    </div>
 			</sec:authorize>
 			
-			<!-- 비로그인 사용자: 목록 버튼만 보이게 -->
+			<!-- 비로그인 사용자 -->
 			<sec:authorize access="isAnonymous()">
 			    <div class="button-container">
 			        <button onclick="location.href='/support-center/inquiry'">목록</button>
@@ -162,7 +151,12 @@
 	            const requestUrl = `/support-center/inquiry/delete/${inquiry.inquiryId}`;
 	
 	            fetch(requestUrl, { method: "DELETE" })
-	            .then(response => response.json())
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('서버 오류');
+	                }
+	                return response.json();
+	            })
 	            .then(data => {
 	                if (data.success) {
 	                	window.location.href = "/support-center/inquiry"; // 문의사항 페이지
@@ -170,7 +164,7 @@
 	                	Swal.fire({
 	    					icon: 'error',
 	    					title: '삭제 실패',
-	    					text: '존재하지 않는 글입니다.',
+	    					text: '존재하지 않거나 삭제 권한이 없는 글입니다.',
 	    					confirmButtonColor: '#d33',
 	    					confirmButtonText: '확인'
 	    				});
