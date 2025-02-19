@@ -1,5 +1,7 @@
 package com.teamf.fwts.service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.teamf.fwts.dto.ProfileDto;
 import com.teamf.fwts.dto.SignupDto;
+import com.teamf.fwts.dto.UserListDto;
 import com.teamf.fwts.entity.UserDetails;
 import com.teamf.fwts.entity.Users;
+import com.teamf.fwts.mapper.UserAccountMapper;
 import com.teamf.fwts.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -18,8 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
+    private final UserAccountMapper userAccountMapper;
     private final PasswordEncoder passwordEncoder;
-    private final BankAccountService bankAccountService;
+    private final AccountService accountService;
     
     private static final Pattern BUSINESS_NO_PATTERN = Pattern.compile("^\\d{3}-\\d{2}-\\d{5}$");
 	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
@@ -59,7 +64,7 @@ public class UserService {
         userMapper.insertUserDetail(userDetail);
         
         // BackAccount 추가
-        bankAccountService.insertBankAccount(user.getUserId());
+        accountService.insertAccount(user.getUserId());
     }
     
     // 비밀번호 재설정
@@ -95,6 +100,11 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userMapper.existsByEmail(email) > 0;
     }
+    
+    // 전체 회원 정보 조회
+ 	public List<UserListDto> findAll(Map<String, Object> params) {
+ 		return userAccountMapper.findAll(params);
+ 	}
 
     // 회원 정보 조회
 	public Users findByUsername(String name) {
@@ -132,5 +142,10 @@ public class UserService {
         );
 		
         userMapper.updateUserDetails(userDetail);
+	}
+
+	// 회원 수 확인
+	public int count() {
+		return userMapper.count();
 	}
 }

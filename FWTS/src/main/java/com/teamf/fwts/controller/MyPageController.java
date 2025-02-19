@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.ProfileDto;
 import com.teamf.fwts.dto.ResetPasswordDto;
-import com.teamf.fwts.entity.BankAccount;
+import com.teamf.fwts.entity.Account;
 import com.teamf.fwts.entity.UserDetails;
 import com.teamf.fwts.entity.Users;
-import com.teamf.fwts.service.BankAccountService;
+import com.teamf.fwts.service.AccountService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.UserService;
 
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/my-page")
 public class MyPageController {
 	private final UserService userService;
-	private final BankAccountService bankAccountService;
+	private final AccountService accountService;
 	private final InquiryBoardService inquiryBoardService;
 	
 	// 내 정보 관리 페이지
@@ -44,8 +44,8 @@ public class MyPageController {
 
 		// 도매업자 처리
 		if (user.getRole() == 1) {
-			BankAccount bankAccount = bankAccountService.findByUserId(user.getUserId());
-			model.addAttribute("bankAccount", bankAccount);
+			Account account = accountService.findByUserId(user.getUserId());
+			model.addAttribute("account", account);
 		}
 		
 		model.addAttribute("userDetails", userDetails);
@@ -67,7 +67,7 @@ public class MyPageController {
         	
         	// 도매업자 처리
         	if (user.getRole() == 1)
-        		bankAccountService.updateBankAccount(dto);
+        		accountService.updateAccount(dto);
 
         	return ResponseEntity.ok().build();
 		} catch (Exception e) {

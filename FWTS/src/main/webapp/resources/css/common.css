@@ -36,12 +36,33 @@ body {
     margin: 0 auto;
 }
 
+.body-container {
+    display: flex;
+    margin: 50px;
+}
+
+/* 버튼 */
+.button-container {
+    display: flex;
+    align-items: center;
+}
+.button {
+	font-weight: 600;
+    background: #ff7f9d;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 /* 헤더 */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0px 10px;
+    padding: 0 10px;
     margin: 20px 10px 15px 10px;
     position: relative;
 }
@@ -52,7 +73,7 @@ body {
 .header-left h1 {
     font-size: 36px;
     color: #ff3366;
-    margin: 0px;
+    margin: 0;
 }
 .header-right {
     display: flex;
@@ -64,6 +85,7 @@ body {
     margin-left: 10px;
 }
 
+/* 검색창 */
 .search-container {
     width: 240px;
     display: flex;
@@ -89,6 +111,7 @@ body {
     padding: 5px;
 }
 
+/* 메뉴 */
 .nav-container {
 	display: flex;
 	justify-content: space-between;
@@ -110,11 +133,6 @@ body {
     font-size: 16px;
     font-weight: 600;
     margin-left: 10px;
-}
-
-.body-container {
-    display: flex;
-    margin: 20px;
 }
 
 /* 사이드바 */
@@ -139,4 +157,25 @@ body {
     text-decoration: none;
     color: #333;
     cursor: pointer;
+}
+
+/* 페이지네이션 */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+.pagination a {
+   	font-size: 12px;
+    text-decoration: none;
+    color: #333;
+    margin-left: 10px;
+}
+.pagination a:first-child {
+ 	margin-right: 5px; /* 화살표와 숫자 사이 간격 조절 */
+}
+.pagination span {
+    background-color: #ff7f9d;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
 }
