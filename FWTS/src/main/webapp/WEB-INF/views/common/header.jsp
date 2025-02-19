@@ -2,13 +2,7 @@
 
 <div class="header">
     <div class="header-left">
-<<<<<<< HEAD
 		<a href="/FWTS" class="special-font">생화24</a>
-=======
-        <h1>생화24</h1>
-        
-        <!-- 검색 -->
->>>>>>> branch 'main' of https://github.com/FWTS-ProjectTeam/FWTS-Repository.git
         <div class="search-container">
             <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
             <button class="search-button">
