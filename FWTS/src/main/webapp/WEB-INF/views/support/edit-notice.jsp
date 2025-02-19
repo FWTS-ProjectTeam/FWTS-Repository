@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -17,48 +17,13 @@
     .sidebar .notice-active {
     	font-weight: 600;
         background-color: #ff7f9d;
-        color: #fff;
+        color: white;
         border-radius: 5px;
     }
-    
-    .search-board-container {
-    	display: flex;
-     	align-items: center;
-     	justify-content: end;
-     	margin-bottom: 20px;
- 	}
- 	.search-category {
- 		width: 80px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	background-color: #fff;
-     	margin-right: 10px;
- 	}
- 	.search-board-box {
- 		width: 280px;
-     	padding: 10px;
-     	border: 1px solid #ccc;
-     	border-radius: 5px;
-     	font-size: 16px;
-     	outline: none;
- 	}
- 	.search-board-button {
-     	padding: 10px 15px;
-     	border: none;
-     	border-radius: 5px;
-     	background-color: #ff7f9d;
-     	color: #fff;
-     	font-size: 16px;
-     	font-weight: 600;
-     	cursor: pointer;
-     	margin-left: 10px;
- 	}
  	
-	.post-container {
+	.post-form {
 	    width: 100%;
-	    margin: 50px 10px 0px 10px;
+	    margin: 50px 10px 0 10px;
 	    background: white;
 	    display: block;
 	}
@@ -83,19 +48,10 @@
 	}
 
     .button-container {
-	    display: flex;
 	    justify-content: space-between;  /* 버튼들을 양쪽 끝에 배치 */
 	    margin-top: 20px;
 	    gap: 10px;  /* 버튼 사이의 간격 */
 	}
-    .button-container button {
-        background: #ff7f9d;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
 </style>
 </head>
 <body>
@@ -107,7 +63,7 @@
         <!-- 사이드바 -->
     	<%@ include file="/WEB-INF/views/common/support-sidebar.jsp" %>
         
-        <form class="post-container" id="post-container" action="/support-center/notice/edit" method="post">
+        <form class="post-form" id="post-form" action="/support-center/notices/edit" method="post">
         	<input type="hidden" name="noticeId" value="${notice.noticeId}">
         	
         	<div class="post-content">
@@ -117,8 +73,8 @@
 	     		</div>
         	</div>
 	  		<div class="button-container">
-	  			<button type="button" onclick="cancelAction()">취소</button>
-	  			<button type="button" onclick="submitPostForm()">저장</button>
+	  			<button type="button" class="button" onclick="cancelAction()">취소</button>
+	  			<button type="button" class="button" onclick="submitPostForm()">저장</button>
 	      	</div>
   		</form>
     </div>
@@ -139,9 +95,20 @@
 	        fCreator: "createSEditor2"
        	});
        	
-     	// 유효성 검사 실패
+	 	// 유효성 검사 실패
+     	<c:if test="${not empty validMessage}">
+			alert("${validMessage}");
+		</c:if>
+     	
+		// 서버 오류 발생
 		<c:if test="${not empty errorMessage}">
-			alert("${errorMessage}");
+			Swal.fire({
+				icon: 'error',
+				title: '서버 오류',
+				text: "${errorMessage}",
+				confirmButtonColor: '#d33',
+				confirmButtonText: '확인'
+			});
 		</c:if>
 	};
 	
@@ -151,7 +118,7 @@
 	
 	// 스마트에디터 내용 전송
 	function submitPostForm() {
-	   const form = document.getElementById("post-container");
+	   const form = document.getElementById("post-form");
 	   
 	   oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 	   form.requestSubmit(); // 폼 제출 실행
@@ -163,9 +130,9 @@
 		
 	    // 글 작성인지, 수정인지에 따라 처리
 	    if (noticeId) {
-            window.location.href = "/support-center/notice/" + noticeId;
+            window.location.href = "/support-center/notices/" + noticeId;
         } else {
-            window.location.href = "/support-center/notice";
+            window.location.href = "/support-center/notices";
         }
 	}
 </script>

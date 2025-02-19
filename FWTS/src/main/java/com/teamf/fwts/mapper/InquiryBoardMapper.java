@@ -62,4 +62,13 @@ public interface InquiryBoardMapper {
 	// 문의사항 삭제
 	@Delete("DELETE FROM inquiry_board WHERE inquiry_id = #{id}")
 	void deleteInquiryById(int id);
+	
+	// 답변 작성
+	@Update({"UPDATE inquiry_board SET reply = #{reply}, reply_date = NOW()",
+			"WHERE inquiry_id = #{inquiryId}"})
+	void saveReply(InquiryBoard newInquiry);
+	
+	// 답변 수정
+	@Update("UPDATE inquiry_board SET reply = #{reply} WHERE inquiry_id = #{inquiryId}")
+	void updateReply(InquiryBoard oldInquiry);
 }

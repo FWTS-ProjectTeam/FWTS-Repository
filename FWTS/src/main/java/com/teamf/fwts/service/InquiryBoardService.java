@@ -59,4 +59,16 @@ public class InquiryBoardService {
 	public void deleteInquiryById(int id) {
 		inquiryBoardMapper.deleteInquiryById(id);
 	}
+
+	// 답변 작성
+	@Transactional
+	public void saveReply(InquiryBoard newInquiry) {
+		inquiryBoardMapper.saveReply(newInquiry);
+	}
+	
+	// 답변 수정
+	@Transactional
+	public void updateReply(InquiryBoard oldInquiry) {
+		inquiryBoardMapper.updateReply(oldInquiry);
+	}
 }

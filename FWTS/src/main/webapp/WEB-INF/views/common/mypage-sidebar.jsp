@@ -8,7 +8,7 @@
 	<sec:authorize access="hasRole('ROLE_SELLER')">
 		<a href="#"  class="product-active">상품 관리</a>
 		<a href="#"  class="order-active">주문 관리</a>
-		<a href="/my-page/inquiry-history"  class="inquiry-active">문의 내역</a>
+		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>
 		<a href="#"  class="stats-active">통계</a>
 	</sec:authorize>
             
@@ -16,6 +16,6 @@
 	<sec:authorize access="hasRole('ROLE_BUYER')">
 		<a href="#"  class="cart-active">장바구니</a>
 		<a href="#"  class="order-active">주문 내역</a>
-		<a href="/my-page/inquiry-history"  class="inquiry-active">문의 내역</a>
+		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>
 	</sec:authorize>
 </div>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -16,7 +16,7 @@
     .sidebar .inquiry-active {
     	font-weight: 600;
         background-color: #ff7f9d;
-        color: #fff;
+        color: white;
         border-radius: 5px;
     }
     
@@ -34,7 +34,6 @@
     	display: flex;
 	    justify-content: space-between; /* 왼쪽, 오른쪽 정렬 */
 	    align-items: center; /* 수직 중앙 정렬 */
-	    color: gray;
     }
     .post-content img {
 	    max-width: 100%; /* 이미지가 컨테이너를 초과하지 않도록 설정 */
@@ -44,41 +43,61 @@
     .post-container .title {
         font-weight: 600;
         text-align: center;
-        margin-bottom: 10px;
+        margin: 16px 0 10px 0;
     }
+    .post-container .writer,
     .post-container .date {
-        text-align: right;
         color: gray;
-        font-size: 0.9em;
+        font-size: 14px;
     }
     
-    .comment-content {
+    .post-content .date {
+        text-align: right;
+    }
+    
+    .reply-content {
     	padding: 20px;
     	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
         margin-top: 50px;
     }
-    .comment-content .date {
+    
+    .reply-content .date {
         text-align: right;
-        color: gray;
-        font-size: 0.9em;
     }
     
     .button-container {
-        display: flex;
         justify-content: center;
         margin: 20px auto;
     }
-    .button-container button {
-        background: #ff7f9d;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+    
+    .reply-content textarea {
+	    width: 100%;
+	    padding: 12px;
+	    margin: 14px 0;
+	    border: 1px solid #ddd;
+	    border-radius: 6px;
+	    resize: none;
+	    outline: none;
+	    transition: border-color 0.3s;
+	    box-sizing: border-box; /* 패딩을 포함해 전체 너비 100%로 설정 */
+	}
+    .reply-content textarea:focus {
+        border-color: #ff6699;
+    }
+	.reply-content .button-container {
+        margin: 0;
+    }
+    .reply-content #char-count {
+    	margin: 0;
+    	font-size: 14px;
     }
     
-    .multiple {
+   	.hidden {
+		display: none;
+	}
+	
+	.multiple {
         justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
     }
 </style>
@@ -107,11 +126,11 @@
 			    <sec:authentication property="principal.username" var="currentUser"/>
 			    <div class="button-container ${currentUser eq inquiry.writer.username ? 'multiple' : ''}">
 			        <c:if test="${currentUser eq inquiry.writer.username}">
-			            <button onclick="deleteInquiry()">삭제</button>
+			            <button class="button" onclick="deleteInquiry()">삭제</button>
 			        </c:if>
-			        <button onclick="location.href='/support-center/inquiry'">목록</button>
+			        <button class="button" onclick="location.href='/support-center/inquirys'">목록</button>
 					<c:if test="${currentUser eq inquiry.writer.username}">
-			            <button onclick="location.href='/support-center/inquiry/edit?id=${inquiry.inquiryId}'">수정</button>
+			            <button class="button" onclick="location.href='/support-center/inquirys/edit?id=${inquiry.inquiryId}'">수정</button>
 			        </c:if>
 			    </div>
 			</sec:authorize>
@@ -119,24 +138,69 @@
 			<!-- 비로그인 사용자 -->
 			<sec:authorize access="isAnonymous()">
 			    <div class="button-container">
-			        <button onclick="location.href='/support-center/inquiry'">목록</button>
+			        <button class="button" onclick="location.href='/support-center/inquirys'">목록</button>
 			    </div>
 			</sec:authorize>
       
       		<c:if test="${not empty inquiry.reply}">
-			    <div class="comment-content">
+			    <div class="reply-content">
 			        <h2 class="title">답변</h2>
-			        <p class="date">작성일: 
-			            <fmt:formatDate value="${inquiry.replyDate}" pattern="yyyy.MM.dd HH:mm" />
-			        </p>
-			        <p>${inquiry.reply}</p>
+			        <p class="date">작성일: <fmt:formatDate value="${inquiry.replyDate}" pattern="yyyy.MM.dd HH:mm" /></p>
+			        <p id="old-reply">${inquiry.reply}</p>
+			        
+			        <!-- 관리자일 경우: 수정 버튼 -->
+			        <sec:authorize access="hasRole('ROLE_ADMIN')">
+				        <div class="button-container">
+				            <button id="update-button" class="button" onclick="toggleEditMode()">수정</button>
+			            </div>
+			        </sec:authorize>
+			
+			        <!-- 수정 폼 -->
+			        <form id="edit-reply-form" class="hidden" action="/support-center/inquirys/reply/${inquiry.inquiryId}" method="post">
+			            <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
+			            <textarea name="reply" id="edit-reply-textarea" rows="10" maxlength="2000" oninput="countChars(this)">${inquiry.reply}</textarea>
+			            <div class="button-container multiple">
+			   				<button type="button" class="button" onclick="toggleEditMode()">취소</button>
+			   				<p id="char-count">0 / 1000자</p>
+			                <button type="submit" class="button">저장</button>
+			            </div>
+			        </form>
 			    </div>
+			</c:if>
+			
+			<c:if test="${empty inquiry.reply}">
+				<!-- 관리자일 경우: 답변 작성 -->
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				    <form class="reply-content" action="/support-center/inquirys/reply/${inquiry.inquiryId}" method="post">
+				        <h2 class="title">답변</h2>
+			            <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
+			            <textarea name="reply" rows="10" maxlength="2000" oninput="countChars(this)">${inquiry.reply}</textarea>
+			            <div class="button-container multiple">
+			            	<p id="char-count">0 / 1000자</p>
+			            	<button type="submit" class="button">저장</button>
+			            </div>
+				    </form>
+				</sec:authorize>
 			</c:if>
   		</div>
     </div>
 </div>
 <script>
-	function deleteInquiry(inquiryId) {
+	// 페이지 로드 시 실행
+	window.onload = function () {
+		<c:if test="${not empty errorMessage}">
+			Swal.fire({
+				icon: 'error',
+				title: '서버 오류',
+				text: "${errorMessage}",
+				confirmButtonColor: '#d33',
+				confirmButtonText: '확인'
+			});
+		</c:if>
+	};
+
+	// 글 삭제
+	function deleteInquiry() {
 	    Swal.fire({
 	        title: "정말로 삭제하시겠습니까?",
 	        text: "이 작업은 되돌릴 수 없습니다!",
@@ -148,7 +212,7 @@
 	        cancelButtonText: "취소"
 	    }).then((result) => {
 	        if (result.isConfirmed) {
-	            const requestUrl = `/support-center/inquiry/delete/${inquiry.inquiryId}`;
+	        	const requestUrl = "/support-center/inquirys/delete/" + ${inquiry.inquiryId};
 	
 	            fetch(requestUrl, { method: "DELETE" })
 	            .then(response => {
@@ -159,7 +223,7 @@
 	            })
 	            .then(data => {
 	                if (data.success) {
-	                	window.location.href = "/support-center/inquiry"; // 문의사항 페이지
+	                	window.location.href = "/support-center/inquirys"; // 문의사항 페이지
 	                } else {
 	                	Swal.fire({
 	    					icon: 'error',
@@ -181,6 +245,40 @@
 	            });
 	        }
 	    });
+	}
+	
+	// 답변 수정 필드 활성화
+	function toggleEditMode() {
+	    var oldReply = document.getElementById("old-reply");
+	    var updateButton = document.getElementById("update-button");
+	    var editForm = document.getElementById("edit-reply-form");
+	    var toggleButton = document.getElementById("toggle-button");
+	    var textarea = document.getElementById("edit-reply-textarea");
+
+	    if (editForm.classList.contains("hidden")) {
+	        editForm.classList.remove("hidden"); // 수정 폼 표시
+	        oldReply.style.display = "none"; // 기존 답변 숨김
+	        updateButton.style.display = "none"; // 수정 버튼 숨김
+	        
+	        countChars(textarea); // 글자 수 업데이트
+	    } else {
+	        editForm.classList.add("hidden"); // 수정 폼 숨김
+	        oldReply.style.display = "block"; // 기존 답변 표시
+	        updateButton.style.display = "block"; // 수정 버튼 표시
+	    }
+	}
+	
+	// 글자 수 세기
+	function countChars(textarea) {
+	    var maxLength = 1000;
+	    var currentLength = textarea.value.length;
+
+	    if (currentLength > maxLength) {
+	        textarea.value = textarea.value.substring(0, maxLength); // 1000자 초과 시 잘라내기
+	        currentLength = maxLength;
+	    }
+
+	    document.getElementById("char-count").innerText = currentLength + " / " + maxLength + "자";
 	}
 </script>
 </body>
