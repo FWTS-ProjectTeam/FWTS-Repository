@@ -191,7 +191,7 @@
 		<c:if test="${not empty errorMessage}">
 			Swal.fire({
 				icon: 'error',
-				title: '서버 오류',
+				title: '저장 실패',
 				text: "${errorMessage}",
 				confirmButtonColor: '#d33',
 				confirmButtonText: '확인'
@@ -237,7 +237,7 @@
 	            .catch(error => {
 	            	Swal.fire({
     					icon: 'error',
-    					title: '오류 발생',
+    					title: '삭제 실패',
     					text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
     					confirmButtonColor: '#d33',
     					confirmButtonText: '확인'
@@ -249,20 +249,19 @@
 	
 	// 답변 수정 필드 활성화
 	function toggleEditMode() {
+		var form = document.getElementById("edit-reply-form");
 	    var oldReply = document.getElementById("old-reply");
 	    var updateButton = document.getElementById("update-button");
-	    var editForm = document.getElementById("edit-reply-form");
-	    var toggleButton = document.getElementById("toggle-button");
-	    var textarea = document.getElementById("edit-reply-textarea");
 
-	    if (editForm.classList.contains("hidden")) {
-	        editForm.classList.remove("hidden"); // 수정 폼 표시
+	    if (form.classList.contains("hidden")) {
+	    	form.classList.remove("hidden"); // 수정 폼 표시
 	        oldReply.style.display = "none"; // 기존 답변 숨김
 	        updateButton.style.display = "none"; // 수정 버튼 숨김
 	        
+	        var textarea = document.getElementById("edit-reply-textarea");
 	        countChars(textarea); // 글자 수 업데이트
 	    } else {
-	        editForm.classList.add("hidden"); // 수정 폼 숨김
+	    	form.classList.add("hidden"); // 수정 폼 숨김
 	        oldReply.style.display = "block"; // 기존 답변 표시
 	        updateButton.style.display = "block"; // 수정 버튼 표시
 	    }

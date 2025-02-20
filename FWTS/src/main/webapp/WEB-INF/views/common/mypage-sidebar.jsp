@@ -5,15 +5,14 @@
 	<a href="/my-page/info" class="profile-active">내 정보 관리</a>
             
 	<!-- 도매업자 항목 -->
-	<sec:authorize access="hasRole('ROLE_SELLER')">
+	<sec:authorize access="hasRole('ROLE_WHOLESALER')">
 		<a href="#"  class="product-active">상품 관리</a>
 		<a href="#"  class="order-active">주문 관리</a>
 		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>
-		<a href="#"  class="stats-active">통계</a>
 	</sec:authorize>
             
 	<!-- 소매업자 항목 -->
-	<sec:authorize access="hasRole('ROLE_BUYER')">
+	<sec:authorize access="hasRole('ROLE_RETAILER')">
 		<a href="#"  class="cart-active">장바구니</a>
 		<a href="#"  class="order-active">주문 내역</a>
 		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>

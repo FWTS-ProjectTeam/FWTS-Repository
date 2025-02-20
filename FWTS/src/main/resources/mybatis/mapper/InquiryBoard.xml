@@ -9,12 +9,8 @@
         <where>
             <if test="category != null and keyword != null">
                 <choose>
-                    <when test="category == 'title'">
-                        AND inquiry_title LIKE CONCAT('%', #{keyword}, '%')
-                    </when>
-                    <when test="category == 'content'">
-                        AND inquiry_content LIKE CONCAT('%', #{keyword}, '%')
-                    </when>
+                    <when test="category == 'title'">AND inquiry_title LIKE CONCAT('%', #{keyword}, '%')</when>
+                    <when test="category == 'content'">AND inquiry_content LIKE CONCAT('%', #{keyword}, '%')</when>
                     <otherwise>
                         AND (inquiry_title LIKE CONCAT('%', #{keyword}, '%') 
                         OR inquiry_content LIKE CONCAT('%', #{keyword}, '%'))
@@ -34,7 +30,10 @@
                 <choose>
                     <when test="category == 'title'">AND ib.inquiry_title LIKE CONCAT('%', #{keyword}, '%')</when>
                     <when test="category == 'content'">AND ib.inquiry_content LIKE CONCAT('%', #{keyword}, '%')</when>
-                    <otherwise>AND (ib.inquiry_title LIKE CONCAT('%', #{keyword}, '%') OR ib.inquiry_content LIKE CONCAT('%', #{keyword}, '%'))</otherwise>
+                    <otherwise>
+                    	AND (ib.inquiry_title LIKE CONCAT('%', #{keyword}, '%') 
+                    	OR ib.inquiry_content LIKE CONCAT('%', #{keyword}, '%'))
+                    </otherwise>
                 </choose>
             </if>
         </where>

@@ -72,13 +72,13 @@
 				</div>
 	         
 	         	<!-- 게시글 검색 -->
-	         	<form class="search-board-container" action="/support-center/inquirys">
+	         	<form class="search-board-form" action="/support-center/inquirys">
 				    <select class="search-category" name="category">
 				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
 				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
 				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
 				    </select>
-				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
+				    <input class="search-board-box" name="keyword" type="text" value="${keyword}" placeholder="검색어를 입력해주세요">
 				    <button type="submit" class="button">검색</button>
 				</form>
          	</div>
@@ -107,40 +107,29 @@
 			<!-- 페이지네이션 -->
 			<div class="pagination">
 			    <c:choose>
-			        <c:when test="${count > 0}">
-			            <c:set var="queryString">
-						    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-						        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-						    </c:if>
-						</c:set>
-			
-			            <!-- 이전 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage > 1}">
-			                    <a href="/support-center/inquirys?page=${currentPage - 1}${queryString}">◀</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>◀</a>
-			                </c:otherwise>
-			            </c:choose>
-			
-			            <!-- 현재 페이지 / 전체 페이지 표시 -->
-			            <span>${currentPage} / ${totalPages}</span>
-			
-			            <!-- 다음 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage < totalPages}">
-			                    <a href="/support-center/inquirys?page=${currentPage + 1}${queryString}">▶</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>▶</a>
-			                </c:otherwise>
-			            </c:choose>
-			        </c:when>
-			        <c:otherwise>
-			            <p>조회된 글이 없습니다.</p>
-			        </c:otherwise>
-			    </c:choose>
+				    <c:when test="${count > 0}">
+				        <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
+				            <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+				        </c:if>
+				
+				        <c:choose>
+				            <c:when test="${currentPage > 1}">
+				                <a href="/support-center/inquirys?page=${currentPage - 1}${queryString}">◀</a>
+				            </c:when>
+				            <c:otherwise><a>◀</a></c:otherwise>
+				        </c:choose>
+				
+				        <span>${currentPage} / ${totalPages}</span>
+				
+				        <c:choose>
+				            <c:when test="${currentPage < totalPages}">
+				                <a href="/support-center/inquirys?page=${currentPage + 1}${queryString}">▶</a>
+				            </c:when>
+				            <c:otherwise><a>▶</a></c:otherwise>
+				        </c:choose>
+				    </c:when>
+				    <c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
+				</c:choose>
 			</div>
         </div>
     </div>

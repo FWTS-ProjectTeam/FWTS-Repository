@@ -48,8 +48,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private String getRoleString(Users user) {
         return switch (user.getRole()) {
             case 0 -> "ROLE_ADMIN";
-            case 1 -> "ROLE_SELLER";
-            default -> "ROLE_BUYER";
+            case 1 -> "ROLE_WHOLESALER";
+            default -> "ROLE_RETAILER";
         };
     }
 }

@@ -67,7 +67,7 @@
         	<input type="hidden" name="noticeId" value="${notice.noticeId}">
         	
         	<div class="post-content">
-        		<input class="title" name="noticeTitle" value="${notice.noticeTitle}" maxlength="64" placeholder="제목을 입력하세요"/>
+        		<input class="title" name="noticeTitle" value="${notice.noticeTitle}" maxlength="64" placeholder="제목을 입력해주세요"/>
        			<div id="smarteditor">
 		      		<textarea id="content" name="noticeContent" rows="20"></textarea>
 	     		</div>
@@ -100,11 +100,11 @@
 			alert("${validMessage}");
 		</c:if>
      	
-		// 서버 오류 발생
+		// 서버 오류
 		<c:if test="${not empty errorMessage}">
 			Swal.fire({
 				icon: 'error',
-				title: '서버 오류',
+				title: '저장 실패',
 				text: "${errorMessage}",
 				confirmButtonColor: '#d33',
 				confirmButtonText: '확인'
@@ -118,10 +118,9 @@
 	
 	// 스마트에디터 내용 전송
 	function submitPostForm() {
-	   const form = document.getElementById("post-form");
-	   
-	   oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-	   form.requestSubmit(); // 폼 제출 실행
+		const form = document.getElementById("post-form");
+	   	oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+	   	form.requestSubmit(); // 폼 제출 실행
    	}
 	
 	// 취소 버튼 클릭 시 실행

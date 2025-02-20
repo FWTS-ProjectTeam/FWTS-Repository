@@ -7,18 +7,26 @@ import java.nio.file.Files;
 import org.springframework.core.io.ClassPathResource;
 
 public class EmailTemplateUtils {
-    // HTML 템플릿을 읽고 인증 코드 적용
-    public static String generateVerificationCodeEmail(String verificationCode) {
+	// HTML 템플릿을 읽고 반환하는 메서드
+    private static String loadTemplate(String filePath) {
         try {
-            // 이메일 템플릿 파일 읽기
-            ClassPathResource resource = new ClassPathResource("templates/verification-code-email.html");
-            String content = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
-
-            // ${verificationCode}를 실제 인증 코드로 변경
-            return content.replace("${verificationCode}", verificationCode);
+            ClassPathResource resource = new ClassPathResource(filePath);
+            return new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
-            return "<p>이메일을 로드하는 중 오류가 발생했습니다.</p>";
+            return "<p>이메일 템플릿을 로드하는 중 오류가 발생했습니다.</p>";
         }
+    }
+
+    // 비밀번호 재설정 인증 코드 이메일 템플릿
+    public static String generateVerificationCodeEmail(String verificationCode) {
+        String content = loadTemplate("templates/verification-code-email.html");
+        return content.replace("${verificationCode}", verificationCode);
+    }
+
+    // 회원가입 완료 이메일 템플릿
+    public static String generateSignupEmail(String ceoName) {
+    	String content = loadTemplate("templates/signup-confirmation-email.html");
+        return content.replace("${ceoName}", ceoName);
     }
 }
