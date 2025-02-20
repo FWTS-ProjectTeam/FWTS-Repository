@@ -63,6 +63,7 @@
 
 .product-item:hover {
 	transform: scale(1.05);
+	border: 1px solid var(--main4);
 }
 
 .product-image {
@@ -83,11 +84,20 @@
     font-size: 14px;
 }
 
-
 .product-details {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;	
+}
+
+.product-revenue{
+	margin: 10px 0 5px 0;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    background-color: var(--main5);
+    color: var(--main1);
+    font-size:14px;
+    text-align: center;
 }
 
 .pagination {
@@ -137,7 +147,7 @@
 				<div class="array-container">
 					<div class="array-notice">
 						<p>
-							<span style="color: var(--main4); font-size: 30px;">A플라워샵(수정필요)</span> 의 판매 상품 목록
+							<span style="color: var(--main4); font-size: 30px;">${userDetails.companyName}</span> 의 판매 상품 목록
 						</p>
 					</div>
 				</div>
@@ -152,8 +162,8 @@
             					<c:otherwise> available</c:otherwise>
         					</c:choose>">
         					<c:choose>
-            					<c:when test="${not product.isSales()}">판매 중지</c:when>
-            				<c:otherwise>판매 중</c:otherwise>
+            					<c:when test="${not product.isSales()}"><span style="color: var(--main2);">판매 중지</span></c:when>
+            				<c:otherwise><span style="color: var(--main4);">판매중</span></c:otherwise>
         					</c:choose>
     					</p>
 							<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
@@ -168,11 +178,11 @@
     							</c:choose>
     						</h3>
 							<div class="product-details">
-								<p>${product.unitPrice}원</p>
-								<p>등록일: <fmt:formatDate value="${product.formattedDate}" pattern="yyyy-MM-dd" /></p>
+								<span style="font-weight: bold; color:var(--main4);">${product.unitPrice}원</span>
+								<span style="color:#999; font-size:12px;">등록일: <fmt:formatDate value="${product.formattedDate}" pattern="yyyy-MM-dd" /></span>
 
 							</div>
-							<div>
+							<div class="product-revenue">
 							<p>누적 판매량: ${product.totalSales}</p>
 							</div>
 						</li>
@@ -219,6 +229,7 @@
 			</div>
 		</div>
 	</div>
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
 	
 </body>

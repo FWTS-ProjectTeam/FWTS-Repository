@@ -62,4 +62,8 @@ public interface UserMapper {
 	// 회원 수 확인
 	@Select("SELECT COUNT(*) FROM user_details")
 	int count();
+	
+	// sellerId로 UserDetails 조회
+    @Select("SELECT * FROM user_details WHERE user_id = #{sellerId}")
+    UserDetails findBySellerId(@Param("sellerId") int sellerId);
 }
