@@ -7,9 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>생화24-샵의 상품 리스트</title>
+<title>생화24 - 상품 등록</title>
 <link rel="stylesheet" href="/resources/css/common.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
 .body-container {
 	display: flex;
@@ -121,6 +123,32 @@ img {
 	font-weight: bold;
 }
 
+ 	
+	.post-form {
+	    width: 100%;
+	    margin: 50px 10px 0 10px;
+	    background: white;
+	    display: block;
+	}
+	.post-content {
+	    padding: 20px;
+	    border-top: 1px solid #ccc;
+	    border-bottom: 1px solid #ccc;
+	}
+	.post-content .title {
+	    width: 100%;
+	    padding: 10px;
+	    font-size: 24px;
+	    border: 1px solid #ccc;
+	    outline: none;
+	    font-weight: 600;
+	    margin-bottom: 16px;
+	    box-sizing: border-box;
+	}
+	.post-content textarea {
+	    width: 99.6%;
+	    box-sizing: border-box; /* 패딩을 포함해 전체 너비 100%로 설정 */
+	}
 .button-container {
 	width: 100%;
 	display: flex;
@@ -184,8 +212,8 @@ img {
 						</div>
 						<div class="pro-detail">
 							<div class="pro-detail1">
-								<h3>A플라워(수정필요)</h3>
-								<p>상품 ID: 상품 등록 시 자동 생성됩니다 :)</p>
+								<h3>${userDetails.companyName }</h3>
+								<p>상품 ID는 상품 등록 시 자동 생성됩니다 :)</p>
 							</div>
 							<div class="pro-detail2">
 								<p>
@@ -232,11 +260,12 @@ img {
 					</div>
 					<div class="pro-info2">
 						<p class="description-title">상품 설명</p>
-						<p>
-							<textarea name="proName"
-								style="width: 100%; height: 300px; overflow-y: auto; padding: 0; line-height: 1.5; vertical-align: top;">
-  ${product.description}</textarea>
-						</p>
+						<div class="post-content">
+        		<input class="title" name="inquiryTitle" value="${inquiry.inquiryTitle}" maxlength="64" placeholder="제목을 입력하세요"/>
+       			<div id="smarteditor">
+		      		<textarea id="content" name="inquiryContent" rows="20"></textarea>
+	     		</div>
+        	</div>
 					</div>
 					<div class="button-container">
 						<button class="btn1" type="submit">등록하기</button>
@@ -244,7 +273,70 @@ img {
 				</form>
 			</div>
 		</div>
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
+<script>
+    var oEditors = [];
+
+    // 스마트 에디터 초기화 함수
+    smartEditor = function() {
+        nhn.husky.EZCreator.createInIFrame({
+            oAppRef: oEditors,
+            elPlaceHolder: "content", // 텍스트 영역 ID
+            sSkinURI: "/smarteditor/SmartEditor2Skin.html", // 스마트 에디터 스킨 경로
+            fOnAppLoad: function() {
+                // 에디터 로딩 후 기존 내용 설정 (서버에서 넘어온 내용을 에디터에 삽입)
+                const content = "${inquiry.inquiryContent}";
+                oEditors.getById["content"].exec("PASTE_HTML", [content]);
+            },
+            fCreator: "createSEditor2"
+        });
+    };
+
+    // 문서 준비되었을 때 실행
+    $(document).ready(function() {
+        smartEditor(); // 스마트 에디터 실행
+    });
+
+    // 스마트 에디터 내용 전송
+    function submitPostForm() {
+        const form = document.getElementById("post-form");
+
+        // 스마트 에디터 내용 업데이트
+        oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+        
+        // 폼 제출
+        form.requestSubmit();
+    }
+
+    // 취소 버튼 클릭 시 실행
+    function cancelAction() {
+        const inquiryId = "${inquiry.inquiryId}";
+
+        // 글 작성인지, 수정인지에 따라 처리
+        if (inquiryId) {
+            window.location.href = "/support-center/inquirys/" + inquiryId; // 수정 페이지로 돌아가기
+        } else {
+            window.location.href = "/support-center/inquirys"; // 리스트 페이지로 돌아가기
+        }
+    }
+
+    // 유효성 검사 실패 시 alert
+    <c:if test="${not empty validMessage}">
+        alert("${validMessage}");
+    </c:if>
+
+    // 서버 오류 발생 시 Swal 알림
+    <c:if test="${not empty errorMessage}">
+        Swal.fire({
+            icon: 'error',
+            title: '서버 오류',
+            text: "${errorMessage}",
+            confirmButtonColor: '#d33',
+            confirmButtonText: '확인'
+        });
+    </c:if>
+</script>
 
 </body>
 </html>

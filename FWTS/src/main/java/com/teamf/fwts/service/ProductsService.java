@@ -33,35 +33,32 @@ public class ProductsService {
     public void deleteProduct(int proId) {
     	productsMapper.deleteProduct(proId);
     }
-    
-    // 상품 목록 조회
-    public List<ProductsDto> getAllProducts() {
-        return productsMapper.getAllProducts();
-    }
+
     // 상품 개수 조회
-    public int countProducts(Map<String, Object> params) {
-    	return productsMapper.countProducts(params);
+    public int countAllProducts(Map<String, Object> params) {
+    	return productsMapper.countAllProducts(params);
     }    
     // 상품 목록 페이지 조회
-    public List<ProductsDto> getProductsWithPage(Map<String, Object> params) {
-        return productsMapper.getProductsWithPage(params);
+    public List<ProductsDto> findProductsWithPage(Map<String, Object> params) {
+        return productsMapper.findProductsWithPage(params);
     }
 
-    // 특정 셀러의 상품 목록 조회
-    public List<ProductsDto> getProductsBySellerId(int sellerId) {
-        return productsMapper.getProductsBySellerId(sellerId);
-    }
-
-    // 특정 셀러의 상품 개수 조회
+    // 셀러의 상품 개수 조회
     public int countBySellerId(int sellerId) {
         return productsMapper.countBySellerId(sellerId);
     }
-
-    // 특정 셀러의 상품 목록 (페이지네이션 포함)
-    public List<ProductsDto> findBySellerIdAndPage(Map<String, Object> params) {
-        return productsMapper.findBySellerIdAndPage(params);
+    // 셀러의 상품 목록 페이지 조회
+    public List<ProductsDto> findBySellerIdWithPage(Map<String, Object> params) {
+        return productsMapper.findBySellerIdWithPage(params);
     }
     
-
+    // 셀러의 상품 개수 조회 (판매 x 상품 포함)
+    public int countAllBySellerId(int sellerId) {
+        return productsMapper.countAllBySellerId(sellerId);
+    }
+    // 셀러의 상품 목록 페이지 조회 (판매 x 상품 포함)
+    public List<ProductsDto> findAllBySellerIdWithPage(Map<String, Object> params) {
+        return productsMapper.findAllBySellerIdWithPage(params);
+    }
     
 }

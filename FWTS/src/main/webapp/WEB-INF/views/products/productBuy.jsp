@@ -15,8 +15,9 @@
 .body-container {
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 90%;
 	margin: 0 auto;
+	padding-top:30px;
 }
 
 .pro-info1 {
@@ -39,7 +40,7 @@
 }
 
 .img-container:before {
-	content: "이미지가 없습니다";
+	content: "이미지가\A없습니다";
 	color: #666;
 	font-size: 16px;
 	font-weight: bold;
@@ -51,6 +52,7 @@
 	justify-content: center;
 	align-items: center;
 	margin-top:30px;
+	white-space: pre;
 }
 
 img {
@@ -72,8 +74,15 @@ img {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 	width: 100%;
 	margin: 0px 300px 0px 0px;
+}
+.pro-detail1 a{
+	color: var(--main4);
+	font-size: 16px;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 .pro-detail2 {
@@ -196,15 +205,15 @@ img {
 				</div>
 				<div class="pro-detail">
 					<div class="pro-detail1">
-						<p>A플라워(수정필요)<p>
+						<a href="/products/shop/${product.sellerId}">${userDetails.companyName}</a>
 						<p>상품 ID: ${product.proId}</p>
 					</div>
 					<div class="pro-detail2">
 						<h3>${product.proName}</h3>
 						<hr class="highlight-line">
-						<p>단일가격: ${product.unitPrice}</p>
+						<p>단일가격: ${product.unitPrice}원 </p>
 						<hr class="solid-line">
-						<p>구매 가능 수량 ${product.minPossible}~${product.maxPossible}</p>
+						<p>구매 가능 수량: ${product.minPossible}~${product.maxPossible}개</p>
 						<hr class="solid-line">
 					<div>
 						<div>
@@ -245,6 +254,7 @@ img {
         	    </p>
 			</div>
 		</div>
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
 
 	<script>

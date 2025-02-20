@@ -14,6 +14,8 @@
 		<div class="body-container">
 		<p>메인 화면 </p>
 		</div>
+		
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
 </body>
 </html>

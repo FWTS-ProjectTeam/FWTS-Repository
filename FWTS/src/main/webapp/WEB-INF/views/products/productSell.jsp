@@ -291,11 +291,12 @@ table th, table td {
 				<div class="button-container">
 					<button class="btn1"
 						onclick="location.href='/products/edit/${product.proId}'">수정</button>
-					<button class="btn2"
-						onclick="location.href='/products/delete/${product.proId}'">삭제</button>
+					<button class="btn2" 
+						onclick="confirmDelete(${product.proId}, '${product.proName}', '${product.sellerId}')">삭제</button>
 				</div>
 			</div>
 		</div>
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
 	<script>
       // 탭 전환 기능
@@ -318,6 +319,13 @@ table th, table td {
         	}
     	});
 	}
+      function confirmDelete(proId, proName) {
+          const isConfirmed = confirm(`${product.proName} 상품을 삭제하시겠습니까?`);
+          
+          if (isConfirmed) {
+              location.href = `/products/shopM/${product.sellerId}`;
+          }
+      }
 
 // 페이지 로드 시 기본 탭 설정
 window.onload = function () {

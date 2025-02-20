@@ -148,4 +148,9 @@ public class UserService {
 	public int count() {
 		return userMapper.count();
 	}
+	
+	// sellerId로 UserDetails 조회
+    public UserDetails findBySellerId(int sellerId) {
+        return userMapper.findBySellerId(sellerId);
+    }
 }
