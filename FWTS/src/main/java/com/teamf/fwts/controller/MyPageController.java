@@ -9,11 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.ProfileDto;
@@ -25,6 +27,7 @@ import com.teamf.fwts.service.AccountService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -53,7 +56,7 @@ public class MyPageController {
 	}
 	
 	// 회원정보 수정
-	@PostMapping("/edit-profile")
+	@PostMapping("/info/edit-profile")
 	public ResponseEntity<?> editProfile(@Valid @RequestBody ProfileDto dto, BindingResult bindingResult, Authentication authentication) {
 		Users user = userService.findByUsername(authentication.getName());
 
@@ -75,8 +78,25 @@ public class MyPageController {
 		}
 	}
 	
+	// 회원탈퇴
+	@ResponseBody
+	@DeleteMapping("/info/delete")
+	public Map<String, Boolean> deleteUser(Authentication authentication, HttpSession session) {
+	    Map<String, Boolean> response = new HashMap<>();
+	    
+	    try {
+	    	userService.deleteByUsername(authentication.getName());
+	    	session.invalidate(); // 세션 무효화
+	    	response.put("success", true);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    
+	    return response;
+	}
+	
 	// 비밀번호 재설정
-	@PostMapping("/reset-password")
+	@PostMapping("/info/reset-password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto dto, BindingResult bindingResult, Authentication authentication) {
 		String password = dto.getPassword();
 		String username = authentication.getName();

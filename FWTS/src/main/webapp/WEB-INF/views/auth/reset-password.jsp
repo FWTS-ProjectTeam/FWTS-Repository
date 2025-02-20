@@ -88,7 +88,7 @@
 <body>
 <div class="container">
     <h1>비밀번호 재설정</h1>
-    <p class="description">새 비밀번호를 입력하세요.</p>
+    <p class="description">새 비밀번호를 입력해주세요.</p>
 
     <form id="password-content" action="/find-password/reset-password" method="post"> 
 		<div class="input-group">
@@ -120,7 +120,7 @@
       	<c:if test="${not empty errorMessage}">
           	Swal.fire({
               	icon: 'error',
-              	title: '오류 발생',
+              	title: '재설정 실패',
               	text: "${errorMessage}", 
               	confirmButtonColor: '#d33',
 				confirmButtonText: '확인'

@@ -1,15 +1,16 @@
-.search-board-container {
+.search-board-form {
     display: flex;
     align-items: center;
 }
 .search-category {
  	width: 80px;
-    padding: 10px;
+    padding: 10px 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    color: #333;
     background-color: #fff;
-    margin-right: 10px;
+    margin-right: 5px;
     outline: none; /* 클릭 시 검은색 강조 제거 */
    	appearance: none; /* 기본 드롭다운 스타일 제거 */
     -webkit-appearance: none;
@@ -17,7 +18,7 @@
 }
 	
 .search-board-box {
-	width: 280px;
+	width: 250px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

@@ -94,7 +94,7 @@
         <div class="input-group">
 		   <label for="code">인증 코드</label>
 		   <div class="row-group">
-		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력하세요" maxlength="6"
+		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력해주세요" maxlength="6"
 		       		  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 		       <button type="button" class="resend-code" onclick="resendCode()">재전송</button>
 		    </div>
@@ -129,7 +129,7 @@
 		const code = document.getElementById("code").value;
 	  
 		if (!code) {
-			alert("인증 코드를 입력하세요.");
+			alert("인증 코드를 입력해주세요.");
 			return false;
 		}
 	
@@ -160,13 +160,13 @@
 	    	Swal.close();
       	    Swal.fire({
       	        icon: 'error',
-      	        title: '오류 발생',
+      	        title: '재전송 실패',
       	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
       	        confirmButtonColor: '#d33',
       	        confirmButtonText: '확인'
       	    });
       	    
-      	  	messageElement.innerHTML = `<span style="color: red;">인증 코드 전송에 실패했습니다.</span>`;
+      	  	messageElement.innerHTML = `<span style="color: red;">인증 코드 재전송에 실패했습니다.</span>`;
 	    });
 	}
 </script>

@@ -75,10 +75,10 @@
 	</div>
 
 	<!-- 아이디 찾기 -->
-	<form id="username-content" class="form-content" action="/find-id" method="post" onsubmit="return validateBeforeFindId()">
+	<form id="username-form" class="form-content" action="/find-id" method="post" onsubmit="return validateBeforeFindId()">
 		<div class="input-group">
 			<label for="email">이메일</label>
-			<input type="email" id="email-id" name="email" placeholder="가입 시 등록한 이메일을 입력하세요">
+			<input type="email" id="email-id" name="email" placeholder="가입 시 등록한 이메일을 입력해주세요">
 		</div>
 		<div class="button-container">
 			<button type="submit">확인</button>
@@ -86,10 +86,10 @@
 	</form>
 
 	<!-- 비밀번호 찾기 -->
-	<form id="password-content" class="form-content">
+	<form id="password-form" class="form-content">
 		<div class="input-group">
 			<label for="email">이메일</label>
-			<input type="email" id="email-pw" name="email" placeholder="가입 시 등록한 이메일을 입력하세요" onkeydown="handleEnter(event)">
+			<input type="email" id="email-pw" name="email" placeholder="가입 시 등록한 이메일을 입력해주세요" onkeydown="handleEnter(event)">
 		</div>
 		<div class="button-container">
 			<button type="button" onclick="sendVerificationCode()">확인</button>
@@ -126,7 +126,7 @@
 		document.querySelectorAll(".tab").forEach(el => el.classList.remove("active")); 
 		document.querySelectorAll(".form-content").forEach(el => el.classList.remove("active")); 
 		document.getElementById(tab).classList.add("active"); 
-		document.getElementById(tab + "-content").classList.add("active"); 
+		document.getElementById(tab + "-form").classList.add("active"); 
 
 		// URL 변경 
 		const newUrl = tab === "password" ? "/find-password" : "/find-id"; 
@@ -135,15 +135,20 @@
   
 	// 아이디 찾기 요청
 	function validateBeforeFindId() {
-		const form = document.getElementById("username-content");
+		const form = document.getElementById("username-form");
 		const email = document.getElementById("email-id").value;
       
 		if (!email) {
-			alert("이메일을 입력하세요.");
+			alert("이메일을 입력해주세요.");
 			return false;
 		}
-
-		form.requestSubmit(); // 폼 제출 실행
+		
+		// 기본 유효성 검사
+		if (form.checkValidity()) {
+	        form.requestSubmit(); // 폼 제출 실행
+	    } else {
+	        form.reportValidity();
+	    }
 	}
 	
 	// 엔터키를 누르면 sendVerificationCode() 호출
@@ -156,12 +161,19 @@
   
 	// 비밀번호 찾기 요청
 	function sendVerificationCode() {
+		const form = document.getElementById("password-form");
     	const email = document.getElementById("email-pw").value;
 
     	if (!email) {
-        	alert("이메일을 입력하세요.");
+        	alert("이메일을 입력해주세요.");
         	return false;
       	}
+    	
+    	// 기본 유효성 검사
+    	if (!form.checkValidity()) {
+	        form.reportValidity();
+	        return false;
+	    }
     	
      	// 로딩 메시지 표시
       	Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
@@ -184,7 +196,7 @@
       	            if (data && data.errorMessage) {
       	                Swal.fire({
       	                    icon: 'error',
-      	                    title: '코드 전송 실패',
+      	                    title: '전송 실패',
       	                    text: data.errorMessage,
       	                    confirmButtonColor: '#d33',
       	                    confirmButtonText: '확인'
@@ -201,7 +213,7 @@
       		Swal.close();
       	    Swal.fire({
       	        icon: 'error',
-      	        title: '오류 발생',
+      	        title: '전송 실패',
       	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
       	        confirmButtonColor: '#d33',
       	        confirmButtonText: '확인'

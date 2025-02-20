@@ -81,11 +81,10 @@
 		회사는 원활한 서비스 제공을 위해 아래와 같은 개인정보를 수집합니다.
 		
 		- 이메일 주소: 회원 식별
+		- 상호명: 사업장 정보 확인
+		- 대표자명: 상호 대표 확인
 		- 사업자등록번호: 사업자 확인
-		- 휴대폰 번호: 주문·거래 관련 연락
-		- 업체 전화번호: 사업장 연락처 확인
-		- 업체명: 사업장 정보 확인
-		- 대표자명: 사업장 대표 확인
+		- 전화번호: 주문·거래 관련 연락
 		- 우편주소: 상품 배송 및 청구서 발송
 
 		<strong>제3조 (개인정보 보관 및 이용 기간)</strong>
@@ -104,6 +103,7 @@
 	function toggleButton() {
 		var checkbox = document.getElementById("agree");
 		var button = document.getElementById("next-button");
+		
 		if (checkbox.checked) {
 			button.classList.add("enabled");
 			button.disabled = false;

@@ -34,7 +34,7 @@
     <div class="nav-right">
     	<!-- 관리자 항목 -->
     	<sec:authorize access="hasRole('ROLE_ADMIN')">
-		    <a href="/manage-page/users">관리페이지</a>
+		    <a href="/manage-page/wholesalers">관리페이지</a>
 		</sec:authorize>
 		
 		<!-- 비관리자 항목 -->
