@@ -43,7 +43,7 @@ public class MyPageController {
 	@GetMapping("/info")
 	public String editProfilForm(Authentication authentication, Model model) {
 		Users user = userService.findByUsername(authentication.getName());
-		UserDetails userDetails = userService.findByUserId(user.getUserId());
+		UserDetails userDetails = userService.findUserDetailsByUserId(user.getUserId());
 
 		// 도매업자 처리
 		if (user.getRole() == 1) {

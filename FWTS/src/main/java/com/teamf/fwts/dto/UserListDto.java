@@ -11,7 +11,6 @@ public class UserListDto {
 	private String username;
 	private String ceoName;
     private String email;
-	private Integer role;
     private boolean isLimited;
     private Date createdAt;
     

@@ -6,7 +6,7 @@
         
         <!-- 검색 -->
         <div class="search-container">
-            <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
+            <input class="search-box" placeholder="찾으시는 꽃을 입력해주세요!">
             <button class="search-button">
                 <i class="fas fa-search"></i>
             </button>

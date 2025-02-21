@@ -32,10 +32,14 @@ public interface UserMapper {
 		    "WHERE user_id = #{userId}"})
 	void updateUserDetails(UserDetails dto);
 	
+	// 제한 여부 변경
+	@Update("UPDATE users SET is_limited = #{isLimited} WHERE user_id = #{userId}")
+	void updateUserStatus(Users user);
+	
 	// 비밀번호 재설정
 	@Update("UPDATE users SET password = #{password} WHERE email = #{email}")
 	void resetPassword(@Param("email") String email, @Param("password") String password);
-    
+	
 	// 아이디 조회
 	@Select("SELECT username FROM users WHERE email = #{email}")
 	String findUsernameByEmail(@Param("email") String email);
@@ -53,12 +57,15 @@ public interface UserMapper {
     int checkBesinessNo(@Param("value") String value);
 	
 	// 회원 기본 정보 조회
+	@Select("SELECT * FROM users WHERE user_id = #{userId}")
+	Users findByUserId(@Param("userId") Integer userId);
+	
 	@Select("SELECT * FROM users WHERE username = #{username}")
     Users findByUsername(@Param("username") String username);
-
+	
 	// 회원 상세 정보 조회
 	@Select("SELECT * FROM user_details WHERE user_id = #{userId}")
-	UserDetails findByUserId(@Param("userId") Integer userId);
+	UserDetails findUserDetailsByUserId(Integer userId);
 
 	// 회원 삭제
 	@Delete("DELETE FROM users WHERE username = #{username}")

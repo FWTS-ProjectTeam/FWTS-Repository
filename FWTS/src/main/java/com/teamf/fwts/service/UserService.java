@@ -135,13 +135,17 @@ public class UserService {
  	}
 
     // 회원 기본 정보 조회
+ 	public Users findByUserId(Integer userId) {
+ 		return userMapper.findByUserId(userId);
+	}
+ 	
 	public Users findByUsername(String name) {
 		return userMapper.findByUsername(name);
 	}
 	
 	// 회원 상세 정보 조회
-	public UserDetails findByUserId(Integer userId) {
-		return userMapper.findByUserId(userId);
+	public UserDetails findUserDetailsByUserId(Integer userId) {
+		return userMapper.findUserDetailsByUserId(userId);
 	}
 
 	// 회원 상세 정보 수정
@@ -164,5 +168,11 @@ public class UserService {
         );
 		
         userMapper.updateUserDetails(userDetail);
+	}
+
+	// 제한 여부 변경
+	@Transactional
+	public void updateUserStatus(Users user) {
+		userMapper.updateUserStatus(user);
 	}
 }

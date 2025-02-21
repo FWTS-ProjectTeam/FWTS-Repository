@@ -48,7 +48,7 @@
     <h1><a href="/">생화24</a></h1>
     <form id="login-form" action="/login" method="POST">
     	<div class="input-group">
-    		<input type="text" id="username" name="username" placeholder="아이디를 입력해주세요">
+    		<input id="username" name="username" placeholder="아이디를 입력해주세요">
         	<input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요">
     	</div>
         

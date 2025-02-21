@@ -98,7 +98,7 @@
             <label for="email">이메일 <span class="required">*</span></label>
             <div class="input-field">
             	<input type="hidden" id="email-check" value="false"/>
-             	<input type="text" id="email" name="email" value="${inputData.email}" maxlength="320"
+             	<input id="email" name="email" value="${inputData.email}" maxlength="320"
 					oninput="this.value = this.value.replace(/[^A-Za-z0-9._%+-@]/g, '');">
              	<button type="button" onclick="checkDuplicate('email')">중복 확인</button>
              	<p class="error-message" id="email-error"></p>
@@ -107,7 +107,7 @@
             <label for="username">아이디 <span class="required">*</span></label>
             <div class="input-field">
             	<input type="hidden" id="username-check" value="false"/>
-            	<input type="text" id="username" name="username" value="${inputData.username}" maxlength="20"
+            	<input id="username" name="username" value="${inputData.username}" maxlength="15"
 					 oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '');">
             	<button type="button" onclick="checkDuplicate('username')">중복 확인</button>
             	<p class="error-message" id="username-error"></p>
@@ -132,24 +132,24 @@
 			
 			<label for="company">상호명 <span class="required">*</span></label>
 	   		<div class="input-field">
-	   			<input type="text" id="company" name="companyName" value="${inputData.companyName}">
+	   			<input id="company" name="companyName" value="${inputData.companyName}">
 	   		</div>
          
          	<label for="ceo">대표자명 <span class="required">*</span></label>
          	<div class="input-field">
-         		<input type="text" id="ceo" name="ceoName" value="${inputData.ceoName}">
+         		<input id="ceo" name="ceoName" value="${inputData.ceoName}">
          	</div>
    
    			<label for="opening-date">개업일자 <span class="required">*</span></label>
          	<div class="input-field">
-         		<input type="text" id="opening-date" name="openingDate" value="${inputData.openingDate}" maxlength="8"
+         		<input id="opening-date" name="openingDate" value="${inputData.openingDate}" maxlength="8"
 					placeholder="YYYYMMDD" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
          	</div>
    
 		   	<label for="business-no">사업자등록번호 <span class="required">*</span></label>
 		   	<div class="input-field">
 		   		<input type="hidden" id="business-no-check" value="false"/>
-		   		<input type="text" id="business-no" name="businessNo" value="${inputData.businessNo}" maxlength="12"
+		   		<input id="business-no" name="businessNo" value="${inputData.businessNo}" maxlength="12"
 		   	   		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 		   		<button type="button" onclick="verifyBusinessNo()">확인</button>
 		   		<p class="error-message" id="business-no-error"></p>
@@ -157,28 +157,28 @@
    
 		   	<label for="phone">휴대폰번호 <span class="required">*</span></label>
 		   	<div class="input-field">
-	          	<input type="text" id="phone" name="phoneNum" value="${inputData.phoneNum}" maxlength="13"
+	          	<input id="phone" name="phoneNum" value="${inputData.phoneNum}" maxlength="13"
 		      		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 		       	<p class="error-message" id="phone-error"></p>
 		   	</div>
           
         	<label for="company-phone">사업장 전화번호</label>
         	<div class="input-field">
-        		<input type="text" id="company-phone" name="companyNum" value="${inputData.companyNum}" maxlength="13"
+        		<input id="company-phone" name="companyNum" value="${inputData.companyNum}" maxlength="13"
 			    	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
        			<p class="error" id="company-phone-error"></p>
 			</div>
          
          	<label for="postal-code">우편번호 <span class="required">*</span></label>
          	<div class="input-field">
-	             <input type="text" id="postal-code" name="postalCode" value="${inputData.postalCode}" readonly>
+	             <input id="postal-code" name="postalCode" value="${inputData.postalCode}" readonly>
 	             <button type="button" onclick="searchAddress()">주소 찾기</button>
             </div>
             
             <label for="address">주소 <span class="required">*</span></label>
            	<div class="input-field">
-          		<input type="text" id="address" name="address" value="${inputData.address}" readonly>
-          		<input type="text" id="detail-address" name="detailAddress" value="${inputData.detailAddress}" maxlength="30">
+          		<input id="address" name="address" value="${inputData.address}" readonly>
+          		<input id="detail-address" name="detailAddress" value="${inputData.detailAddress}" maxlength="30">
        		</div>
         </div>
         
