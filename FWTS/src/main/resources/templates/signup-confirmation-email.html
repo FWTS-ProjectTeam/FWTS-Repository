@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>비밀번호 찾기 인증 코드</title>
+<title>회원가입 완료</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -19,19 +19,12 @@
         border-radius: 10px;
         background-color: #ffffff;
     }
+    h2 {
+        color: #ff7f9d;
+    }
     p {
         font-size: 16px;
         color: #555;
-    }
-    .code-box {
-        font-size: 24px;
-        font-weight: bold;
-        color: #ff7f9d;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #ffe6ea;
-        display: inline-block;
-        margin-top: 10px;
     }
     .footer {
         font-size: 12px;
@@ -42,11 +35,11 @@
 </head>
 <body>
 <div class="container">
-    <p>아래의 인증 코드를 입력하여 비밀번호를 재설정하세요.</p>
-    <div class="code-box">${verificationCode}</div>
-    <p class="footer">이 코드는 5분 동안 유효합니다.</p>
-    <hr>
-    <p class="footer">추가적인 도움이 필요하시면 <strong>saenghwa24@gmail.com</strong>으로 문의해 주세요.</p>
+    <h2>생화24에 오신 것을 환영합니다!</h2>
+    <p><strong>${ceoName}님, 가입해 주셔서 감사합니다.</strong></p>
+    <p>생화24는 <strong>도소매업자를 위한 신선한 생화 공급 서비스</strong>를 제공합니다. 고품질의 상품을 안정적으로 공급받아보세요.</p>
+	<hr>
+    <p class="footer">만약 본인이 가입하지 않았다면, 계정 보호를 위해 <strong>saenghwa24@gmail.com</strong>으로 문의해 주세요.</p>
 </div>
 </body>
 </html>

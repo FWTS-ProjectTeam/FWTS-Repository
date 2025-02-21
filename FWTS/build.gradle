@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 	
 	// JSP 관련
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.33'

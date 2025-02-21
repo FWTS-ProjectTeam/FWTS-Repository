@@ -18,8 +18,8 @@ public class InquiryBoardService {
 	private final InquiryBoardMapper inquiryBoardMapper;
 	
 	// 문의사항 수 확인
-	public int count(Map<String, Object> paging) {
-	    return inquiryBoardMapper.count(paging);
+	public int count(Map<String, Object> params) {
+	    return inquiryBoardMapper.count(params);
 	}
 	
 	// 문의사항 내역 수 확인

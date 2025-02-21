@@ -132,10 +132,17 @@ public class SupportController {
 	// 공지사항 삭제
 	@ResponseBody
 	@DeleteMapping("/notices/delete/{id}")
-	public Map<String, Boolean> deleteNotice(@PathVariable("id") int id) {
-	    Map<String, Boolean> response = new HashMap<>();
+	public Map<String, Object> deleteNotice(@PathVariable("id") int id) {
+	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
+	    	NoticeBoard notice = noticeBoardService.findByNoticeId(id);
+	        if (notice == null) {
+	            response.put("success", false);
+	            response.put("errorMessage", "존재하지 않는 글입니다.");
+	            return response;
+	        }
+	    	
 	    	noticeBoardService.deleteNoticeById(id);
 	        response.put("success", true);
 	    } catch (Exception e) {
@@ -263,11 +270,16 @@ public class SupportController {
 	// 문의사항 삭제
 	@ResponseBody
 	@DeleteMapping("/inquirys/delete/{id}")
-	public Map<String, Boolean> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
-	    Map<String, Boolean> response = new HashMap<>();
+	public Map<String, Object> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
+	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
 	    	InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
+	    	if (inquiry == null) {
+	    		response.put("success", false);
+	            response.put("errorMessage", "존재하지 않는 글입니다.");
+	            return response;
+	    	}
 		    String currentUsername = inquiry.getWriter().getUsername();
 		    
 		    // 작성자 검증 및 처리
@@ -276,6 +288,7 @@ public class SupportController {
 		        response.put("success", true);
 		    } else {
 		    	response.put("success", false);
+		    	response.put("errorMessage", "삭제 권한이 없는 글입니다.");
 		    }
 	    } catch (Exception e) {
 	        response.put("success", false);
