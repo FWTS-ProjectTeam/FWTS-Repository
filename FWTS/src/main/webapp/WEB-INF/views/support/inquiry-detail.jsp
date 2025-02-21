@@ -107,7 +107,7 @@
 	<!-- 공통 -->
    	<%@ include file="/WEB-INF/views/common/header.jsp" %>
      
-     <div class="body-container">
+	<div class="body-container">
 		<!-- 사이드바 -->
     	<%@ include file="/WEB-INF/views/common/support-sidebar.jsp" %>
          
@@ -148,14 +148,14 @@
 			        <p class="date">작성일: <fmt:formatDate value="${inquiry.replyDate}" pattern="yyyy.MM.dd HH:mm" /></p>
 			        <p id="old-reply">${inquiry.reply}</p>
 			        
-			        <!-- 관리자일 경우: 수정 버튼 -->
+			        <!-- 관리자 항목  -->
 			        <sec:authorize access="hasRole('ROLE_ADMIN')">
 				        <div class="button-container">
 				            <button id="update-button" class="button" onclick="toggleEditMode()">수정</button>
 			            </div>
 			        </sec:authorize>
 			
-			        <!-- 수정 폼 -->
+			        <!-- 관리자 항목: 수정 폼 -->
 			        <form id="edit-reply-form" class="hidden" action="/support-center/inquirys/reply/${inquiry.inquiryId}" method="post">
 			            <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
 			            <textarea name="reply" id="edit-reply-textarea" rows="10" maxlength="2000" oninput="countChars(this)">${inquiry.reply}</textarea>
@@ -169,7 +169,7 @@
 			</c:if>
 			
 			<c:if test="${empty inquiry.reply}">
-				<!-- 관리자일 경우: 답변 작성 -->
+				<!-- 관리자 항목: 작성 폼 -->
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 				    <form class="reply-content" action="/support-center/inquirys/reply/${inquiry.inquiryId}" method="post">
 				        <h2 class="title">답변</h2>
@@ -184,6 +184,7 @@
 			</c:if>
   		</div>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
 <script>
 	// 페이지 로드 시 실행

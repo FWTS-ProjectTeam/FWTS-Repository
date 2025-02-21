@@ -17,5 +17,4 @@
 		<a href="#"  class="order-active">주문 내역</a>
 		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>
 	</sec:authorize>
-	
 </div>
