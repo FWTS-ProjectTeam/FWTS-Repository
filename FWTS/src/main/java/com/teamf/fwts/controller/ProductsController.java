@@ -1,7 +1,6 @@
 package com.teamf.fwts.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,7 +118,7 @@ public class ProductsController {
 	    model.addAttribute("sort", sort);
 	    
 	    // 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 	    model.addAttribute("userDetails", userDetails);	    
 
 	    return "products/productShop";
@@ -153,7 +152,7 @@ public class ProductsController {
 		model.addAttribute("count", count);
 
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 		
 		return "products/productShopManager";
@@ -174,7 +173,7 @@ public class ProductsController {
 		model.addAttribute("product", product); // 상품 데이터 모델에 담기
 		
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 	    model.addAttribute("userDetails", userDetails);
 	    
 		return "products/productBuy";
@@ -184,7 +183,7 @@ public class ProductsController {
 	@GetMapping("/add/{sellerId}")
 	public String getProductAddPage(@PathVariable("sellerId") int sellerId, Model model) {
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 		
 		return "products/productAdd";

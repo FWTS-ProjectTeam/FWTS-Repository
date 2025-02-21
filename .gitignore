@@ -3,9 +3,6 @@
 # Ignore compiled class files
 *.class
 
-# Ignore bin/ directory
-/FWTS/bin/
-
 # Ignore Eclipse specific files
 /.settings/
 /.project
