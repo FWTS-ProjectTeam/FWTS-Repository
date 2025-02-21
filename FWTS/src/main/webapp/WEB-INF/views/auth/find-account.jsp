@@ -42,18 +42,9 @@
 	}
 	.input-group label {
 	    font-size: 14px;
-	    font-weight: 600;
-	    display: block;
-	    margin-bottom: 5px;
 	}
 	.input-group input {
 	    width: 100%;
-	    padding: 12px;
-	    border: 1px solid #ddd;
-	    border-radius: 6px;
-	    font-size: 14px;
-	    outline: none;
-	    box-sizing: border-box;
 	}
 	.input-group input:focus {
 	    border-color: #ff6699;
