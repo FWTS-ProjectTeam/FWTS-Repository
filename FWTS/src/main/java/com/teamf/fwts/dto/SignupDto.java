@@ -16,7 +16,7 @@ public class SignupDto {
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     private String email;
 	@NotNull
-	@Size(min = 4, max = 20)
+	@Size(min = 4, max = 15)
 	@Pattern(regexp = "^[a-zA-Z0-9]+$")
 	private String username;
 	@NotNull

@@ -215,25 +215,22 @@
 	        	const requestUrl = "/support-center/inquirys/delete/" + ${inquiry.inquiryId};
 	
 	            fetch(requestUrl, { method: "DELETE" })
-	            .then(response => {
-	                if (!response.ok) {
-	                    throw new Error('서버 오류');
-	                }
-	                return response.json();
-	            })
+	            .then(response => response.json())
 	            .then(data => {
 	                if (data.success) {
 	                	window.location.href = "/support-center/inquirys"; // 문의사항 페이지
-	                } else {
-	                	Swal.fire({
-	    					icon: 'error',
-	    					title: '삭제 실패',
-	    					text: '존재하지 않거나 삭제 권한이 없는 글입니다.',
-	    					confirmButtonColor: '#d33',
-	    					confirmButtonText: '확인'
-	    				});
-	                }
-	            })
+	                } else if (data.errorMessage) {
+	    	            Swal.fire({
+	    	                icon: 'error',
+	    	                title: '삭제 실패',
+	    	                text: data.errorMessage,
+	    	                confirmButtonColor: '#d33',
+	    	                confirmButtonText: '확인'
+	    	            });
+	    	        } else {
+	    	        	throw new Error("서버 오류");
+	    	        }
+	    	    })
 	            .catch(error => {
 	            	Swal.fire({
     					icon: 'error',

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .sidebar .wholesaler-active {
+    .sidebar .retailer-active {
         font-weight: 600;
         background-color: #ff7f9d;
         color: white;
@@ -174,7 +174,6 @@
 				    </div>
 				    
 				    <p><strong>주소:</strong> <span id="detail-address"></span></p>
-				    <p><strong>계좌:</strong> <span id="detail-account"></span></p>
 				</div>
 			</div>
 		</div>
@@ -188,7 +187,7 @@
 		    </label>
 		
 		    <!-- 회원 검색 -->
-		    <form class="search-board-form" id="search-board-form" action="/manage-page/wholesalers" onsubmit="return cleanEmptyQuery()">
+		    <form class="search-board-form" id="search-board-form" action="/manage-page/retailers" onsubmit="return cleanEmptyQuery()">
 		        <select class="search-category" id="category" name="category">
 		            <option value="username" ${category == 'username' ? 'selected' : ''}>아이디</option>
 		            <option value="email" ${category == 'email' ? 'selected' : ''}>이메일</option>
@@ -251,7 +250,7 @@
 			
 			            <c:choose>
 			                <c:when test="${currentPage > 1}">
-			                    <a href="/manage-page/wholesalers?page=${currentPage - 1}${queryString}">◀</a>
+			                    <a href="/manage-page/retailers?page=${currentPage - 1}${queryString}">◀</a>
 			                </c:when>
 			                <c:otherwise><a>◀</a></c:otherwise>
 			            </c:choose>
@@ -260,7 +259,7 @@
 			
 			            <c:choose>
 			                <c:when test="${currentPage < totalPages}">
-			                    <a href="/manage-page/wholesalers?page=${currentPage + 1}${queryString}">▶</a>
+			                    <a href="/manage-page/retailers?page=${currentPage + 1}${queryString}">▶</a>
 			                </c:when>
 			                <c:otherwise><a>▶</a></c:otherwise>
 			            </c:choose>
@@ -288,9 +287,7 @@
 	        companyName: "${user.companyName}",
 	        postalCode: "${user.postalCode}",
 	        address: "${user.address}",
-	        detailAddress: "${user.detailAddress}",
-	        bankName: "${user.bankName}",
-	        accountNum: "${user.accountNum}"
+	        detailAddress: "${user.detailAddress}"
 	    });
 	</c:forEach>
 	
@@ -357,9 +354,7 @@
 	    document.getElementById("detail-phone").innerText = user.phoneNum;
 	    document.getElementById("detail-company-phone").innerText = user.companyNum;
 	    document.getElementById("detail-business-no").innerText = user.businessNo;
-	    
-	    document.getElementById("detail-account").innerText = user.bankName ? user.bankName + " " + user.accountNum : "등록된 계좌가 없습니다.";
-	
+	    	
 	    // 상태 처리
 	    var statusField = document.getElementById("detail-status");
 	    statusField.innerText = user.isLimited ? "⚠️ 제한" : "✅ 활성화";

@@ -57,6 +57,7 @@
 	}
 	
 	.resend-code {
+		width: 80px;
 		background: white;
 	    color: #ffb6c1;
 	    border: 1px solid #ffb6c1;
@@ -94,7 +95,7 @@
         <div class="input-group">
 		   <label for="code">인증 코드</label>
 		   <div class="row-group">
-		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력해주세요" maxlength="6"
+		       <input id="code" name="code" placeholder="6자리 인증 코드를 입력해주세요" maxlength="6"
 		       		  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 		       <button type="button" class="resend-code" onclick="resendCode()">재전송</button>
 		    </div>

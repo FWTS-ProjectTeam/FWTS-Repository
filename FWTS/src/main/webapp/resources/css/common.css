@@ -11,7 +11,7 @@ body {
 
 .body-container {
     display: flex;
-    margin: 50px 10px;
+    margin: 30px 10px 50px 10px;
 }
 
 /* 버튼 */

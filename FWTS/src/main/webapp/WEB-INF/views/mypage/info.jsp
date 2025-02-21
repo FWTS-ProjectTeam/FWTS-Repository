@@ -135,50 +135,50 @@
     			<div class="input-group">
 			        <label for="company">상호명 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
+			            <input id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
 			        </div>
         
 			        <label for="ceo">대표자명 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
+			            <input id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
 			        </div>
         
 			        <label for="phone">핸드폰번호 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
+			            <input id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
 			            	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            <p class="error" id="phone-error"></p>
 			        </div>
         
 			        <label for="company-phone">사업장 전화번호</label>
 			        <div class="input-field">
-			            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
+			            <input id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
 			            	 placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            <p class="error" id="company-phone-error"></p>
 			        </div>
         
 	               <label for="postal-code">우편번호 <span class="required">*</span></label>
 	               <div class="input-field">
-		                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
+		                <input id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
 		                <button type="button" class="button" onclick="searchAddress()">주소 찾기</button>
 		            </div>
            
 		            <label for="address">주소 <span class="required">*</span></label>
 		           	<div class="input-field">
-		            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
-		            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
+		            	<input id="address" name="address" value="${userDetails.address}" readonly>
+		            	<input id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
             		</div>
            		
             		<!-- 도매업자 항목 -->
 					<sec:authorize access="hasRole('ROLE_WHOLESALER')">
 						<label for="bank">은행명 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="bank" name="bankName" value="${account.bankName}" maxlength="10">
+			            	<input id="bank" name="bankName" value="${account.bankName}" maxlength="10">
 	            		</div>
 	            		
 	            		<label for="account">계좌번호 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="account" name="accountNum" value="${account.accountNum}" maxlength="17"
+			            	<input id="account" name="accountNum" value="${account.accountNum}" maxlength="17"
 			            		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            	<p class="error" id="account-error"></p>
 	            		</div>
