@@ -32,14 +32,12 @@
 }
 
 .sidebar {
-	display:flex;
 	width: 220px;
 	padding: 10px 0 10px 0;
 	border: 1px solid #ccc;
 	background-color: #fff;
 	border-radius: 10px;
 	margin-right: 20px;
-    flex-direction: column; /* 세로 정렬 */
     align-items: center; /* 가운데 정렬 */
     text-align: center; /* 텍스트 가운데 정렬 */
 }
@@ -49,18 +47,9 @@
 	margin-bottom: 10px;
 }
 
-.sidebar a {
-	display: block;
-	padding: 10px;
-	text-decoration: none;
-	color: #333;
-	cursor: pointer;
-}
-
 .sidebar p {
-	display: block;
-	font-size: 14px;
-	margin-bottom: 10px;
+	color:gray;
+	font-size: 12px;
 }
 
 .sidebar-img {
@@ -146,7 +135,7 @@
 	font-weight: bold;
 }
 
-.product-list, .sidebar a {
+.product-list{
 	list-style-type: none; /* 목록 앞의 점을 없앰 */
 	padding-left: 0; /* 기본적으로 나오는 패딩도 없애기 */
 }
@@ -158,9 +147,10 @@
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
 			<div class="sidebar">
-				<img src="/resources/smarteditor/img/userimg.jpg" class="sidebar-img">
+				<img src="/smarteditor/img/userimg.png" class="sidebar-img">
 				<h2>${userDetails.ceoName} 대표님</h2>
 				<p>${userDetails.phoneNum}</p>
+				<p>${userDetails.companyNum}</p>
 			</div>
 			<div class="table-container">
 				<div class="array-container">

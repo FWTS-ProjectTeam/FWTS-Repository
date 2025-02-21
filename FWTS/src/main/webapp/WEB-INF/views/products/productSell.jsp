@@ -11,7 +11,8 @@
 <title>생화24 - 판매자의 상품 상세</title>
 <link rel="stylesheet" href="/resources/css/common.css">
 <link rel="stylesheet" href="/resources/css/sidebar.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 .sidebar .product-active {
 	background-color: #ff7f9d;
@@ -155,7 +156,7 @@ img {
 
 .tabs {
 	display: flex;
-	border-bottom: 1px solid var(--main4); 
+	border-bottom: 1px solid var(--main4);
 }
 
 .tab-button {
@@ -208,10 +209,10 @@ table th, table td {
 <body>
 	<div class="container">
 		<!-- 공통 -->
-   		<%@ include file="/WEB-INF/views/common/header.jsp" %>
+		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
 			<!-- 사이드바 -->
-    		<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
+			<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp"%>
 			<div class="table-container">
 				<h1>상품 관리</h1>
 				<div class="pro-info1">
@@ -242,12 +243,13 @@ table th, table td {
 								<p>가격: ${product.unitPrice}</p>
 							</div>
 							<div>
-								<p>카테고리:
-								    <c:choose>
-								    	<c:when test="${product.categoryId == '1'}">절화</c:when>
-        								<c:when test="${product.categoryId == '2'}">관엽</c:when>
-        								<c:when test="${product.categoryId == '3'}">난</c:when>
-    								</c:choose>
+								<p>
+									카테고리:
+									<c:choose>
+										<c:when test="${product.categoryId == '1'}">절화</c:when>
+										<c:when test="${product.categoryId == '2'}">관엽</c:when>
+										<c:when test="${product.categoryId == '3'}">난</c:when>
+									</c:choose>
 								</p>
 								<p>
 									등록일:
@@ -291,7 +293,7 @@ table th, table td {
 				<div class="button-container">
 					<button class="btn1"
 						onclick="location.href='/products/edit/${product.proId}'">수정</button>
-					<button class="btn2" 
+					<button class="btn2"
 						onclick="confirmDelete(${product.proId}, '${product.proName}', '${product.sellerId}')">삭제</button>
 				</div>
 			</div>
@@ -319,19 +321,35 @@ table th, table td {
         	}
     	});
 	}
-      function confirmDelete(proId, proName) {
-          const isConfirmed = confirm(`${product.proName} 상품을 삭제하시겠습니까?`);
-          
-          if (isConfirmed) {
-              location.href = `/products/shopM/${product.sellerId}`;
-          }
-      }
+      // 상품 삭제
+      function confirmDelete(id, proName, sellerId) {
+    	const isConfirmed = confirm(`${product.proName} 상품을 삭제하시겠습니까?`);
+    
+    	if (isConfirmed) {
+        	fetch(`/products/delete/${product.proId}`, { 
+            	method: 'PUT'
+        	})
+        	.then(response => {
+            	if (!response.ok) {
+                	throw new Error("삭제에 실패했습니다.");
+            	}
+            	return response.json();
+        	})
+        	.then(data => {
+            	alert(`${product.proName} 상품이 삭제되었습니다.`);
+            	location.href = `/products/shopM/${product.sellerId}`; // 삭제 후 해당 판매자의 페이지로 이동
+        	})
+        	.catch(error => {
+            	console.error("삭제 중 오류 발생:", error);
+            	alert("삭제에 실패했습니다.");
+        	});
+    	}
+	}
 
 // 페이지 로드 시 기본 탭 설정
 window.onload = function () {
     showTab('description');
 };
-
     </script>
 </body>
 </html>

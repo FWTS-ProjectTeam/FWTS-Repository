@@ -1,17 +1,20 @@
 package com.teamf.fwts.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+
 import com.teamf.fwts.service.ProductsService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import com.teamf.fwts.dto.ProductsDto;
-import com.teamf.fwts.entity.Account;
 import com.teamf.fwts.entity.UserDetails;
-import com.teamf.fwts.entity.Users;
 
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +126,7 @@ public class ProductsController {
 	}
 
 
-	// 상품 목록 페이지-마이페이지 상품관리
+	// 상품 목록 페이지 - 상품관리
 	@GetMapping("/shopM/{sellerId}")
 	public String getProductsBySellerId(@PathVariable("sellerId") int sellerId,
 			@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
@@ -153,7 +156,7 @@ public class ProductsController {
 		UserDetails userDetails = userService.findBySellerId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 		
-		return "products/productShopManager"; // 뷰 이름
+		return "products/productShopManager";
 	}
 
 	// 상품 상세 페이지-판매자 (판매내역+수정 삭제)
@@ -161,7 +164,7 @@ public class ProductsController {
 	public String getProductSell(@PathVariable("id") int id, Model model) {
 		ProductsDto product = productsService.getProductById(id);
 		model.addAttribute("product", product); // 상품 데이터 모델에 담기
-		return "products/productSell"; // 상세 페이지 JSP 반환
+		return "products/productSell";
 	}
 
 	// 상품 상세 페이지-구매자 (구매 전)
@@ -174,35 +177,56 @@ public class ProductsController {
 		UserDetails userDetails = userService.findBySellerId(sellerId);
 	    model.addAttribute("userDetails", userDetails);
 	    
-		return "products/productBuy"; // 상세 페이지 JSP 반환
+		return "products/productBuy";
 	}
-
-	// 상품 등록 화면 (GET 요청)
+    
+	// 상품 등록 페이지
 	@GetMapping("/add/{sellerId}")
-	public String getProductAddPage(@PathVariable("sellerId") int sellerId, Model model) {		
+	public String getProductAddPage(@PathVariable("sellerId") int sellerId, Model model) {
 		// 판매자 정보
 		UserDetails userDetails = userService.findBySellerId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 		
-		return "products/productAdd"; // 상품 등록 폼 JSP 반환
+		return "products/productAdd";
 	}
 
-	// 상품 등록 처리 (POST 요청)
-	@PostMapping("/add")
-	public String addProduct(@ModelAttribute ProductsDto product) {
-		productsService.addProduct(product); // 상품 등록 서비스 호출
-		return "products/redirect:/products"; // 상품 목록 페이지로 리다이렉트
-	}
-
-	// 상품 수정 화면
+	// 상품 수정 페이지
 	@GetMapping("/edit/{id}")
 	public String getProductEditPage(@PathVariable("id") int id, Model model) {
 		ProductsDto product = productsService.getProductById(id);
 		model.addAttribute("product", product); // 수정할 상품 데이터 모델에 담기
-		return "products/productEdit"; // 수정 화면 JSP 반환
+		return "products/productEdit";
 	}
+	
+    
+    // 상품 삭제 처리
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") int id) {
+        productsService.deleteProduct(id);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "상품이 삭제되었습니다.");
+        return ResponseEntity.ok(response);
+    }
 
-	// 상품 수정 처리 (폼 제출)
+	// 상품 등록 처리
+    @PostMapping("/add")
+    public String addProduct(@Valid @ModelAttribute("productsDto") ProductsDto products,
+                             BindingResult bindingResult,
+                             Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validMessage", "입력값을 확인해주세요.");
+            return "products/add/1";  // 리다이렉트가 아니라 JSP 템플릿 직접 반환
+        }
+
+        productsService.addProduct(products);  
+
+        return "redirect:/products/shopM/1";
+    }
+
+
+	// 상품 수정 처리
 	@PostMapping("/edit/{id}")
 	public String updateProduct(@PathVariable int id, @ModelAttribute ProductsDto product) {
 		product.setProId(id); // 수정할 상품 ID 설정

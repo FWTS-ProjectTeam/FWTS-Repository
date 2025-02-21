@@ -62,8 +62,7 @@ public interface ProductsMapper {
 	@Update("UPDATE products SET pro_name = #{proName}, inventory = #{inventory}, unit_price = #{unitPrice}, description = #{description}, is_sales = #{isSales}, img_path = #{imgPath}, regist_date = #{registDate} WHERE pro_id = #{proId}")
 	void updateProduct(ProductsDto product);
 
-	// 상품 삭제 (소프트 삭제)
-	@Update("UPDATE products SET is_delete = TRUE WHERE pro_id = #{proId}")
+	// 상품 삭제
+	@Update("UPDATE products SET is_delete = 1 WHERE pro_id = #{proId}")
 	void deleteProduct(@Param("proId") int proId);
-
 }
