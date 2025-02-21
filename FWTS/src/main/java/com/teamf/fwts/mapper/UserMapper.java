@@ -70,4 +70,8 @@ public interface UserMapper {
 	// 회원 삭제
 	@Delete("DELETE FROM users WHERE username = #{username}")
 	void deleteByUsername(String username);
+	
+	// sellerId로 UserDetails 조회 (통합 예정)
+    @Select("SELECT * FROM user_details WHERE user_id = #{sellerId}")
+    UserDetails findBySellerId(@Param("sellerId") int sellerId);
 }

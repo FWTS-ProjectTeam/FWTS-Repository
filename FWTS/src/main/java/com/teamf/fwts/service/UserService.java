@@ -175,4 +175,9 @@ public class UserService {
 	public void updateUserStatus(Users user) {
 		userMapper.updateUserStatus(user);
 	}
+	
+	// sellerId로 UserDetails 조회
+    public UserDetails findBySellerId(int sellerId) {
+        return userMapper.findBySellerId(sellerId);
+    }
 }
