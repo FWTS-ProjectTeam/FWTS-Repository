@@ -14,28 +14,10 @@
 <link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .container h1 {
-        color: #ff6699;
-        font-weight: 600;
-        margin-bottom: 15px;
-    }
-    
-    .description {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 20px;
-    }
-    
     .input-group {
 	    width: 100%;
 	    text-align: left;
 	    margin-bottom: 20px;
-	}
-	.input-group label {
-		font-size: 14px;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 5px;
 	}
     
     .row-group {
@@ -44,13 +26,6 @@
 	}
 	.row-group input {
 	    flex: 1; /* 입력 필드가 남은 공간을 다 차지하도록 */
-	    padding: 12px;
-	    border: 1px solid #ddd;
-	    border-radius: 6px;
-	    font-size: 14px;
-	    outline: none;
-	    transition: border-color 0.3s;
-	    box-sizing: border-box;
 	}
 	.row-group input:focus {
 		border-color: #ff6699;
@@ -64,24 +39,11 @@
 	    padding: 8px 12px;
 	    font-size: 12px;
 	    border-radius: 8px;
-	    cursor: pointer;
 	}
 	.resend-code:hover {
 	    background: #ffb6c1;
 	    color: white;
 	}
-	
-    .button-container button {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        background-color: #ff6699;
-        color: white;
-    }
 </style>
 </head>
 <body>
