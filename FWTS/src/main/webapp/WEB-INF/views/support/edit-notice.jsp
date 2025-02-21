@@ -69,7 +69,7 @@
         	<div class="post-content">
         		<input class="title" name="noticeTitle" value="${notice.noticeTitle}" maxlength="64" placeholder="제목을 입력해주세요"/>
        			<div id="smarteditor">
-		      		<textarea id="content" name="noticeContent" rows="20"></textarea>
+		      		<textarea id="content" name="noticeContent" rows="30"></textarea>
 	     		</div>
         	</div>
 	  		<div class="button-container">
@@ -78,6 +78,7 @@
 	      	</div>
   		</form>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
 <script>
 	var oEditors = [];

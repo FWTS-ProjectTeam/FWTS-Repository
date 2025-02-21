@@ -6,9 +6,7 @@ import com.teamf.fwts.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
-import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,18 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
 
-        // 권한 리스트 생성
-        List<GrantedAuthority> authorities;
-        if (!user.isLimited()) {
-            authorities = Collections.singletonList(new SimpleGrantedAuthority(getRoleString(user)));
-        } else {
-            authorities = Collections.emptyList();
-        }
-
         return new User(
             user.getUsername(),
             user.getPassword(),
-            authorities
+            Collections.singletonList(new SimpleGrantedAuthority(getRoleString(user)))
         );
     }
     
