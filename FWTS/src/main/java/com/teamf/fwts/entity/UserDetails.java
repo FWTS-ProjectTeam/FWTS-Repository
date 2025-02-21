@@ -10,6 +10,7 @@ public class UserDetails {
     private String businessNo;
     private String companyName;
     private String ceoName;
+    private String openingDate;
     private String postalCode;
     private String address;
     private String detailAddress;

@@ -20,26 +20,23 @@
         border-radius: 5px;
     }
     
-    td:nth-child(2) {
-	    text-align: left; /* 제목만 왼쪽 정렬 */
-	}
     th:nth-child(1), td:nth-child(1) { 
-    	width: 60px;  /* 번호 열의 너비 고정 */
+	    width: 60px;  /* 번호 열의 너비 고정 */
 	    min-width: 60px;
 	    max-width: 60px;
-	    text-align: center;
 	}
-	th:nth-child(3), td:nth-child(3) { 
-		width: 100px; /* 작성자 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
+	th:nth-child(2), td:nth-child(2) { 
+		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
+	    overflow: hidden; /* 넘칠 경우 숨김 처리 */
 	}
+	td:nth-child(2) {
+   		text-align: left; /* 제목만 왼쪽 정렬 */
+   	}
+	th:nth-child(3), td:nth-child(3),
 	th:nth-child(4), td:nth-child(4) { 
-		width: 100px; /* 작성일 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
+	    width: 96px; /* 작성자, 작성일 열의 너비 고정 */
+	    min-width: 96px;
+	    max-width: 96px;
 	}
 </style>
 </head>

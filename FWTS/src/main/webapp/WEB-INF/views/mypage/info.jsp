@@ -133,52 +133,52 @@
             <h2>회원정보 수정</h2>
                <form class="profile-form" id="profile-form">
     			<div class="input-group">
-			        <label for="company">업체 <span class="required">*</span></label>
+			        <label for="company">상호명 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
+			            <input id="company" name="companyName" value="${userDetails.companyName}" maxlength="30">
 			        </div>
         
-			        <label for="ceo">대표자 <span class="required">*</span></label>
+			        <label for="ceo">대표자명 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
+			            <input id="ceo" name="ceoName" value="${userDetails.ceoName}" maxlength="30">
 			        </div>
         
 			        <label for="phone">핸드폰번호 <span class="required">*</span></label>
 			        <div class="input-field">
-			            <input type="text" id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
+			            <input id="phone" name="phoneNum" value="${userDetails.phoneNum}" maxlength="13"
 			            	placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            <p class="error" id="phone-error"></p>
 			        </div>
         
-			        <label for="company-phone">업체전화번호</label>
+			        <label for="company-phone">사업장 전화번호</label>
 			        <div class="input-field">
-			            <input type="text" id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
+			            <input id="company-phone" name="companyNum" value="${userDetails.companyNum}" maxlength="13"
 			            	 placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            <p class="error" id="company-phone-error"></p>
 			        </div>
         
 	               <label for="postal-code">우편번호 <span class="required">*</span></label>
 	               <div class="input-field">
-		                <input type="text" id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
+		                <input id="postal-code" name="postalCode" value="${userDetails.postalCode}" readonly>
 		                <button type="button" class="button" onclick="searchAddress()">주소 찾기</button>
 		            </div>
            
 		            <label for="address">주소 <span class="required">*</span></label>
 		           	<div class="input-field">
-		            	<input type="text" id="address" name="address" value="${userDetails.address}" readonly>
-		            	<input type="text" id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
+		            	<input id="address" name="address" value="${userDetails.address}" readonly>
+		            	<input id="detail-address" name="detailAddress" value="${userDetails.detailAddress}" maxlength="30">
             		</div>
            		
             		<!-- 도매업자 항목 -->
-					<sec:authorize access="hasRole('ROLE_SELLER')">
-						<label for="bank">은행 <span class="required">*</span></label>
+					<sec:authorize access="hasRole('ROLE_WHOLESALER')">
+						<label for="bank">은행명 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="bank" name="bankName" value="${account.bankName}" maxlength="10">
+			            	<input id="bank" name="bankName" value="${account.bankName}" maxlength="10">
 	            		</div>
 	            		
 	            		<label for="account">계좌번호 <span class="required">*</span></label>
 			           	<div class="input-field">
-			            	<input type="text" id="account" name="accountNum" value="${account.accountNum}" maxlength="17"
+			            	<input id="account" name="accountNum" value="${account.accountNum}" maxlength="17"
 			            		placeholder="- 포함" oninput="this.value = this.value.replace(/[^0-9-]/g, '');">
 			            	<p class="error" id="account-error"></p>
 	            		</div>
@@ -187,7 +187,7 @@
 	
 			    <div class="button-container">
 			        <button type="button" class="button" onclick="editProfile()">저장</button>
-			        <button type="button" class="delete-button">회원탈퇴</button>
+			        <button type="button" class="delete-button" onclick="deleteUser()">회원탈퇴</button>
 			    </div>
 			</form>
             
@@ -242,56 +242,43 @@
 	
 	// 회원정보 수정 요청
 	function editProfile() {
-		const form = document.getElementById("profile-form");
-		
-		// 입력 필드 값
 	    var companyName = document.getElementById("company").value.trim();
 	    var ceoName = document.getElementById("ceo").value.trim();
-	    var phoneNum = document.getElementById("phone").value.trim();
-	    var companyNum = document.getElementById("company-phone").value.trim();
-	    var postalCode = document.getElementById("postal-code").value.trim();
-	    var address = document.getElementById("address").value.trim();
+	    var phoneNum = document.getElementById("phone").value;
+	    var companyNum = document.getElementById("company-phone").value;
+	    var postalCode = document.getElementById("postal-code").value;
+	    var address = document.getElementById("address").value;
 	    var detailAddress = document.getElementById("detail-address").value.trim();
 
 	    // 도매업자일 경우
 	    const bankNameField = document.getElementById("bank");
 	    const accountNumField = document.getElementById("account");
-	    const isSeller = bankNameField !== null && accountNumField !== null;
+	    const isWholesaler = bankNameField !== null && accountNumField !== null;
 	    
-	    var bankName = isSeller ? bankNameField.value.trim() : "";
-	    var accountNum = isSeller ? accountNumField.value.trim() : "";
-	 	
-	 	// 오류 메시지 필드
-	    var errorFields = {
-            phoneNum: document.getElementById("phone-error"),
-            companyNum: document.getElementById("company-phone-error")
-        };
-	 	
-	    if (isSeller) {
-	        errorFields.accountNum = document.getElementById("account-error");
-	    }
+	    var bankName = isWholesaler ? bankNameField.value.trim() : "";
+	    var accountNum = isWholesaler ? accountNumField.value.trim() : "";
 	    
 		// 유효성 검사: 1. 입력 여부   
 	    if (!companyName) {
-	    	alert("업체를 입력하세요.");
+	    	alert("상호명을 입력해주세요.");
 	    	return false;
 	    } else if (!ceoName) {
-	    	alert("대표자를 입력하세요.");
+	    	alert("대표자명을 입력해주세요.");
 	    	return false;
 	    } else if (!phoneNum) {
-	    	alert("핸드폰번호를 입력하세요.");
+	    	alert("핸드폰번호를 입력해주세요.");
 	    	return false;
 	    } else if (!postalCode) {
-	    	alert("주소를 입력하세요.");
+	    	alert("주소를 입력해주세요.");
 	    	return false;
 	    }
 	 	
-	 	if (isSeller) {
+	 	if (isWholesaler) {
 	 		if (!bankName) {
-	 			alert("은행을 입력하세요.");
+	 			alert("은행명을 입력해주세요.");
 		    	return false;
 		    } else if (!accountNum) {
-		    	alert("계좌번호를 입력하세요.");
+		    	alert("계좌번호를 입력해주세요.");
 		    	return false;
 		    }
 	 	}
@@ -299,20 +286,29 @@
 	    // 유효성 검사: 2. 입력 형식
 	    var isValid = true;
 	 	
-	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; }); // 오류 메시지 초기화
+	    var errorFields = {
+            phoneNum: document.getElementById("phone-error"),
+            companyNum: document.getElementById("company-phone-error")
+        };
+	 	
+	    if (isWholesaler) {
+	        errorFields.accountNum = document.getElementById("account-error");
+	    }
+	 	
+	 	// 오류 메시지 초기화
+	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; });
+	 	
+	 	// 전화번호 정규식
+	  	const phoneRegex = /^(010)-\d{4}-\d{4}$/;
+	  	const companyPhoneRegex = /^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/;
 	    
-	    if (!/^(010)-\d{4}-\d{4}$/.test(phoneNum)) {
+	    if (!phoneRegex.test(phoneNum)) {
 	        errorFields.phoneNum.textContent = "올바른 핸드폰번호 형식이 아닙니다.";
 	        isValid = false;
 	    }
 
-	    if (companyNum && !/^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/.test(companyNum)) {
-	        errorFields.companyNum.textContent = "올바른 업체전화번호 형식이 아닙니다.";
-	        isValid = false;
-	    }
-	    
-	    if (companyNum && !/^(\d{2,3}-\d{3,4}-\d{4}|\d{4}-\d{4})$/.test(companyNum)) {
-	        errorFields.companyNum.textContent = "올바른 업체전화번호 형식이 아닙니다.";
+	    if (companyNum && !companyPhoneRegex.test(companyNum)) {
+	        errorFields.companyNum.textContent = "올바른 사업장 전화번호 형식이 아닙니다.";
 	        isValid = false;
 	    }
 	    
@@ -326,66 +322,99 @@
 	    }
 
 	    // API 요청
-	    fetch("/my-page/edit-profile", {
+	    fetch("/my-page/info/edit-profile", {
 	        method: "POST",
 	        headers: { "Content-Type": "application/json" },
 	        body: JSON.stringify({
 	        	companyName, ceoName, phoneNum, companyNum, postalCode, address, detailAddress,
-	            ...(isSeller ? { bankName, accountNum } : {}) // 도매업자일 경우 은행 정보 추가
+	            ...(isWholesaler ? { bankName, accountNum } : {}) // 도매업자일 경우 은행 정보 추가
 	        })
 	    })
 	    .then(response => {
 	        if (response.ok) {
 	            Swal.fire({
-	                icon: "success",
-	                title: "수정 완료",
-	                text: "회원 정보가 성공적으로 수정되었습니다.",
-	                confirmButtonColor: "#3085d6",
+	                icon: 'success',
+	                title: '수정 완료',
+	                text: '회원 정보가 성공적으로 수정되었습니다.',
+	                confirmButtonColor: '#3085d6',
 	                confirmButtonText: "확인"
 	            });
 	        } else if (response.status === 400) {
 	        	location.reload();
 	        } else {
-	        	throw new Error("서버 오류 발생");
+	        	throw new Error("서버 오류");
 	        }
 	    })	    
 	    .catch(error => {
 	  	    Swal.fire({
 	  	        icon: 'error',
-	  	        title: '오류 발생',
+	  	        title: '수정 실패',
 	  	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
 	  	        confirmButtonColor: '#d33',
 	  	        confirmButtonText: '확인'
 	  	    });
 	  	});
 	}
+	
+	// 회원탈퇴 요청
+	function deleteUser() {
+		Swal.fire({
+	        title: "정말로 탈퇴하시겠습니까?",
+	        text: "이 작업은 되돌릴 수 없습니다!",
+	        icon: "warning",
+	        showCancelButton: true,
+	        confirmButtonColor: "#d33",
+	        cancelButtonColor: "#aaa",
+	        confirmButtonText: "탈퇴",
+	        cancelButtonText: "취소"
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            const requestUrl = "/my-page/info/delete";
+	
+	            fetch(requestUrl, { method: "DELETE" })
+		        .then(response => {
+		            if (response.ok) {
+		            	window.location.href = "/"; // 메인 페이지
+		            } else {
+		            	throw new Error('서버 오류');
+		            }
+		        })
+	            .catch(error => {
+	                Swal.fire({
+	                    icon: 'error',
+	                    title: '탈퇴 실패',
+	                    text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
+	                    confirmButtonColor: '#d33',
+	                    confirmButtonText: '확인'
+	                });
+	            });
+	        }
+	    });
+	}
 
 	// 비밀번호 재설정 요청
 	function resetPassword() {
-		const form = document.getElementById("password-form");
-		
-		// 입력 필드
 	  	var currentPassword = document.getElementById("current-password").value;
 	  	var password = document.getElementById("password").value;
 	  	var confirmPassword = document.getElementById("confirm-password").value;
 	  	
-	  	// 오류 메시지 필드
-	    var errorFields = {
-	    	currentPassword: document.getElementById("current-password-error"),
-	    	password: document.getElementById("password-error")
-	    }
-	
-	  	// 비밀번호 정규식: 영문 + 숫자 + 특수문자 포함
-	  	var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]*$/;
-
+	  	// 유효성 검사: 1. 입력 여부
 	  	if (!currentPassword || !password || !confirmPassword) {
 	  		alert("비밀번호를 입력해주세요.")
 	  		return false;
 	  	}
 	  	
+	 	// 유효성 검사: 2. 입력 형식
+	 	var errorFields = {
+	    	currentPassword: document.getElementById("current-password-error"),
+	    	password: document.getElementById("password-error")
+	    }
+	  	
 	 	// 오류 메시지 초기화
 	    Object.values(errorFields).forEach(el => { if (el) el.textContent = ""; });
-	  	
+	
+	  	// 비밀번호 정규식: 영문 + 숫자 + 특수문자 포함
+	  	var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]*$/;
 	  	
 	  	if (password.length < 8) {
 	  		errorFields.password.textContent = "비밀번호는 8~20자 이내여야 합니다.";
@@ -403,7 +432,7 @@
 	  	}
 
 	 	// API 요청
-	  	fetch("/my-page/reset-password", {
+	  	fetch("/my-page/info/reset-password", {
 	  	    method: "POST",
 	  	    headers: {
 	  	        "Content-Type": "application/json"
@@ -415,11 +444,11 @@
 	  	.then(response => {
 	  	    if (response.ok) {
 	  	    	Swal.fire({
-	                icon: "success",
-	                title: "재설정 완료",
-	                text: "비밀번호가 성공적으로 재설정되었습니다.",
-	                confirmButtonColor: "#3085d6",
-	                confirmButtonText: "확인"
+	                icon: 'success',
+	                title: '재설정 완료',
+	                text: '비밀번호가 성공적으로 재설정되었습니다.',
+	                confirmButtonColor: '#3085d6',
+	                confirmButtonText: '확인'
 	            });
 	  	    	
 	  	   		// 입력 필드 초기화
@@ -433,13 +462,13 @@
       	            }
       	        });
 	  	    } else {
-	  	        throw new Error("서버 오류 발생");
+	  	        throw new Error("서버 오류");
 	  	    }
 	  	})
 	  	.catch(error => {
 	  	    Swal.fire({
 	  	        icon: 'error',
-	  	        title: '오류 발생',
+	  	        title: '재설정 실패',
 	  	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
 	  	        confirmButtonColor: '#d33',
 	  	        confirmButtonText: '확인'
@@ -450,6 +479,7 @@
 	// 비밀번호 표시/숨기기
 	function togglePassword(fieldId, icon) {
 	     const input = document.getElementById(fieldId);
+	     
 	     if (input.type === "password") {
 	         input.type = "text";
 	         icon.classList.remove("fa-eye");

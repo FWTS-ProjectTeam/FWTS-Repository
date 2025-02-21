@@ -21,7 +21,7 @@ import com.teamf.fwts.dto.ResetPasswordDto;
 import com.teamf.fwts.dto.SignupDto;
 import com.teamf.fwts.dto.UserDto;
 import com.teamf.fwts.dto.VerificationCodeDto;
-import com.teamf.fwts.service.EmailService;
+import com.teamf.fwts.service.NTSService;
 import com.teamf.fwts.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-    private final EmailService emailService;
+    private final NTSService ntsService;
     private final AuthenticationManager authenticationManager;
 
     // 로그인 페이지
@@ -60,8 +60,8 @@ public class AuthController {
 
     // 로그아웃
     @GetMapping("/logout")
-    public String logout() {
-        SecurityContextHolder.clearContext();
+    public String logout(HttpSession session) {
+    	session.invalidate(); // 세션 무효화
         return "redirect:/";
     }
     
@@ -73,29 +73,25 @@ public class AuthController {
     	return "auth/signup"; // 정보입력 페이지
     }
     
-    // 회원가입 (*수정 필요)
+    // 회원가입
     @PostMapping("/sign-up")
-    public String signup(@Valid SignupDto dto, BindingResult bindingResult, Model model) {
+    public String signup(@Valid SignupDto dto, BindingResult bindingResult, HttpSession session, Model model) {
+    	boolean isValid = Boolean.TRUE.equals(session.getAttribute("isValid"));
+    	boolean isPasswordMatching = dto.getPassword().equals(dto.getConfirmPassword());
+
     	// 유효성 검사
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("inputData", dto);
-            //model.addAttribute("errorMessages", bindingResult);
-            return "auth/signup"; // 정보입력 페이지
-        }
+        if (bindingResult.hasErrors() || !isValid || !isPasswordMatching)
+        	return "auth/signup"; // 정보입력 페이지
+
         
     	try {
             userService.signup(dto);
             return "auth/signup-complete"; //가입완료 페이지
         } catch (Exception e) {
         	model.addAttribute("inputData", dto);
-        	model.addAttribute("errorMessage", "가입에 실패했습니다...");
+        	model.addAttribute("errorMessage", "처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
             return "auth/signup"; // 정보입력 페이지
         }
-    }
-    
-    @GetMapping("/sign-up/clear")
-    public String test() {
-    	return "auth/signup-complete"; //가입완료 페이지
     }
     
     // 중복 확인 (이메일, 아이디)
@@ -112,17 +108,23 @@ public class AuthController {
         return ResponseEntity.ok(isDuplicate);
     }
     
-    // 사업자등록번호 확인 (*수정 필요)
+    // 사업자등록번호 확인
     @PostMapping("/check-business-no")
-	public ResponseEntity<Boolean> checkBusinessNo(@RequestBody Map<String, String> request) {
-    	String value = request.get("value");
+	public ResponseEntity<Boolean> checkBusinessNo(@RequestBody Map<String, String> request, HttpSession session) {
+    	String ceoName = request.get("ceoName");
+    	String openingDate = request.get("openingDate");
+    	String businessNo = request.get("businessNo");
 
         // 유효성 검사
-        if (value == null)
+        if (ceoName == null || openingDate == null || businessNo == null)
             return ResponseEntity.ok(true);
     	
-		boolean isDuplicate = userService.isDuplicate("businessNo", value);
-		return ResponseEntity.ok(isDuplicate);
+		boolean isValid = !userService.isDuplicate("businessNo", businessNo);
+		if (isValid)
+			isValid = ntsService.checkBusinessValidity(businessNo, ceoName, openingDate);
+		
+		session.setAttribute("isValid", isValid);
+		return ResponseEntity.ok(!isValid);
 	}
     
     // 계정 찾기 페이지
@@ -159,8 +161,7 @@ public class AuthController {
         	return ResponseEntity.badRequest().body(Map.of("errorMessage", "존재하지 않는 이메일입니다."));
 
         try {
-        	String verificationCode = emailService.generateCode(email, session);  // 인증 코드 생성
-        	emailService.sendVerificationCode(email, verificationCode);  // 인증 코드 전송
+        	userService.requestVerificationCode(email, session);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
         	return ResponseEntity.internalServerError().build();
@@ -173,8 +174,7 @@ public class AuthController {
         String email = (String) session.getAttribute("email");
 
         try {
-        	String verificationCode = emailService.generateCode(email, session);  // 인증 코드 생성
-        	emailService.sendVerificationCode(email, verificationCode);  // 인증 코드 전송
+        	userService.requestVerificationCode(email, session);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

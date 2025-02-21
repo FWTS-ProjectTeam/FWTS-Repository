@@ -16,6 +16,7 @@ import com.teamf.fwts.entity.Users;
 import com.teamf.fwts.mapper.UserAccountMapper;
 import com.teamf.fwts.mapper.UserMapper;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +25,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserAccountMapper userAccountMapper;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
     private final AccountService accountService;
     
     private static final Pattern BUSINESS_NO_PATTERN = Pattern.compile("^\\d{3}-\\d{2}-\\d{5}$");
@@ -50,6 +52,7 @@ public class UserService {
         userDetail.setBusinessNo(dto.getBusinessNo());
         userDetail.setCompanyName(dto.getCompanyName());
         userDetail.setCeoName(dto.getCeoName());
+        userDetail.setOpeningDate(dto.getOpeningDate());
         userDetail.setPostalCode(dto.getPostalCode());
         userDetail.setAddress(dto.getAddress());
         
@@ -64,7 +67,22 @@ public class UserService {
         userMapper.insertUserDetail(userDetail);
         
         // BackAccount 추가
-        accountService.insertAccount(user.getUserId());
+        if (dto.getRole() == 1)
+        	accountService.insertAccount(user.getUserId());
+
+        emailService.sendSignupConfirmationEmail(dto.getEmail(), dto.getCeoName());
+    }
+    
+    // 회원탈퇴
+    @Transactional
+ 	public void deleteByUsername(String username) {
+ 		userMapper.deleteByUsername(username);
+ 	}
+    
+    // 인증 코드 생성 및 이메일 전송
+    public void requestVerificationCode(String email, HttpSession session) {
+        String verificationCode = emailService.generateCode(email, session);
+        emailService.sendVerificationCode(email, verificationCode);
     }
     
     // 비밀번호 재설정
@@ -72,6 +90,11 @@ public class UserService {
     public void resetPassword(String email, String password) {
         userMapper.resetPassword(email, hashPassword(password));
     }
+    
+    // 비밀번호 검증
+ 	public boolean checkPassword(String inputPassword, String currentPassword) {
+ 		return passwordEncoder.matches(inputPassword, currentPassword);
+ 	}
     
     // 비밀번호 암호화
     public String hashPassword(String password) {
@@ -101,24 +124,28 @@ public class UserService {
         return userMapper.existsByEmail(email) > 0;
     }
     
-    // 전체 회원 정보 조회
+    // 회원 수 확인
+    public int count(Map<String, Object> params) {
+		return userAccountMapper.count(params);
+	}
+    
+    // 회원 조회
  	public List<UserListDto> findAll(Map<String, Object> params) {
  		return userAccountMapper.findAll(params);
  	}
 
-    // 회원 정보 조회
+    // 회원 기본 정보 조회
+ 	public Users findByUserId(Integer userId) {
+ 		return userMapper.findByUserId(userId);
+	}
+ 	
 	public Users findByUsername(String name) {
 		return userMapper.findByUsername(name);
 	}
 	
 	// 회원 상세 정보 조회
-	public UserDetails findByUserId(Integer userId) {
-		return userMapper.findByUserId(userId);
-	}
-	
-	// 비밀번호 검증
-	public boolean checkPassword(String inputPassword, String currentPassword) {
-		return passwordEncoder.matches(inputPassword, currentPassword);
+	public UserDetails findUserDetailsByUserId(Integer userId) {
+		return userMapper.findUserDetailsByUserId(userId);
 	}
 
 	// 회원 상세 정보 수정
@@ -127,7 +154,6 @@ public class UserService {
         UserDetails userDetail = new UserDetails();
         userDetail.setUserId(dto.getUserId());
         userDetail.setPhoneNum(dto.getPhoneNum());       
-        userDetail.setBusinessNo(dto.getBusinessNo());
         userDetail.setCompanyName(dto.getCompanyName());
         userDetail.setCeoName(dto.getCeoName());
         userDetail.setPostalCode(dto.getPostalCode());
@@ -144,13 +170,9 @@ public class UserService {
         userMapper.updateUserDetails(userDetail);
 	}
 
-	// 회원 수 확인
-	public int count() {
-		return userMapper.count();
+	// 제한 여부 변경
+	@Transactional
+	public void updateUserStatus(Users user) {
+		userMapper.updateUserStatus(user);
 	}
-	
-	// sellerId로 UserDetails 조회
-    public UserDetails findBySellerId(int sellerId) {
-        return userMapper.findBySellerId(sellerId);
-    }
 }
