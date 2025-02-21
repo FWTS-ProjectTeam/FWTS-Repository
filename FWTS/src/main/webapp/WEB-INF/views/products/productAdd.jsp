@@ -9,9 +9,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 상품 등록</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
+	charset="utf-8"></script>
 <style>
 .body-container {
 	display: flex;
@@ -91,25 +93,6 @@ img {
 	width: 100%;
 }
 
-.status {
-	display: inline;
-	padding: 5px 10px;
-	border: 2px solid var(--main4);
-	border-radius: 12px;
-	color: var(--main4);
-	font-weight: bold;
-	text-align: center;
-}
-
-.status.available {
-	background-color: var(--main5);
-}
-
-.status.sold-out {
-	background-color: transparent; /* 배경색 없앰 */
-	color: #999; /* 텍스트 색상 변경 */
-}
-
 .pro-info2 {
 	width: 100%;
 	margin-top: 50px;
@@ -123,32 +106,35 @@ img {
 	font-weight: bold;
 }
 
- 	
-	.post-form {
-	    width: 100%;
-	    margin: 50px 10px 0 10px;
-	    background: white;
-	    display: block;
-	}
-	.post-content {
-	    padding: 20px;
-	    border-top: 1px solid #ccc;
-	    border-bottom: 1px solid #ccc;
-	}
-	.post-content .title {
-	    width: 100%;
-	    padding: 10px;
-	    font-size: 24px;
-	    border: 1px solid #ccc;
-	    outline: none;
-	    font-weight: 600;
-	    margin-bottom: 16px;
-	    box-sizing: border-box;
-	}
-	.post-content textarea {
-	    width: 99.6%;
-	    box-sizing: border-box; /* 패딩을 포함해 전체 너비 100%로 설정 */
-	}
+.post-form {
+	width: 100%;
+	margin: 50px 10px 0 10px;
+	background: white;
+	display: block;
+}
+
+.post-content {
+	padding: 20px;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.post-content .title {
+	width: 100%;
+	padding: 10px;
+	font-size: 24px;
+	border: 1px solid #ccc;
+	outline: none;
+	font-weight: 600;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+}
+
+.post-content textarea {
+	width: 99.6%;
+	box-sizing: border-box; /* 패딩을 포함해 전체 너비 100%로 설정 */
+}
+
 .button-container {
 	width: 100%;
 	display: flex;
@@ -198,145 +184,150 @@ img {
 <body>
 	<div class="container">
 		<!-- 공통 -->
-   		<%@ include file="/WEB-INF/views/common/header.jsp" %>
+		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
 			<div class="product-container">
 				<h1>상품 등록</h1>
-				<form method="POST" action="/products/add" method="post">
-					<div class="pro-info1">
-						<div class="img-container">
-							<div class="img">
-								<img src="${product.imgPath}">
-							</div>
-							<input type="file" name="productImage" accept="image/*">
+				<div class="pro-info1">
+					<div class="img-container">
+						<div class="img">
+							<img src="${product.imgPath}">
 						</div>
-						<div class="pro-detail">
-							<div class="pro-detail1">
-								<h3>${userDetails.companyName }</h3>
-								<p>상품 ID는 상품 등록 시 자동 생성됩니다 :)</p>
-							</div>
-							<div class="pro-detail2">
-								<p>
-									상품명: <input type="text" name="proName"
-										value="${product.proName}">
-								</p>
-								<p>
-									판매 상태: <select name="isSales">
-										<option value="true" ${product.isSales() ? 'selected' : ''}>판매
-											중</option>
-										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
-											중지</option>
-									</select>
-								</p>
-								<p>
-									최소 구매 가능 수량: <input type="number" name="minPossible"
-										value="${product.minPossible}">
-								</p>
-								<p>
-									최대 구매 가능 수량: <input type="number" name="maxPossible"
-										value="${product.maxPossible}">
-								</p>
-								<p>
-									재고: <input type="number" name="inventory"
-										value="${product.inventory}">
-								</p>
-								<p>
-									가격: <input type="number" name="unitPrice"
-										value="${product.unitPrice}">
-								</p>
-								<p>
-									카테고리: <select name="category">
-										<option value="절화"
-											${product.categoryId == '1' ? 'selected' : ''}>절화</option>
-										<option value="관엽"
-											${product.categoryId == '2' ? 'selected' : ''}>관엽</option>
-										<option value="난"
-											${product.categoryId == '3' ? 'selected' : ''}>난</option>
-									</select>
-								</p>
+						<input type="file" name="productImage" accept="image/*">
+					</div>
+					<div class="pro-detail">
+						<div class="pro-detail1">
+							<h3>${userDetails.companyName }</h3>
+							<p>상품 ID는 상품 등록 시 자동 생성됩니다 :)</p>
+						</div>
+						<div class="pro-detail2">
+							<p>
+								상품명: <input type="text" name="proName"
+									value="${product.proName}">
+							</p>
+							<p>
+								판매 상태: <select name="isSales">
+									<option value="true" ${product.isSales() ? 'selected' : ''}>판매
+										중</option>
+									<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
+										중지</option>
+								</select>
+							</p>
+							<p>
+								최소 구매 가능 수량: <input type="number" name="minPossible"
+									value="${product.minPossible}">
+							</p>
+							<p>
+								최대 구매 가능 수량: <input type="number" name="maxPossible"
+									value="${product.maxPossible}">
+							</p>
+							<p>
+								재고: <input type="number" name="inventory"
+									value="${product.inventory}">
+							</p>
+							<p>
+								가격: <input type="number" name="unitPrice"
+									value="${product.unitPrice}">
+							</p>
+							<p>
+								카테고리: <select name="category">
+									<option value="절화"
+										${product.categoryId == '1' ? 'selected' : ''}>절화</option>
+									<option value="관엽"
+										${product.categoryId == '2' ? 'selected' : ''}>관엽</option>
+									<option value="난"
+										${product.categoryId == '3' ? 'selected' : ''}>난</option>
+									<option value="기타"
+										${product.categoryId == '4' ? 'selected' : ''}>기타</option>
+								</select>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="pro-info2">
+					<p class="description-title">상품 설명</p>
+					<div class="post-content">
+						<div id="smarteditor">
+							<textarea id="content" name="description" rows="20"></textarea>
+						</div>
+					</div>
+				</div>
 
-							</div>
-						</div>
-					</div>
-					<div class="pro-info2">
-						<p class="description-title">상품 설명</p>
-						<div class="post-content">
-        		<input class="title" name="inquiryTitle" value="${inquiry.inquiryTitle}" maxlength="64" placeholder="제목을 입력하세요"/>
-       			<div id="smarteditor">
-		      		<textarea id="content" name="inquiryContent" rows="20"></textarea>
-	     		</div>
-        	</div>
-					</div>
+				<form id="productForm" method="POST" action="/add">
 					<div class="button-container">
-						<button class="btn1" type="submit">등록하기</button>
+						<button type="button" class="btn1" onclick="confirmCancle()">취소</button>
+						<button type="submit" class="btn2" onclick="confirmAdd()">등록</button>
 					</div>
 				</form>
 			</div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
-<script>
-    var oEditors = [];
+	<script>
+		var oEditors = [];
 
-    // 스마트 에디터 초기화 함수
-    smartEditor = function() {
-        nhn.husky.EZCreator.createInIFrame({
-            oAppRef: oEditors,
-            elPlaceHolder: "content", // 텍스트 영역 ID
-            sSkinURI: "/smarteditor/SmartEditor2Skin.html", // 스마트 에디터 스킨 경로
-            fOnAppLoad: function() {
-                // 에디터 로딩 후 기존 내용 설정 (서버에서 넘어온 내용을 에디터에 삽입)
-                const content = "${inquiry.inquiryContent}";
-                oEditors.getById["content"].exec("PASTE_HTML", [content]);
-            },
-            fCreator: "createSEditor2"
-        });
-    };
+		// 스마트 에디터 초기화 함수
+		smartEditor = function() {
+			nhn.husky.EZCreator
+					.createInIFrame({
+						oAppRef : oEditors,
+						elPlaceHolder : "content", // 텍스트 영역 ID
+						sSkinURI : "/smarteditor/SmartEditor2Skin.html", // 스마트 에디터 스킨 경로
+						fOnAppLoad : function() {
+							// 에디터 로딩 후 기존 내용 설정 (서버에서 넘어온 내용을 에디터에 삽입)
+							const content = "${inquiry.inquiryContent}";
+							oEditors.getById["content"].exec("PASTE_HTML",
+									[ content ]);
+						},
+						fCreator : "createSEditor2"
+					});
+		};
 
-    // 문서 준비되었을 때 실행
-    $(document).ready(function() {
-        smartEditor(); // 스마트 에디터 실행
-    });
+		// 문서 준비되었을 때 실행
+		$(document).ready(function() {
+			smartEditor(); // 스마트 에디터 실행
+		});
 
-    // 스마트 에디터 내용 전송
-    function submitPostForm() {
-        const form = document.getElementById("post-form");
+		// 스마트 에디터 내용 전송
+		function submitPostForm() {
+			const form = document.getElementById("post-form");
 
-        // 스마트 에디터 내용 업데이트
-        oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-        
-        // 폼 제출
-        form.requestSubmit();
-    }
+			// 스마트 에디터 내용 업데이트
+			oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 
-    // 취소 버튼 클릭 시 실행
-    function cancelAction() {
-        const inquiryId = "${inquiry.inquiryId}";
+			// 폼 제출
+			form.requestSubmit();
+		}
 
-        // 글 작성인지, 수정인지에 따라 처리
-        if (inquiryId) {
-            window.location.href = "/support-center/inquirys/" + inquiryId; // 수정 페이지로 돌아가기
-        } else {
-            window.location.href = "/support-center/inquirys"; // 리스트 페이지로 돌아가기
-        }
-    }
+		// 유효성 검사 실패 시 alert
+		<c:if test="${not empty validMessage}">
+		alert("${validMessage}");
+		</c:if>
 
-    // 유효성 검사 실패 시 alert
-    <c:if test="${not empty validMessage}">
-        alert("${validMessage}");
-    </c:if>
+		// 서버 오류 발생 시 Swal 알림
+		<c:if test="${not empty errorMessage}">
+		Swal.fire({
+			icon : 'error',
+			title : '서버 오류',
+			text : "${errorMessage}",
+			confirmButtonColor : '#d33',
+			confirmButtonText : '확인'
+		});
+		</c:if>
 
-    // 서버 오류 발생 시 Swal 알림
-    <c:if test="${not empty errorMessage}">
-        Swal.fire({
-            icon: 'error',
-            title: '서버 오류',
-            text: "${errorMessage}",
-            confirmButtonColor: '#d33',
-            confirmButtonText: '확인'
-        });
-    </c:if>
-</script>
+		// 취소 버튼
+		function confirmCancle() {
+			window.location.href = "/products/shopM/1";
+		}
+
+		// 등록 버튼 
+		function confirmAdd() {
+			const isConfirmed = confirm(`상품을 등록하시겠습니까?`);
+			if (isConfirmed) {
+				document.getElementById("productForm").submit(); // 폼 제출
+			}
+		}
+	</script>
 
 </body>
 </html>
