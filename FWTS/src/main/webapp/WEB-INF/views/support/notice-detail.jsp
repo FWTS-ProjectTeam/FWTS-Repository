@@ -47,6 +47,7 @@
 	}
     
     .button-container {
+    	justify-content: center;
         margin: 20px auto;
     }
     
@@ -71,20 +72,24 @@
 		       	<p>${notice.noticeContent}</p>
         	</div>
 	      	
-			<!-- 관리자일 경우: 삭제, 수정 버튼 -->
-			<div class="button-container multiple">
-	    		<sec:authorize access="hasRole('ROLE_ADMIN')">
-		            <button class="button" onclick="deleteNotice()">삭제</button>
-				</sec:authorize>
-				
-				<button class="button" onclick="location.href='/support-center/notices'">목록</button>
-				
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<!-- 관리자 항목: 삭제, 수정 버튼 -->
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<div class="button-container multiple">
+		    		<button class="button" onclick="deleteNotice()">삭제</button>
+					<button class="button" onclick="location.href='/support-center/notices'">목록</button>
 	            	<button class="button" onclick="location.href='/support-center/notices/edit?id=${notice.noticeId}'">수정</button>
-            	</sec:authorize>
-			</div>
+            	</div>
+            </sec:authorize>
+			
+			<!-- 비관리자 항목 -->
+			<sec:authorize access="!hasRole('ROLE_ADMIN')">
+				<div class="button-container">
+		    		<button class="button" onclick="location.href='/support-center/notices'">목록</button>
+            	</div>
+            </sec:authorize>
   		</div>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
 <script>
 	// 글 삭제
