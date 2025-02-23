@@ -1,4 +1,4 @@
-package util;
+package com.teamf.fwts.util;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

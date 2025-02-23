@@ -179,8 +179,7 @@
                             </c:otherwise>
 									</c:choose>
 								</h3>
-								<img src="${product.imgPath}" alt="이미지가 없습니다"
-								class="product-image">
+								<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
 								<span style="font-size:12px;">
 									<c:choose>
 										<c:when test="${fn:length(product.description) > 25}">
@@ -206,18 +205,15 @@
 				<c:choose>
 					<c:when test="${count > 0}">
 						<c:set var="queryString">
-							<c:if
-								test="${category == 'all' || category == 'title' || category == 'content'}">
-								<c:set var="queryString"
-									value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+							<c:if test="${category == 'all' || category == 'title' || category == 'content'}">
+								<c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
 							</c:if>
 						</c:set>
 
 						<!-- 이전 페이지 버튼 -->
 						<c:choose>
 							<c:when test="${currentPage > 1}">
-								<a
-									href="?category=${category}&sort=${sort}&page=${currentPage - 1}${queryString}">◀</a>
+								<a href="?category=${category}&sort=${sort}&page=${currentPage - 1}${queryString}">◀</a>
 							</c:when>
 							<c:otherwise>
 								<a>◀</a>
@@ -230,8 +226,7 @@
 						<!-- 다음 페이지 버튼 -->
 						<c:choose>
 							<c:when test="${currentPage < totalPages}">
-								<a
-									href="?category=${category}&sort=${sort}&page=${currentPage + 1}${queryString}">▶</a>
+								<a href="?category=${category}&sort=${sort}&page=${currentPage + 1}${queryString}">▶</a>
 							</c:when>
 							<c:otherwise>
 								<a>▶</a>

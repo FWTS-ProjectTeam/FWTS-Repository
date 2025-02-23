@@ -83,7 +83,6 @@ public class AuthController {
         if (bindingResult.hasErrors() || !isValid || !isPasswordMatching)
         	return "auth/signup"; // 정보입력 페이지
 
-        
     	try {
             userService.signup(dto);
             return "auth/signup-complete"; //가입완료 페이지

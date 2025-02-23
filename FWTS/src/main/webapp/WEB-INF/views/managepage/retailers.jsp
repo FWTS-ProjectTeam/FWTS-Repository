@@ -306,8 +306,7 @@
 				const requestUrl = "/manage-page/users/update/" + userId;
 				
 			    fetch(requestUrl, {
-			        method: 'POST',
-			        headers: { 'Content-Type': 'application/json' }
+			        method: 'GET'
 			    })
 			    .then(response => response.json())
 			    .then(data => {

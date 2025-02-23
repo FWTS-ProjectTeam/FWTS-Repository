@@ -371,27 +371,28 @@
 	        confirmButtonText: "탈퇴",
 	        cancelButtonText: "취소"
 	    }).then((result) => {
-	        if (result.isConfirmed) {
-	            const requestUrl = "/my-page/info/delete";
-	
-	            fetch(requestUrl, { method: "DELETE" })
-		        .then(response => {
-		            if (response.ok) {
-		            	window.location.href = "/"; // 메인 페이지
-		            } else {
-		            	throw new Error('서버 오류');
-		            }
-		        })
-	            .catch(error => {
-	                Swal.fire({
-	                    icon: 'error',
-	                    title: '탈퇴 실패',
-	                    text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
-	                    confirmButtonColor: '#d33',
-	                    confirmButtonText: '확인'
-	                });
-	            });
-	        }
+	    	if (result.isConfirmed) {
+	    	    const requestUrl = "/my-page/info/delete";
+
+	    	    fetch(requestUrl, { method: "DELETE" })
+    	        .then(response => response.json())
+    	        .then(data => {
+    	            if (data.success) {
+    	                window.location.href = "/"; // 메인 페이지
+    	            } else {
+    	                throw new Error(data.message || '처리 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    	            }
+    	        })
+    	        .catch(error => {
+    	            Swal.fire({
+    	                icon: 'error',
+    	                title: '탈퇴 실패',
+    	                text: error.message,
+    	                confirmButtonColor: '#d33',
+    	                confirmButtonText: '확인'
+    	            });
+    	        });
+	    	}
 	    });
 	}
 
