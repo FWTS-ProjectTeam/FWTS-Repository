@@ -35,7 +35,7 @@
 	    transition: background-color 0.3s, color 0.3s;
 	}
 	table button i.fas {
-	    color: #adb5bd;
+	    color: var(--main2);
 	}
 	table button:hover {
 	    background-color: #f0f0f0;
@@ -187,14 +187,14 @@
 		    </label>
 		
 		    <!-- 회원 검색 -->
-		    <form class="search-board-form" id="search-board-form" action="/manage-page/retailers" onsubmit="return cleanEmptyQuery()">
+		    <form class="search-table-form" id="search-table-form" action="/manage-page/retailers" onsubmit="return cleanEmptyQuery()">
 		        <select class="search-category" id="category" name="category">
-		            <option value="username" ${category == 'username' ? 'selected' : ''}>아이디</option>
-		            <option value="email" ${category == 'email' ? 'selected' : ''}>이메일</option>
-		            <option value="companyName" ${category == 'companyName' ? 'selected' : ''}>상호명</option>
-		            <option value="ceoName" ${category == 'ceoName' ? 'selected' : ''}>대표자명</option>
+		            <option value="username" ${tCategory == 'username' ? 'selected' : ''}>아이디</option>
+		            <option value="email" ${tCategory == 'email' ? 'selected' : ''}>이메일</option>
+		            <option value="companyName" ${tCategory == 'companyName' ? 'selected' : ''}>상호명</option>
+		            <option value="ceoName" ${tCategory == 'ceoName' ? 'selected' : ''}>대표자명</option>
 		        </select>
-		        <input class="search-board-box" id="keyword" name="keyword" value="${keyword}" placeholder="검색어를 입력해주세요">
+		        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="검색어를 입력해주세요">
 		
 		        <!-- 제한된 회원 여부를 hidden input으로 전송 -->
 		        <input type="hidden" id="limited-hidden" name="isLimited" value="${isLimited}">
@@ -240,8 +240,8 @@
 			        <c:when test="${count > 0}">
 			        	<c:set var="queryString" value="" />
 			        
-					    <c:if test="${category == 'username' || category == 'email' || category == 'companyName' || category == 'ceoName'}">
-					        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+					    <c:if test="${tCategory == 'username' || tCategory == 'email' || tCategory == 'companyName' || tCategory == 'ceoName'}">
+					        <c:set var="queryString" value="&category=${fn:escapeXml(tCategory)}&keyword=${fn:escapeXml(tKeyword)}" />
 					    </c:if>
 					    
 					    <c:if test="${not empty isLimited}">
@@ -389,7 +389,7 @@
 	
 	// 빈 쿼리 제거
 	function cleanEmptyQuery() {
-	    const form = document.getElementById("search-board-form");
+	    const form = document.getElementById("search-table-form");
 	    
 	    var categoryInput = document.getElementById("category");
 	    var keywordInput = document.getElementById("keyword");

@@ -30,12 +30,12 @@
 		width: 100%;
 		padding: 10px;
 		margin: 5px 0;
-		border: 1px solid #ddd;
+		border: 1px solid var(--gray6);
 		border-radius: 5px;
 		box-sizing: border-box;
 		height: 150px;
 		overflow-y: auto;
-		background-color: #f9f9f9;
+		background-color: var(--white);
 		white-space: pre-line;
 		font-size: 12.5px;
 		line-height: 1.4;
@@ -57,13 +57,13 @@
 	.checkbox-container label { line-height: 18px; }
 	
 	.container button {
-		background-color: #ffb6c1;
+		background-color: var(--pink3);
 		color: white;
 		cursor: not-allowed;
 		margin-top: 20px;
 	}
 	.container button.enabled {
-		background-color: #ff7f9d;
+		background-color: var(--pink2);
 		cursor: pointer;
 	}
 </style>

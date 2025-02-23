@@ -197,7 +197,6 @@ public class ProductsController {
 		return "products/productEdit";
 	}
 	
-    
     // 상품 삭제 처리
     @PutMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") int id) {

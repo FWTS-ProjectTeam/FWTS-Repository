@@ -1,4 +1,4 @@
-.search-board-form {
+.search-table-form {
     display: flex;
     align-items: center;
 }
@@ -17,7 +17,7 @@
     -moz-appearance: none;
 }
 	
-.search-board-box {
+.search-table-box {
 	width: 250px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -66,5 +66,5 @@ td a {
 
 .reply {
 	font-weight: 600;
-	color: #ffb6c1;
+	color: var(--main3);
 }

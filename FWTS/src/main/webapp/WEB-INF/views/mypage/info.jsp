@@ -227,6 +227,8 @@
             </form>
         </div>
     </div>
+    
+    <!-- 푸터 -->
     <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
 </body>
