@@ -135,8 +135,8 @@
 			<div class="array-container">
 				<div class="array-notice">
 					<p>
-						<span id="category-title"
-							style="color: var(--main4); font-size: 30px;"> <c:choose>
+						<span id="category-title" style="color: var(--main4); font-size: 30px;">
+							<c:choose>
 								<c:when test="${category == '0'}">ALL</c:when>
 								<c:when test="${category == '1'}">절화</c:when>
 								<c:when test="${category == '2'}">난</c:when>

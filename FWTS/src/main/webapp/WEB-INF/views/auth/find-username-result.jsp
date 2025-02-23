@@ -12,7 +12,7 @@
     .username {
         font-size: 18px;
         font-weight: 600;
-        color: #ff6699;
+        color: var(--pink2);
         margin-bottom: 20px;
     }
 </style>

@@ -41,10 +41,10 @@
 	    right: 10px;
 	    cursor: pointer;
 	    font-size: 18px;
-	    color: #888;
+	    color: var(--gray4);
 	}
 	.password-field i:hover {
-		color: #ff6699;
+		color: var(--pink2);
 	}
 </style>
 </head>
