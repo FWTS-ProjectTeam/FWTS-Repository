@@ -1,8 +1,9 @@
 package com.teamf.fwts.validation;
 
+import com.teamf.fwts.util.HtmlUtils;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import util.HtmlUtils;
 
 public class NotEmptyHtmlValidator implements ConstraintValidator<NotEmptyHtml, String> {
 

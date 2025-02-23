@@ -6,8 +6,7 @@
             
 	<!-- 도매업자 항목 -->
 	<sec:authorize access="hasRole('ROLE_WHOLESALER')">
-		<%-- <a href="/products/shopM/${sellerId}"  class="product-active">상품 관리</a> --%>
-		<a href="/products/shopM/1" class="product-active">상품 관리</a>
+		<a href="/products/shopM"  class="product-active">상품 관리</a>
 		<a href="#"  class="order-active">주문 관리</a>
 		<a href="/my-page/inquiry-history" class="inquiry-active">문의 내역</a>
 	</sec:authorize>
