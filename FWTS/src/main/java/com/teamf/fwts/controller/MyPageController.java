@@ -81,15 +81,24 @@ public class MyPageController {
 	// 회원탈퇴
 	@ResponseBody
 	@DeleteMapping("/info/delete")
-	public Map<String, Boolean> deleteUser(Authentication authentication, HttpSession session) {
-	    Map<String, Boolean> response = new HashMap<>();
-	    
+	public Map<String, Object> deleteUser(Authentication authentication, HttpSession session) {
+		Users user = userService.findByUsername(authentication.getName());
+	    Map<String, Object> response = new HashMap<>();
+
+	    // 탈퇴 제한 조건 추가
+	    if (user.isLimited()) {
+	        response.put("success", false);
+	        response.put("message", "회원 탈퇴가 제한된 상태입니다.");
+	        return response;
+	    }
+
 	    try {
-	    	userService.deleteByUsername(authentication.getName());
-	    	session.invalidate(); // 세션 무효화
-	    	response.put("success", true);
+	        userService.deleteByUsername(authentication.getName());
+	        session.invalidate(); // 세션 무효화
+	        response.put("success", true);
 	    } catch (Exception e) {
 	        response.put("success", false);
+	        response.put("message", "회원 탈퇴 중 오류가 발생했습니다.");
 	    }
 	    
 	    return response;
@@ -118,9 +127,9 @@ public class MyPageController {
         }
     }
 	
-	// 문의사항 내역 조회
+	// 문의 내역 조회
 	@GetMapping("/inquiry-history")
-	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page,
+	public String inquiryAll(@RequestParam(name = "page", defaultValue = "1") Integer page,
 							 Authentication authentication, Model model) {
 	    Users user = userService.findByUsername(authentication.getName());
 		

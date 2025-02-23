@@ -20,8 +20,8 @@ public interface UserMapper {
 	void insertUser(Users user);
 	
 	// 회원 상세 정보 저장
-	@Insert({"INSERT INTO user_details (user_id, phone_num, company_num, business_no, company_name, ceo_name, opening_date, postal_code, address, detail_address)",
-			"VALUES (#{userId}, #{phoneNum}, #{companyNum}, #{businessNo}, #{companyName}, #{ceoName}, #{openingDate}, #{postalCode}, #{address}, #{detailAddress})"})
+	@Insert({"INSERT INTO user_details (user_id, phone_num, company_num, business_no, company_name, ceo_name, postal_code, address, detail_address)",
+			"VALUES (#{userId}, #{phoneNum}, #{companyNum}, #{businessNo}, #{companyName}, #{ceoName}, #{postalCode}, #{address}, #{detailAddress})"})
     void insertUserDetail(UserDetails userDetail);
 	
 	// 회원 상세 정보 수정
