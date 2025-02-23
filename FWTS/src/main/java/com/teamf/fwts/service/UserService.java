@@ -52,7 +52,6 @@ public class UserService {
         userDetail.setBusinessNo(dto.getBusinessNo());
         userDetail.setCompanyName(dto.getCompanyName());
         userDetail.setCeoName(dto.getCeoName());
-        userDetail.setOpeningDate(dto.getOpeningDate());
         userDetail.setPostalCode(dto.getPostalCode());
         userDetail.setAddress(dto.getAddress());
         

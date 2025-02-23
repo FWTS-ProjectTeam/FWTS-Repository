@@ -148,7 +148,7 @@
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
 			<div class="sidebar">
-				<img src="/smarteditor/img/userimg.png" class="sidebar-img">
+				<img src="/resources/img/user.png" class="sidebar-img">
 				<h2>${userDetails.ceoName} 대표님</h2>
 				<p>${userDetails.phoneNum}</p>
 				<p>${userDetails.companyNum}</p>

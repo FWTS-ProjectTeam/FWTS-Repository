@@ -54,24 +54,19 @@ public class MainController {
 		
 	    try {
 	        // 각 유형에 대해 원데이터 가져오기
-	        //Map<String, FlowerData> rawCutFlower = flowerPriceService.getFlowerPricesByType("1"); // 절화
-	        //Map<String, FlowerData> rawFoliage = flowerPriceService.getFlowerPricesByType("2"); // 관엽
-	        //Map<String, FlowerData> rawOrchid = flowerPriceService.getFlowerPricesByType("3"); // 난
+	        Map<String, FlowerData> rawCutFlower = flowerPriceService.getFlowerPricesByType("1"); // 절화
+	        Map<String, FlowerData> rawFoliage = flowerPriceService.getFlowerPricesByType("2"); // 관엽
+	        Map<String, FlowerData> rawOrchid = flowerPriceService.getFlowerPricesByType("3"); // 난
 
 	        // 평균 데이터 계산
-	        //Map<String, FlowerData> averagedCutFlower = flowerPriceService.calculateAveragedData(rawCutFlower);
-	        //Map<String, FlowerData> averagedFoliage = flowerPriceService.calculateAveragedData(rawFoliage);
-	        //Map<String, FlowerData> averagedOrchid = flowerPriceService.calculateAveragedData(rawOrchid);
+	        Map<String, FlowerData> averagedCutFlower = flowerPriceService.calculateAveragedData(rawCutFlower);
+	        Map<String, FlowerData> averagedFoliage = flowerPriceService.calculateAveragedData(rawFoliage);
+	        Map<String, FlowerData> averagedOrchid = flowerPriceService.calculateAveragedData(rawOrchid);
 
 	        // 결과를 Map에 담아 반환
-	        //result.put("cutFlower", averagedCutFlower);
-	        //result.put("foliage", averagedFoliage);
-	        //result.put("orchid", averagedOrchid);
-	    	
-	    	// 테스트용
-	        result.put("cutFlower", new HashMap<>());
-	        result.put("foliage", new HashMap<>());
-	        result.put("orchid", new HashMap<>());
+	        result.put("cutFlower", averagedCutFlower);
+	        result.put("foliage", averagedFoliage);
+	        result.put("orchid", averagedOrchid);
 	    } catch (Exception e) {
 	        result.put("errorMessage", "데이터를 불러오는 중 오류가 발생했습니다.");
 	    }

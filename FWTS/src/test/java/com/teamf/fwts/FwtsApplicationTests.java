@@ -8,6 +8,6 @@ class ProjectApplicationTests {
 
     @Test
     void contextLoads() {
-        // 애플리케이션이 정상적으로 실행되는지 확인
+
     }
 }
