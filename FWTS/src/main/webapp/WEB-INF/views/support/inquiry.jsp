@@ -27,6 +27,7 @@
 	    max-width: 60px;
 	}
 	th:nth-child(2), td:nth-child(2) { 
+		flex-grow: 1;
 		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
 	    overflow: hidden; /* 넘칠 경우 숨김 처리 */
 	}
@@ -69,13 +70,13 @@
 				</div>
 	         
 	         	<!-- 게시글 검색 -->
-	         	<form class="search-board-form" action="/support-center/inquirys">
-				    <select class="search-category" name="category">
-				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
-				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
-				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
+	         	<form class="search-table-form" action="/support-center/inquirys" onsubmit="return cleanEmptyQuery()">
+				    <select class="search-category" id="category" name="category">
+				        <option value="all" ${tCategory == 'all' ? 'selected' : ''}>전체</option>
+				        <option value="title" ${tCategory == 'title' ? 'selected' : ''}>제목</option>
+				        <option value="content" ${tCategory == 'content' ? 'selected' : ''}>내용</option>
 				    </select>
-				    <input class="search-board-box" name="keyword" value="${keyword}" placeholder="검색어를 입력해주세요">
+				    <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="검색어를 입력해주세요">
 				    <button type="submit" class="button">검색</button>
 				</form>
          	</div>
@@ -93,7 +94,12 @@
                     <c:forEach var="inquiry" items="${inquirys}">
 			            <tr>
 			                <td>${inquiry.inquiryId}</td>
-			                <td><a href="/support-center/inquirys/${inquiry.inquiryId}"><c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
+			                <td>
+			                	<a href="/support-center/inquirys/${inquiry.inquiryId}">
+			                		<c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료]</span></c:if>
+			                		${inquiry.inquiryTitle}
+			                	</a>
+			                </td>
 			                <td>${inquiry.username}</td>
 			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 			            </tr>
@@ -105,8 +111,8 @@
 			<div class="pagination">
 			    <c:choose>
 				    <c:when test="${count > 0}">
-				        <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-				            <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+				        <c:if test="${tCategory == 'all' || tCategory == 'title' || tCategory == 'content'}">
+				            <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(tCategory)}&keyword=${fn:escapeXml(tKeyword)}" />
 				        </c:if>
 				
 				        <c:choose>
@@ -130,7 +136,25 @@
 			</div>
         </div>
     </div>
+    
+    <!-- 푸터 -->
     <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
+<script>
+	//빈 쿼리 제거
+	function cleanEmptyQuery() {
+	    const form = document.getElementById("search-table-form");
+	    
+	    var categoryInput = document.getElementById("category");
+	    var keywordInput = document.getElementById("keyword");
+	    
+	    if (keywordInput && !keywordInput.value.trim()) {
+	        keywordInput.removeAttribute("name");
+	        categoryInput.removeAttribute("name");
+	    }
+	    
+	    form.requestSubmit(); // 폼 제출 실행
+	}
+</script>
 </body>
 </html>

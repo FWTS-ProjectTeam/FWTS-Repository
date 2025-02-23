@@ -28,20 +28,20 @@
 	    flex: 1; /* 입력 필드가 남은 공간을 다 차지하도록 */
 	}
 	.row-group input:focus {
-		border-color: #ff6699;
+		border-color: var(--pink2);
 	}
 	
 	.resend-code {
 		width: 80px;
 		background: white;
-	    color: #ffb6c1;
-	    border: 1px solid #ffb6c1;
+	    color: var(--pink3);
+	    border: 1px solid var(--pink3);
 	    padding: 8px 12px;
 	    font-size: 12px;
 	    border-radius: 8px;
 	}
 	.resend-code:hover {
-	    background: #ffb6c1;
+	    background: var(--pink3);
 	    color: white;
 	}
 </style>

@@ -14,18 +14,18 @@
 	    display: flex;
 	    justify-content: space-around;
 	    margin-bottom: 20px;
-	    border-bottom: 2px solid #ddd;
+	    border-bottom: 2px solid var(--gray6);
 	}
 	.tab {
 	    flex: 1;
 	    padding: 10px 0;
 	    cursor: pointer;
 	    font-weight: 600;
-	    color: #999;
+	    color: var(--gray5);
 	}
 	.tab.active {
-	    color: #ff6699;
-	    border-bottom: 2px solid #ff6699;
+	    color: var(--pink2);
+	    border-bottom: 2px solid var(--pink2);
 	}
 	
 	.form-content {
@@ -45,9 +45,6 @@
 	}
 	.input-group input {
 	    width: 100%;
-	}
-	.input-group input:focus {
-	    border-color: #ff6699;
 	}
 	
 	.button-container {

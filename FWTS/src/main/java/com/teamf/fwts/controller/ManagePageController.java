@@ -63,8 +63,8 @@ public class ManagePageController {
 		}
 		
 		model.addAttribute("count", count);
-		model.addAttribute("category", category);
-		model.addAttribute("keyword", keyword);
+		model.addAttribute("tCategory", category);
+		model.addAttribute("tKeyword", keyword);
 		model.addAttribute("isLimited", isLimited);
 		return "managepage/wholesalers";
 	}
