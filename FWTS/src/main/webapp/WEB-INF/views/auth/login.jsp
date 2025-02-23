@@ -10,14 +10,10 @@
 <link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .container h1 {
-        margin-bottom: 20px;
-    }
-    .container h1 a {
-    	text-decoration: none;
-    	color: #ff6699;
-    }
-    
+	.container h1 {
+		margin-bottom: 19px;
+	}
+	
     .input-group input {
         width: 100%;
         margin: 5px 0;

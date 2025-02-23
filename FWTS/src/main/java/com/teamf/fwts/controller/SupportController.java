@@ -44,7 +44,7 @@ public class SupportController {
 	    int count = noticeBoardService.count();
 
 	    if (count > 0) {
-	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int perPage = 10; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
@@ -170,7 +170,7 @@ public class SupportController {
 		int count = inquiryBoardService.count(params);
 
 	    if (count > 0) {
-	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int perPage = 10; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
@@ -185,8 +185,8 @@ public class SupportController {
 	    }
 	    
 	    model.addAttribute("count", count);
-	    model.addAttribute("category", category);
-	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("tCategory", category);
+	    model.addAttribute("tKeyword", keyword);
 		return "support/inquiry";
     }
 	

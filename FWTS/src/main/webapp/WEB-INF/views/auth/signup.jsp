@@ -69,16 +69,16 @@
         right: 10px;
         cursor: pointer;
         font-size: 18px;
-        color: #888;
+        color: var(--gray4);
     }
     .password-container i:hover {
-        color: #ff6699;
+        color: var(--pink2);
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>생화24</h1>
+    <h1><a href="/">생화24</a></h1>
     <p>가입을 환영합니다!</p>
     
     <form id="signup-form" action="/sign-up" method="post">

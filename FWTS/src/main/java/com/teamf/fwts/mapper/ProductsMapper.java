@@ -30,6 +30,7 @@ public interface ProductsMapper {
             "<if test='keyword != null'> AND pro_name LIKE CONCAT('%', #{keyword}, '%') </if>" +
             "</script>")
     int countAllProducts(Map<String, Object> params);
+    
     // 상품 목록 조회 (페이지네이션+재정렬) 
     @Select("<script>" +
             "SELECT * FROM products WHERE is_delete = FALSE AND is_sales = 1" +
@@ -43,10 +44,11 @@ public interface ProductsMapper {
             "LIMIT #{start}, #{count}" +
             "</script>")
     List<ProductsDto> findProductsWithPage(Map<String, Object> params);
-      
+    
     // 셀러의 상품 개수 조회 (셀러 ID에 해당하는 상품 개수를 반환)
     @Select("SELECT COUNT(*) FROM products WHERE seller_id = #{sellerId} AND is_delete = FALSE AND is_sales = 1")
     int countBySellerId(@Param("sellerId") int sellerId);
+    
     // 셀러의 상품 목록 조회 (페이지네이션)
     @Select("SELECT * FROM products WHERE seller_id = #{sellerId} AND is_delete = FALSE AND is_sales = 1 LIMIT #{start}, #{count}")
     List<ProductsDto> findBySellerIdWithPage(Map<String, Object> params);
@@ -54,6 +56,7 @@ public interface ProductsMapper {
     // 셀러의 상품 개수 조회 (셀러 ID에 해당하는 상품 개수를 반환 + 판매 x 상품 포함)
     @Select("SELECT COUNT(*) FROM products WHERE seller_id = #{sellerId} AND is_delete = FALSE")
     int countAllBySellerId(@Param("sellerId") int sellerId);
+    
     // 셀러의 상품 목록 조회 (페이지네이션 + 판매 x 상품 포함)
     @Select("SELECT * FROM products WHERE seller_id = #{sellerId} AND is_delete = FALSE LIMIT #{start}, #{count}")
     List<ProductsDto> findAllBySellerIdWithPage(Map<String, Object> params);
