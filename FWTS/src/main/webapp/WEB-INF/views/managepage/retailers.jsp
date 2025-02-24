@@ -52,10 +52,6 @@
 	    min-width: 100px;
 	    max-width: 100px;
 	}
-	th:nth-child(4), td:nth-child(4) {
-		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
-	    overflow: hidden; /* 넘칠 경우 숨김 처리 */
-	}
 	th:nth-child(5), td:nth-child(5) { 
 	    width: 80px;  /* 가입일 열의 너비 고정 */
 	    min-width: 80px;
@@ -219,9 +215,9 @@
                     <c:forEach var="user" items="${users}">
 			            <tr>
 			                <td>${user.userId}</td>
-			                <td>${user.username}</td>
-			                <td>${user.ceoName}</td>
-			                <td>${user.email}</td>
+			                <td title="${user.username}">${user.username}</td>
+			                <td title="${user.ceoName}">${user.ceoName}</td>
+			                <td title="${user.email}">${user.email}</td>
 			                <td><fmt:formatDate value="${user.createdAt}" pattern="yyyy.MM.dd"/></td>
 			                <td>
 			                	<button class="status-btn" onclick="toggleUserStatus(${user.userId}, this)">
@@ -351,7 +347,7 @@
 	    document.getElementById("detail-created-at").innerText = user.createdAt;
 	
 	    document.getElementById("detail-phone").innerText = user.phoneNum;
-	    document.getElementById("detail-company-phone").innerText = user.companyNum;
+	    document.getElementById("detail-company-phone").innerText = user.companyNum ? user.companyNum : "없음";
 	    document.getElementById("detail-business-no").innerText = user.businessNo;
 	    	
 	    // 상태 처리
