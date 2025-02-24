@@ -3,19 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <title>생활24 마이페이지</title>
     <style>
-    
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        h1 { color: #333; }
+        .menu { margin: 20px 0; }
+        .menu a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
-	<a href="/login">로그인</a><br>
-	<a href="/logout">로그아웃</a><br>
-	<a href="/my-page/info">마이페이지</a><br>
-	<a href="/support-center/notice">고객센터</a><br>
-	<a href="/products">상품리스트-기본</a><br>
-	<a href="/products/shopM/1">판매자1의 상품관리</a><br>
-	<a href="/products/add/1">판매자1의 상품등록</a><br>
-	<a href="/manage-page/users">관리페이지</a><br>
+
+    <h1>🌸 생활24 마이페이지 🌸</h1>
+    <p>원하는 메뉴를 선택하세요.</p>
+
+    <div class="menu">
+        <a href="/orders">📦 주문 내역</a>
+        <a href="/profile">👤 내 정보 관리</a>
+        <a href="/cart">🛒 장바구니</a>
+        <a href="/inquiries">💬 문의 내역</a>
+    </div>
+
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.teamf.fwts.service;
 
+import com.teamf.fwts.dao.UserDao;
 import com.teamf.fwts.entity.Users;
-import com.teamf.fwts.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserMapper userMapper;
+    private final UserDao userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
