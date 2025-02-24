@@ -9,11 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 상품 등록</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
-	charset="utf-8"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
 .body-container {
 	display: flex;
