@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.teamf.fwts.dto.Cart;
+import com.teamf.fwts.entity.Cart;
 import com.teamf.fwts.mapper.BuyerCartMapper;
 
 @Service

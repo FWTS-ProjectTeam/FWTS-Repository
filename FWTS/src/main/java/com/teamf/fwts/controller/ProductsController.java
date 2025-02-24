@@ -30,7 +30,7 @@ public class ProductsController {
 	// 상품 목록 페이지 - 기본
 	@GetMapping
 	public String getProductsList(@RequestParam(name = "page", defaultValue = "1") Integer page,
-	                              @RequestParam(name = "category", required = false, defaultValue = "0") String category,
+	                              @RequestParam(name = "category", defaultValue = "0") String category,
 	                              @RequestParam(name = "keyword", required = false) String keyword,
 	                              @RequestParam(name = "sort", required = false, defaultValue = "default") String sort,
 	                              Model model) {
@@ -170,13 +170,13 @@ public class ProductsController {
 	}
 
 	// 상품 상세 페이지-구매자 (구매 전)
-	@GetMapping("/buy/{id}/{sellerId}")
-	public String getProductBuy(@PathVariable("id") int id, @PathVariable("sellerId") int sellerId, Model model) {
+	@GetMapping("/buy/{id}")
+	public String getProductBuy(@PathVariable("id") int id, Model model) {
 		ProductsDto product = productsService.getProductById(id);
 		model.addAttribute("product", product); // 상품 데이터 모델에 담기
 		
 		// 판매자 정보
-		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(product.getSellerId());
 	    model.addAttribute("userDetails", userDetails);
 	    
 		return "products/productBuy";

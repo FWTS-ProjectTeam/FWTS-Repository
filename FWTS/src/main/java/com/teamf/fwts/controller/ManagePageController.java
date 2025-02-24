@@ -30,7 +30,7 @@ public class ManagePageController {
 	@GetMapping("/wholesalers")
 	public String wholesalerAll(@RequestParam(name = "category", required = false) String category,
 								@RequestParam(name = "keyword", required = false) String keyword,
-								@RequestParam(name = "isLimited", defaultValue = "false") Boolean isLimited,
+								@RequestParam(name = "isLimited", required = false) Boolean isLimited,
 								@RequestParam(name = "page", defaultValue = "1")  Integer page,
 								Model model) {
 		// 카테고리 값 검증
@@ -42,7 +42,7 @@ public class ManagePageController {
 		params.put("role", 1);
 		params.put("category", category);
 	    params.put("keyword", keyword);
-	    params.put("isLimited", isLimited);
+	    params.put("isLimited", Boolean.TRUE.equals(isLimited));
 		
 		int count = userService.count(params);
 		
@@ -72,7 +72,7 @@ public class ManagePageController {
 	@GetMapping("/retailers")
 	public String retailerAll(@RequestParam(name = "category", required = false) String category,
 							  @RequestParam(name = "keyword", required = false) String keyword,
-							  @RequestParam(name = "isLimited", defaultValue = "false") Boolean isLimited,
+							  @RequestParam(name = "isLimited", required = false) Boolean isLimited,
 							  @RequestParam(name = "page", defaultValue = "1")  Integer page,
 							  Model model) {
 		// 카테고리 값 검증
@@ -84,7 +84,7 @@ public class ManagePageController {
 		params.put("role", 2);
 		params.put("category", category);
 		params.put("keyword", keyword);
-		params.put("isLimited", isLimited);
+		params.put("isLimited", Boolean.TRUE.equals(isLimited));
 		
 		int count = userService.count(params);
 		

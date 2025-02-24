@@ -159,21 +159,20 @@ body {
 
 /* 페이지네이션 */
 .pagination {
+	font-size: 14px;
     text-align: center;
     margin-top: 20px;
 }
 .pagination a {
-   	font-size: 12px;
-    text-decoration: none;
-    color: #333;
-    margin-left: 10px;
-}
-.pagination a:first-child {
- 	margin-right: 5px; /* 화살표와 숫자 사이 간격 조절 */
-}
-.pagination span {
-    background-color: #ff7f9d;
-    padding: 5px 10px;
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    color: #fff;
+    text-decoration: none;
+    color: black;
+}
+.pagination a.active {
+	border: none;
+    background-color: #ff6080;
+    color: white;
 }

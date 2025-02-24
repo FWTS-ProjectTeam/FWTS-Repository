@@ -171,7 +171,7 @@
 					<c:otherwise>
 						<c:forEach var="product" items="${products}">
 							<li class="product-item" data-category="${product.categoryId}"
-								onclick="window.location='/products/buy/${product.proId}/${product.sellerId}'">
+								onclick="window.location='/products/buy/${product.proId}'">
 								<h3>
 									<c:choose>
 										<c:when test="${fn:length(product.proName) > 15}">
@@ -203,37 +203,27 @@
 					</c:otherwise>
 				</c:choose>
 			</ul>
+			
 				<!-- 페이지네이션 -->
 				<div class="pagination">
-					<c:choose>
-						<c:when test="${count > 0}">
-							<!-- 이전 페이지 -->
-							<c:choose>
-								<c:when test="${currentPage > 1}">
-									<a href="?page=${currentPage - 1}&sort=${sort}">◀</a>
-								</c:when>
-								<c:otherwise>
-									<a>◀</a>
-								</c:otherwise>
-							</c:choose>
-
-							<!-- 현재 페이지 / 전체 페이지 -->
-							<span>${currentPage} / ${totalPages}</span>
-
-							<!-- 다음 페이지 -->
-							<c:choose>
-								<c:when test="${currentPage < totalPages}">
-									<a href="?page=${currentPage + 1}&sort=${sort}">▶</a>
-								</c:when>
-								<c:otherwise>
-									<a>▶</a>
-								</c:otherwise>
-							</c:choose>
-						</c:when>
-						<c:otherwise>
-							<p>등록된 상품이 없습니다.</p>
-						</c:otherwise>
-					</c:choose>
+				    <c:choose>
+				        <c:when test="${count > 0}">
+				            <c:if test="${currentPage > 1}">
+				                <a href="?page=${currentPage - 1}">« 이전</a>
+				            </c:if>
+				            
+				            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+	    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+				            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+						        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+						    </c:forEach>
+				            
+				            <c:if test="${currentPage < totalPages}">
+				                <a href="?page=${currentPage + 1}">다음 »</a>
+				            </c:if>
+				        </c:when>
+				        <c:otherwise><p>등록된 상품이 없습니다.</p></c:otherwise>
+				    </c:choose>
 				</div>
 			</div>
 		</div>
