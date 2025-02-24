@@ -168,7 +168,7 @@
 					<c:otherwise>
 						<c:forEach var="product" items="${products}">
 							<li class="product-item" data-category="${product.categoryId}"
-								onclick="window.location='/products/buy/${product.proId}/${product.sellerId}'">
+								onclick="window.location='/products/buy/${product.proId}'">
 								<h3>
 									<c:choose>
 										<c:when test="${fn:length(product.proName) > 15}">
@@ -200,41 +200,27 @@
 				</c:choose>
 			</ul>
 
-			<!-- 페이지네이션 -->
-			<div class="pagination">
-				<c:choose>
-					<c:when test="${count > 0}">
-						<c:set var="queryString">
-							<c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-								<c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-							</c:if>
-						</c:set>
-
-						<!-- 이전 페이지 버튼 -->
-						<c:choose>
-							<c:when test="${currentPage > 1}">
-								<a href="?category=${category}&sort=${sort}&page=${currentPage - 1}${queryString}">◀</a>
-							</c:when>
-							<c:otherwise>
-								<a>◀</a>
-							</c:otherwise>
-						</c:choose>
-
-						<!-- 현재 페이지 / 전체 페이지 표시 -->
-						<span>${currentPage} / ${totalPages}</span>
-
-						<!-- 다음 페이지 버튼 -->
-						<c:choose>
-							<c:when test="${currentPage < totalPages}">
-								<a href="?category=${category}&sort=${sort}&page=${currentPage + 1}${queryString}">▶</a>
-							</c:when>
-							<c:otherwise>
-								<a>▶</a>
-							</c:otherwise>
-						</c:choose>
-					</c:when>
-				</c:choose>
-			</div>
+			<!-- 페이징 처리 -->
+		    <div class="pagination">
+		    	<c:set var="queryString" value="" />
+	            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
+	                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+	            </c:if>
+		    
+		        <c:if test="${currentPage > 1}">
+		            <a href="?page=${currentPage - 1}">« 이전</a>
+		        </c:if>
+		        
+		        <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+		        <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+			        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+			    </c:forEach>
+			    
+		        <c:if test="${currentPage < totalPages}">
+		            <a href="?page=${currentPage + 1}">다음 »</a>
+		        </c:if>
+		    </div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>

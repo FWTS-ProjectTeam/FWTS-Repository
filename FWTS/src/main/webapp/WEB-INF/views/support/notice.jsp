@@ -76,28 +76,26 @@
 				</tbody>
             </table>
            
-            <!-- 페이지네이션 -->
-            <div class="pagination">			        
-		       	<c:choose>
+           	<!-- 페이지네이션 -->
+			<div class="pagination">
+			    <c:choose>
 			        <c:when test="${count > 0}">
-			        	<c:choose>
-						    <c:when test="${currentPage > 1}">
-						        <a href="/support-center/notices?page=${currentPage - 1}">◀</a>
-						    </c:when>
-						    <c:otherwise><a>◀</a></c:otherwise>
-				        </c:choose>
-		        
-		       			<span>${currentPage} / ${totalPages}</span>
-		       		
-			       		<c:choose>
-						    <c:when test="${currentPage < totalPages}">
-						        <a href="/support-center/notices?page=${currentPage + 1}">▶</a>
-						    </c:when>
-						    <c:otherwise><a>▶</a></c:otherwise>
-						</c:choose>
-	       			</c:when>
-       				<c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
-		       	</c:choose>
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+			            
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}">다음 »</a>
+			            </c:if>
+			        </c:when>
+			        <c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
+			    </c:choose>
 			</div>
 		</div>
 	</div>

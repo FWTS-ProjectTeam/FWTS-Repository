@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamf.fwts.dto.FlowerData;
+import com.teamf.fwts.dto.FlowerDto;
 import com.teamf.fwts.dto.FlowerPriceDto;
 
 @Service
@@ -25,7 +25,7 @@ public class FlowerPriceService {
     private String SERVICE_KEY;
     
     // 데이터를 Map 형태로 변환하여 반환
-    public Map<String, FlowerData> getFlowerPricesByType(String flowerType) throws Exception {
+    public Map<String, FlowerDto> getFlowerPricesByType(String flowerType) throws Exception {
     	List<String> dates = getRecent3Dates();
         Map<String, Integer> priceSum = new HashMap<>();
         Map<String, Integer> qtySum = new HashMap<>();
@@ -54,25 +54,25 @@ public class FlowerPriceService {
         }
 
         // 평균 가격 & 총 판매량 계산
-        Map<String, FlowerData> aggregatedData = new HashMap<>();
+        Map<String, FlowerDto> aggregatedData = new HashMap<>();
         for (String key : priceSum.keySet()) {
             int avgPrice = priceSum.get(key) / countMap.get(key);
             int totalQty = qtySum.get(key);  // 총 판매량
-            aggregatedData.put(key, new FlowerData(avgPrice, totalQty));
+            aggregatedData.put(key, new FlowerDto(avgPrice, totalQty));
         }
 
         return aggregatedData;
     }
     
     // Map<String, Integer> 형태의 원데이터를 받아서, 괄호 앞의 품목명으로 그룹화한 후 평균 가격을 계산하는 메소드
-    public Map<String, FlowerData> calculateAveragedData(Map<String, FlowerData> rawData) {
+    public Map<String, FlowerDto> calculateAveragedData(Map<String, FlowerDto> rawData) {
         Map<String, Integer> priceSum = new HashMap<>();
         Map<String, Integer> qtySum = new HashMap<>();
         Map<String, Integer> countMap = new HashMap<>();
 
-        for (Map.Entry<String, FlowerData> entry : rawData.entrySet()) {
+        for (Map.Entry<String, FlowerDto> entry : rawData.entrySet()) {
             String fullName = entry.getKey();  // 예: "튜립 (망고참)"
-            FlowerData data = entry.getValue();
+            FlowerDto data = entry.getValue();
 
             // 괄호 이전 품목명 추출 ("튜립 (망고참)" -> "튜립")
             String category = fullName.split(" \\(")[0];
@@ -82,11 +82,11 @@ public class FlowerPriceService {
             countMap.put(category, countMap.getOrDefault(category, 0) + 1);
         }
 
-        Map<String, FlowerData> averagedData = new HashMap<>();
+        Map<String, FlowerDto> averagedData = new HashMap<>();
         for (String category : priceSum.keySet()) {
             int avgPrice = priceSum.get(category) / countMap.get(category);
             int totalQty = qtySum.get(category);  // 판매량은 평균이 아니라 총합 유지
-            averagedData.put(category, new FlowerData(avgPrice, totalQty));
+            averagedData.put(category, new FlowerDto(avgPrice, totalQty));
         }
 
         return averagedData;
