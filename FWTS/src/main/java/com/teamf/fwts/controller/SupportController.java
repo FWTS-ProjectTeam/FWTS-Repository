@@ -23,10 +23,12 @@ import com.teamf.fwts.dto.NoticeListDto;
 import com.teamf.fwts.dto.ReplyDto;
 import com.teamf.fwts.entity.InquiryBoard;
 import com.teamf.fwts.entity.NoticeBoard;
+import com.teamf.fwts.service.ImageService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.NoticeBoardService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +39,7 @@ public class SupportController {
 	private final NoticeBoardService noticeBoardService;
 	private final InquiryBoardService inquiryBoardService;
 	private final UserService userService;
+	private final ImageService imageService;
 	
 	// 공지사항 조회
 	@GetMapping("/notices")
@@ -132,7 +135,7 @@ public class SupportController {
 	// 공지사항 삭제
 	@ResponseBody
 	@DeleteMapping("/notices/delete/{id}")
-	public Map<String, Object> deleteNotice(@PathVariable("id") int id) {
+	public Map<String, Object> deleteNotice(@PathVariable("id") int id, HttpServletRequest request) {
 	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
@@ -143,7 +146,8 @@ public class SupportController {
 	            return response;
 	        }
 	    	
-	    	noticeBoardService.deleteNoticeById(id);
+	    	noticeBoardService.deleteNoticeById(id); // 게시글 삭제
+	    	imageService.deleteImage(notice.getNoticeContent(), request); // 이미지 삭제
 	        response.put("success", true);
 	    } catch (Exception e) {
 	        response.put("success", false);
@@ -270,7 +274,7 @@ public class SupportController {
 	// 문의사항 삭제
 	@ResponseBody
 	@DeleteMapping("/inquirys/delete/{id}")
-	public Map<String, Object> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
+	public Map<String, Object> deleteInquiry(@PathVariable("id") int id, Authentication authentication, HttpServletRequest request) {
 	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
@@ -280,11 +284,12 @@ public class SupportController {
 	            response.put("errorMessage", "존재하지 않는 글입니다.");
 	            return response;
 	    	}
+	    	
+	    	// 작성자 검증 및 처리
 		    String currentUsername = inquiry.getWriter().getUsername();
-		    
-		    // 작성자 검증 및 처리
 		    if (currentUsername.equals(authentication.getName())) {
-		    	inquiryBoardService.deleteInquiryById(id);
+		    	inquiryBoardService.deleteInquiryById(id); // 게시글 삭제
+		    	imageService.deleteImage(inquiry.getInquiryContent(), request); // 이미지 삭제
 		        response.put("success", true);
 		    } else {
 		    	response.put("success", false);

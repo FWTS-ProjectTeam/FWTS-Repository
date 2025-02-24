@@ -50,19 +50,16 @@
 	font-weight: bold;
 	position: absolute; /* 부모 중앙에 텍스트 배치 */
 	text-align: center;
-	width: 100%;
-	height: 300px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	margin-top:30px;
 	margin-bottom:10px;
+	z-index: 1;
 }
 
 img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover; /* 이미지 비율 유지하며 크기에 맞게 자르기 */
+	z-index: 2;
 }
 
 .pro-detail {

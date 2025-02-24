@@ -25,10 +25,6 @@
 	    min-width: 60px;
 	    max-width: 60px;
 	}
-	th:nth-child(2), td:nth-child(2) { 
-		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
-	    overflow: hidden; /* 넘칠 경우 숨김 처리 */
-	}
 	td:nth-child(2) {
    		text-align: left; /* 제목만 왼쪽 정렬 */
    	}
@@ -72,7 +68,7 @@
                     <c:forEach var="notice" items="${notices}">
 			            <tr>
 			                <td>${notice.noticeId}</td>
-			                <td><a href="/support-center/notices/${notice.noticeId}">${notice.noticeTitle}</a></td>
+			                <td title="${notice.noticeTitle}"><a href="/support-center/notices/${notice.noticeId}">${notice.noticeTitle}</a></td>
 			                <td>생화24</td>
 			                <td><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></td>
 			            </tr>
