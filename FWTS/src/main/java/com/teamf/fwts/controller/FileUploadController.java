@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -45,7 +44,6 @@ public class FileUploadController {
 				print.flush();
 				print.close();
 			} else {
-				//디렉토리 설정 및 업로드	
 				//파일경로
 				String filePath = request.getServletContext().getRealPath("/smarteditor/boardImg/");
 				File file = new File(filePath);
@@ -74,7 +72,6 @@ public class FileUploadController {
 				outputStream.close();
 				
 				///////////////// 이미지 /////////////////
-				// 정보 출력
 				sFileInfo += "&bNewLine=true";
 				
 				// img 태그의 title 속성을 원본파일명으로 적용시키기 위함
