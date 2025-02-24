@@ -26,11 +26,6 @@
 	    min-width: 60px;
 	    max-width: 60px;
 	}
-	th:nth-child(2), td:nth-child(2) { 
-		flex-grow: 1;
-		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
-	    overflow: hidden; /* 넘칠 경우 숨김 처리 */
-	}
 	td:nth-child(2) {
    		text-align: left; /* 제목만 왼쪽 정렬 */
    	}
@@ -94,13 +89,13 @@
                     <c:forEach var="inquiry" items="${inquirys}">
 			            <tr>
 			                <td>${inquiry.inquiryId}</td>
-			                <td>
+			                <td title="${inquiry.inquiryTitle}">
 			                	<a href="/support-center/inquirys/${inquiry.inquiryId}">
 			                		<c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료]</span></c:if>
 			                		${inquiry.inquiryTitle}
 			                	</a>
 			                </td>
-			                <td>${inquiry.username}</td>
+			                <td title="${inquiry.username}">${inquiry.username}</td>
 			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 			            </tr>
         			</c:forEach>

@@ -4,5 +4,4 @@
 	<h2>관리페이지</h2>
 	<a href="/manage-page/wholesalers" class="wholesaler-active">도매업자 관리</a>
 	<a href="/manage-page/retailers" class="retailer-active">소매업자 관리</a>
-	<a href="#" class="order-active">전체 주문 내역</a>
 </div>
