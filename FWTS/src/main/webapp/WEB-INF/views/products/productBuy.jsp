@@ -256,8 +256,8 @@ img {
 
 	<script>
 		function addToCart(proId) {
-	        let quantity = document.getElementById('quantity').value;
-	        location.href = `/buyer/addToCart?proId=${proId}&selectedQuantity=${quantity}`;
+	        var quantity = document.getElementById('quantity').value;
+	        location.href = "/buyer/addToCart?proId=" + proId + "&selectedQuantity=" + quantity;
 	    }
 	    
 	    function orderNow(proId) {

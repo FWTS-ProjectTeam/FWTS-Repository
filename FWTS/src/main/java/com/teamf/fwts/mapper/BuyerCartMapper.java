@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.teamf.fwts.dto.Cart;
+import com.teamf.fwts.entity.Cart;
 
 @Mapper
 public interface BuyerCartMapper {
