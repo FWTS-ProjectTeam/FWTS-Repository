@@ -354,10 +354,10 @@
 	    document.getElementById("detail-created-at").innerText = user.createdAt;
 	
 	    document.getElementById("detail-phone").innerText = user.phoneNum;
-	    document.getElementById("detail-company-phone").innerText = user.companyNum;
+	    document.getElementById("detail-company-phone").innerText = user.companyNum ? user.companyNum : "없음";
 	    document.getElementById("detail-business-no").innerText = user.businessNo;
 	    
-	    document.getElementById("detail-account").innerText = user.bankName ? user.bankName + " " + user.accountNum : "등록된 계좌가 없습니다.";
+	    document.getElementById("detail-account").innerText = user.bankName ? user.bankName + " " + user.accountNum : "없음";
 	
 	    // 상태 처리
 	    var statusField = document.getElementById("detail-status");
