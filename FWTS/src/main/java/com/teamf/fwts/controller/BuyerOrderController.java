@@ -1,11 +1,10 @@
 package com.teamf.fwts.controller;
 
-import com.teamf.fwts.dto.Products;
 import com.teamf.fwts.dto.OrderList;
 import com.teamf.fwts.dto.OrderNow;
 import com.teamf.fwts.dto.OrderDetail;
 import com.teamf.fwts.service.BuyerOrderService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpHeaders;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -38,10 +35,10 @@ import java.util.List;
 public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
 
     private final BuyerOrderService orderService;
-    private final UsersService userService;
+    private final UserService userService;
     
-    // ✅ 상품 주문
-    @PostMapping("/orderNow")
+    // 상품 주문
+    @GetMapping("/orderNow")
     public String orderNow(@RequestParam("proId") int proId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
@@ -58,7 +55,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         return "order/buyer/order_now"; 
     }
     
-    // ✅ 상품 주문 (최종 주문 요청 처리)
+    // 상품 주문 (최종 주문 요청 처리)
     @PostMapping("/placeOrder")
     public String placeOrder(@RequestParam("proId") int proId,
     						 @RequestParam(value = "cartId", required = false, defaultValue = "0") int cartId, // ✅ cartId 기본값 0 설정
@@ -100,18 +97,12 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         // return "redirect:/productList"; // ✅ 주문 완료 후 상품 목록으로 이동
     }
     
-    // ✅ 주문 목록 조회
+    // 주문 목록 조회
     @GetMapping("/orderList")
     public String getOrderList(
         @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
         @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
         Model model) {
-    	// 사용자가 특정 페이지를 요청하면 해당 값을 받음
-    	// 기본값 (defaultValue = "1")을 1로 설정하여, 사용자가 ?page= 값을
-    	// 전달하지 않으면 첫 페이지(1페이지)가 조회됨
-    	// @RequestParam(value = "searchKeyword", required = false) → 검색어를 선택적으로 받음
-    	// 사용자가 ?page=2 이런 식으로 요청하면 해당 값을 받음
-    	// 검색어는 입력 안 하면 null로 처리됨 (required = false)
     	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -149,7 +140,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     // "orders" : jsp에서 사용할 변수 이름
 	// orders : 서비스 계층에서 조회한 주문 내역 정보 객체
     
-    // ✅ 주문 상세 조회
+    // 주문 상세 조회
     @GetMapping("/orderDetail")
     public String getOrderDetail(@RequestParam("orderNum") String orderNum, Model model) {
     	OrderDetail orderDetail = orderService.getOrderWithProducts(orderNum);
@@ -159,33 +150,33 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     }
     
     
-    // ✅ 엑셀 다운로드 기능
+    // 엑셀 다운로드 기능
     @GetMapping("/downloadExcel")
     public ResponseEntity<byte[]> downloadOrdersExcel() throws IOException {
-        // ✅ 현재 로그인한 사용자 가져오기
+        // 현재 로그인한 사용자 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } // 인증되지 않은 사용자면 401 Unauthorized 응답 반환
 
-        // ✅ 로그인된 사용자 ID 조회
+        // 로그인된 사용자 ID 조회
         String username = authentication.getName();
         int buyerId = userService.findByUsername(username).getUserId(); 
 
-        // ✅ 해당 사용자의 주문 내역만 가져오기
+        // 해당 사용자의 주문 내역만 가져오기
         List<OrderDetail> orderList = orderService.getAllOrdersForExcel(buyerId);
 
-        // ✅ 엑셀 파일 생성
+        // 엑셀 파일 생성
         Workbook workbook = new XSSFWorkbook(); // 새 엑셀 파일 생성
         Sheet sheet = workbook.createSheet("주문 내역"); // 시트 생성
 
-        // ✅ 헤더 행 생성
+        // 헤더 행 생성
         Row headerRow = sheet.createRow(0); // 첫 번째 행 생성
         String[] columns = {"주문번호", "주문 날짜", "상품 ID", "상품명", "구매수량", "총 가격", "판매 업체"};
         // 각 열의 제목 설정
         
-        // ✅ 헤더 스타일 적용 (볼드체, 가운데 정렬 등)
+        // 헤더 스타일 적용 (볼드체, 가운데 정렬 등)
         CellStyle headerStyle = createHeaderStyle(workbook);
         for (int i = 0; i < columns.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -193,7 +184,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
             cell.setCellStyle(headerStyle);
         }
 
-        // ✅ 데이터 추가
+        // 데이터 추가
         int rowNum = 1; // 1번째 행부터 데이터 입력 (0번째는 헤더)
         for (OrderDetail order : orderList) {
         	// orderList의 데이터를 순회하면서 각 셀의 데이터 추가
@@ -207,7 +198,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
             row.createCell(6).setCellValue(order.getCompanyName());
         }
 
-        // ✅ 엑셀 파일을 byte[]로 변환
+        // 엑셀 파일을 byte[]로 변환
         
         // 엑셀 파일을 메모리에서 byte[]로 변환하는 스트림
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -216,7 +207,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
 
         byte[] excelData = outputStream.toByteArray(); // byte[] 형태로 변환하여 HTTP 응답으로 보낼 준비
 
-        // ✅ HTTP 응답 헤더 설정
+        // HTTP 응답 헤더 설정
         HttpHeaders headers = new HttpHeaders(); // 응답 헤더 설정
         
         // CONTENT_DISPOSITION → attachment; filename=order_list.xlsx 설정으로 클라이언트가 다운로드할 파일명을 지정
@@ -231,7 +222,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
                 .body(excelData);
     }
 
-    // ✅ 엑셀 헤더 스타일 설정
+    // 엑셀 헤더 스타일 설정
     private CellStyle createHeaderStyle(Workbook workbook) {
     	// CellStyle을 생성하여 엑셀 헤더 스타일 설정
     	

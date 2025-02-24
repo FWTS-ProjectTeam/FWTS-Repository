@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>생화24 - 비밀번호 찾기</title>
+<title>생화24 - 인증 코드 입력</title>
 <link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>

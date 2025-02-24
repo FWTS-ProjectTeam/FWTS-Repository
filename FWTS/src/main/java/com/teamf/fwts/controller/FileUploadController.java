@@ -9,14 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class FileUploadController {
-	@RequestMapping(value = "smarteditorMultiImageUpload")
+	@PostMapping("smarteditorMultiImageUpload")
 	public void smarteditorMultiImageUpload(HttpServletRequest request, HttpServletResponse response){
 		try {
 			//파일정보

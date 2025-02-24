@@ -4,17 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.teamf.fwts.dao.BuyerCartDao;
-import com.teamf.fwts.dao.BuyerOrderDao;
 import com.teamf.fwts.dto.Cart;
+import com.teamf.fwts.mapper.BuyerCartMapper;
 
 @Service
 public class BuyerCartService {
 	
 	// 생성자 주입
-    private final BuyerCartDao cartDao;
+    private final BuyerCartMapper cartDao;
 
-    public BuyerCartService(BuyerCartDao cartDao) {
+    public BuyerCartService(BuyerCartMapper cartDao) {
         this.cartDao = cartDao;
     }
     

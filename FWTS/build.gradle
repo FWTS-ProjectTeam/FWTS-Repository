@@ -45,11 +45,14 @@ dependencies {
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     
-    // DevTools
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // Jsoup
+    implementation 'org.jsoup:jsoup:1.15.3'
 
 	// Apache POI
 	implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    
+    // DevTools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
