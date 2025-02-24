@@ -52,6 +52,8 @@ th, td {
 	word-wrap: break-word; /* 긴 텍스트 줄바꿈 */
     white-space: normal;
     text-align: center;
+    white-space: nowrap; /* 텍스트가 한 줄로 유지 */
+	overflow: hidden; /* 넘칠 경우 숨김 처리 */
 }
 th {
     background-color: #ff7f9d;
