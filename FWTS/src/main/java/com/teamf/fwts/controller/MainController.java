@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.teamf.fwts.dto.FlowerData;
+import com.teamf.fwts.dto.FlowerDto;
 import com.teamf.fwts.dto.NoticeListDto;
 import com.teamf.fwts.dto.ProductsDto;
 import com.teamf.fwts.service.FlowerPriceService;
@@ -54,14 +54,14 @@ public class MainController {
 		
 	    try {
 	        // 각 유형에 대해 원데이터 가져오기
-	        Map<String, FlowerData> rawCutFlower = flowerPriceService.getFlowerPricesByType("1"); // 절화
-	        Map<String, FlowerData> rawFoliage = flowerPriceService.getFlowerPricesByType("2"); // 관엽
-	        Map<String, FlowerData> rawOrchid = flowerPriceService.getFlowerPricesByType("3"); // 난
+	        Map<String, FlowerDto> rawCutFlower = flowerPriceService.getFlowerPricesByType("1"); // 절화
+	        Map<String, FlowerDto> rawFoliage = flowerPriceService.getFlowerPricesByType("2"); // 관엽
+	        Map<String, FlowerDto> rawOrchid = flowerPriceService.getFlowerPricesByType("3"); // 난
 
 	        // 평균 데이터 계산
-	        Map<String, FlowerData> averagedCutFlower = flowerPriceService.calculateAveragedData(rawCutFlower);
-	        Map<String, FlowerData> averagedFoliage = flowerPriceService.calculateAveragedData(rawFoliage);
-	        Map<String, FlowerData> averagedOrchid = flowerPriceService.calculateAveragedData(rawOrchid);
+	        Map<String, FlowerDto> averagedCutFlower = flowerPriceService.calculateAveragedData(rawCutFlower);
+	        Map<String, FlowerDto> averagedFoliage = flowerPriceService.calculateAveragedData(rawFoliage);
+	        Map<String, FlowerDto> averagedOrchid = flowerPriceService.calculateAveragedData(rawOrchid);
 
 	        // 결과를 Map에 담아 반환
 	        result.put("cutFlower", averagedCutFlower);

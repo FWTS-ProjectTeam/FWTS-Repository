@@ -24,7 +24,7 @@
 
 <div class="nav-container">
     <div class="nav">
-		<a href="/products?category=0" class="${category == 'all' ? 'active' : ''}">
+		<a href="/products" class="${category == 'all' ? 'active' : ''}">
 			<span style="color: var(--main4);">ALL</span>
 		</a>
 		<a href="/products?category=1" class="${category == '1' ? 'active' : ''}">절화</a>

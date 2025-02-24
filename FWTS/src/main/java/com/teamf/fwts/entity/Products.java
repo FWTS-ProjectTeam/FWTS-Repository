@@ -1,4 +1,4 @@
-package com.teamf.fwts.dto;
+package com.teamf.fwts.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

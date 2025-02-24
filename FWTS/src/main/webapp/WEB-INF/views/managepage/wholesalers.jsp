@@ -231,35 +231,31 @@
                 </tbody>
             </table>
             
-			<!-- 페이지네이션 -->
+            <!-- 페이지네이션 -->
 			<div class="pagination">
 			    <c:choose>
 			        <c:when test="${count > 0}">
 			        	<c:set var="queryString" value="" />
-			        
-					    <c:if test="${tCategory == 'username' || tCategory == 'email' || tCategory == 'companyName' || tCategory == 'ceoName'}">
+						<c:if test="${tCategory == 'username' || tCategory == 'email' || tCategory == 'companyName' || tCategory == 'ceoName'}">
 					        <c:set var="queryString" value="&category=${fn:escapeXml(tCategory)}&keyword=${fn:escapeXml(tKeyword)}" />
 					    </c:if>
-					    
 					    <c:if test="${not empty isLimited}">
 				            <c:set var="queryString" value="${queryString}&isLimited=true" />
 				        </c:if>
 			
-			            <c:choose>
-			                <c:when test="${currentPage > 1}">
-			                    <a href="/manage-page/wholesalers?page=${currentPage - 1}${queryString}">◀</a>
-			                </c:when>
-			                <c:otherwise><a>◀</a></c:otherwise>
-			            </c:choose>
-			
-			            <span>${currentPage} / ${totalPages}</span>
-			
-			            <c:choose>
-			                <c:when test="${currentPage < totalPages}">
-			                    <a href="/manage-page/wholesalers?page=${currentPage + 1}${queryString}">▶</a>
-			                </c:when>
-			                <c:otherwise><a>▶</a></c:otherwise>
-			            </c:choose>
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+					    
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
+			            </c:if>
 			        </c:when>
 			        <c:otherwise><p>조회된 회원이 없습니다.</p></c:otherwise>
 			    </c:choose>
@@ -393,10 +389,15 @@
 	    
 	    var categoryInput = document.getElementById("category");
 	    var keywordInput = document.getElementById("keyword");
+	    var limitedHidden = document.getElementById("limited-hidden");
         
         if (keywordInput && !keywordInput.value.trim()) {
             keywordInput.removeAttribute("name");
             categoryInput.removeAttribute("name");
+        }
+        
+        if (limitedHidden && limitedHidden.value == "false") {
+        	limitedHidden.removeAttribute("name");
         }
         
         form.requestSubmit(); // 폼 제출 실행
