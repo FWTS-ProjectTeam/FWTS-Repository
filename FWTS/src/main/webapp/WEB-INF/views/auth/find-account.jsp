@@ -7,9 +7,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 계정 찾기</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 0;
+		background-color: #fff;
+		color: #333;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+	}
+	.container {
+		text-align: center;
+		max-width: 400px;
+		width: 100%;
+		background-color: #fefefe;
+		border: 1px solid #ddd;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	.container h1 {
+		font-weight: 600;
+		margin-bottom: 15px;
+	}
+	.container h1 a {
+    	text-decoration: none;
+    	color: #ff6699;
+    }
 	.tabs {
 	    display: flex;
 	    justify-content: space-around;
@@ -27,18 +55,16 @@
 	    color: var(--pink2);
 	    border-bottom: 2px solid var(--pink2);
 	}
-	
 	.form-content {
-	    display: none;
+		display: none;
 	}
 	.form-content.active {
-	    display: block;
+		display: block;
 	}
-	
 	.input-group {
-	    width: 100%;
-	    text-align: left;
-	    margin-bottom: 20px;
+		width: 100%;
+		text-align: left;
+		margin-bottom: 20px;
 	}
 	.input-group label {
 	    font-size: 14px;
@@ -46,11 +72,36 @@
 	.input-group input {
 	    width: 100%;
 	}
-	
 	.button-container {
-	    display: flex;
-	    flex-direction: column;
-	    gap: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.button-container button {
+		width: 100%;
+		padding: 12px;
+		font-size: 16px;
+		font-weight: 600;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		background-color: #ff6699;
+		color: #fff;
+	}
+	.links-container {
+		margin-top: 20px;
+		font-size: 14px;
+	}
+	.links-container a {
+		text-decoration: none;
+		color: #555;
+		font-weight: 600;
+	}
+	/* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
 	}
 </style>
 </head>
@@ -58,8 +109,10 @@
 <div class="container">
 	<h1><a href="/">생화24</a></h1>
 	<div class="tabs">
-		<div class="tab" id="username" onclick="switchTab('username')">아이디 찾기</div>
-		<div class="tab" id="password" onclick="switchTab('password')">비밀번호 찾기</div>
+		<div class="tab" id="username" onclick="switchTab('username')">아이디
+			찾기</div>
+		<div class="tab" id="password" onclick="switchTab('password')">비밀번호
+			찾기</div>
 	</div>
 
 	<!-- 아이디 찾기 -->
@@ -69,7 +122,7 @@
 			<input type="email" id="email-id" name="email" placeholder="가입 시 등록한 이메일을 입력해주세요">
 		</div>
 		<div class="button-container">
-			<button type="submit">확인</button>
+			<button type="button" onclick="validateBeforeFindId()">확인</button>
 		</div>
 	</form>
 
@@ -116,12 +169,12 @@
 		document.getElementById(tab).classList.add("active"); 
 		document.getElementById(tab + "-form").classList.add("active"); 
 
-		// URL 변경 
+		// URL 변경 (새로고침 없이) 
 		const newUrl = tab === "password" ? "/find-password" : "/find-id"; 
 		history.pushState(null, "", newUrl); 
 	}
   
-	// 아이디 찾기 요청
+	// 아이디 찾기 요청 전 유효성 검사
 	function validateBeforeFindId() {
 		const form = document.getElementById("username-form");
 		const email = document.getElementById("email-id").value;
@@ -136,14 +189,6 @@
 	        form.requestSubmit(); // 폼 제출 실행
 	    } else {
 	        form.reportValidity();
-	    }
-	}
-	
-	// 엔터키를 누르면 sendVerificationCode() 호출
-	function handleEnter(event) {
-	    if (event.key === 'Enter') {
-	        event.preventDefault(); // 기본 폼 제출 방지
-	        sendVerificationCode();
 	    }
 	}
   

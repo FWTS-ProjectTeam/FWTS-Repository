@@ -7,7 +7,8 @@ import lombok.Data;
 
 @Data
 public class ResetPasswordDto {
-	private String currentPassword;
+	@Size(min = 4, max = 20)
+	private String username;
 	@NotNull
     @Size(min = 8, max = 20)
 	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\\d!@#$%^&*()_+=-]{8,20}$")

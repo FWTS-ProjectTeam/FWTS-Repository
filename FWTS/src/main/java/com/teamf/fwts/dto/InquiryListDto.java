@@ -10,5 +10,4 @@ public class InquiryListDto {
 	private String username;
 	private String inquiryTitle;
 	private Date createdDate;
-	private Date replyDate;
 }

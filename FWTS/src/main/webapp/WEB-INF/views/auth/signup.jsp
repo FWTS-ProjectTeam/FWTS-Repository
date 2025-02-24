@@ -1,24 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 회원가입</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
+	body {
+    	font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 30px;
+    }
     .container {
         max-width: 720px;
         padding: 20px 40px;
         text-align: left;
         margin: 50px 0;
     }
-    
-    h1, p {
+    h1 {
+        color: #ff6699;
+        font-weight: 600;
         text-align: center;
     }
 
@@ -45,8 +54,26 @@
         align-items: center;
         gap: 5px;
     }
-    
+    .password-container {
+		position: relative;
+	    display: flex;
+	    align-items: center;
+	}
+	.password-container input {
+	    width: 100%;
+	    padding-right: 35px; /* 아이콘 공간 확보 */
+	}
+	.password-container i {
+	    position: absolute;
+	    right: 10px;
+	    cursor: pointer;
+	    font-size: 18px;
+	    color: #888;
+	}
+	.password-container i:hover { color: #ff6699; }
     .button-container {
+        display: flex;
+        justify-content: center;
         margin-top: 20px;
     }
     

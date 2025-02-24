@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     String email = (String) session.getAttribute("email");
@@ -22,15 +22,15 @@
     
     .row-group {
 	    display: flex;
+	    align-items: center;
 	    gap: 10px; /* 입력 필드와 버튼 사이 여백 */
 	}
-	.row-group input {
+	.input-container input {
 	    flex: 1; /* 입력 필드가 남은 공간을 다 차지하도록 */
 	}
 	.row-group input:focus {
 		border-color: var(--pink2);
 	}
-	
 	.resend-code {
 		width: 80px;
 		background: white;
@@ -50,10 +50,11 @@
 <div class="container">
     <h1>이메일 인증</h1>
     <p class="description">
-        <strong><%= email %></strong>으로 인증 코드를 전송했습니다.
+        <strong><%= email %></strong>으로 인증 코드를 전송했습니다.<br>
+        해당 인증 코드는 5분간 유효합니다.
     </p>
 
-    <form id="code-content" action="/find-password/verify-code" method="post" onsubmit="return validateForm()">
+    <form action="/find-password/verify-code" method="post">
         <div class="input-group">
 		   <label for="code">인증 코드</label>
 		   <div class="row-group">
@@ -64,7 +65,7 @@
 		</div>
 
          <div class="button-container">
-             <button type="submit">확인</button>
+             <button type="submit" class="btn">확인</button>
          </div>
      </form>
 
@@ -99,24 +100,26 @@
 		form.requestSubmit(); // 폼 제출 실행
 	}
   
-	// 인증 코드 재전송
 	function resendCode() {
-		const messageElement = document.querySelector(".description");
-		
-	    // 로딩 메시지 표시
+		// 로딩 메시지 표시
 	    Swal.fire({ title: "코드 전송 중...", didOpen: () => Swal.showLoading() });
 
-	 	// API 요청
+	    // 이메일 인증 코드 요청
 	    fetch("/find-password/resend-code", {
 	        method: 'POST'
 	    })
-	    .then(response => {
+	    .then(response => response.json())
+	    .then(data => {
 	        Swal.close(); // 로딩창 닫기
 
-	        if (response.ok) {
-	        	messageElement.innerHTML = `<strong>${email}</strong>으로 인증 코드를 전송했습니다.`;
-	        } else {
-	        	throw new Error('서버 오류');
+	        if (data.errorMessage) {
+	            Swal.fire({
+	                icon: 'error',
+	                title: '코드 전송 실패',
+	                text: data.errorMessage,
+	                confirmButtonColor: '#d33',
+					confirmButtonText: '확인'
+	            });
 	        }
 	    })
 	    .catch(() => {

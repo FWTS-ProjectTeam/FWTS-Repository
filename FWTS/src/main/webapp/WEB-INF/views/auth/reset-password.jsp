@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     String email = (String) session.getAttribute("email");
@@ -26,8 +26,7 @@
     .input-group input {
         width: 100%;
     }
-    
-    .password-field {
+    .password-container {
 	    position: relative;
 	    display: flex;
 	    align-items: center;
@@ -36,7 +35,7 @@
 	.password-field input {
 	    padding-right: 40px; /* 아이콘 공간 확보 */
 	}
-	.password-field i {
+	.password-container i {
 	    position: absolute;
 	    right: 10px;
 	    cursor: pointer;
@@ -56,7 +55,7 @@
     <form id="password-content" action="/find-password/reset-password" method="post"> 
 		<div class="input-group">
 		   <label for="password">비밀번호</label>
-		   <div class="password-field">
+		   <div class="password-container">
 		       <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
 		       <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
 		    </div>
@@ -64,7 +63,7 @@
 
 		<div class="input-group">
 		    <label for="confirm-password">비밀번호 확인</label>
-		    <div class="password-field">
+		    <div class="password-container">
 		        <input type="password" id="confirm-password" name="confirmPassword" value="${inputData.confirmPassword}" maxlength="20">
 		       <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
 		    </div>
@@ -78,7 +77,7 @@
 	</form>
 </div>
 <script>    
-	// 재설정 실패 알림창
+	// 인증 실패 알림창
   	window.onload = function() {
       	<c:if test="${not empty errorMessage}">
           	Swal.fire({
@@ -137,7 +136,7 @@
              icon.classList.remove("fa-eye-slash");
              icon.classList.add("fa-eye");
          }
-	}
+     }
 </script>
 </body>
 </html>

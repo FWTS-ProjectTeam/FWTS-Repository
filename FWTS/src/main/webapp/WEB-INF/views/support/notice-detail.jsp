@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -9,17 +9,122 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화 24 - 고객센터</title>
-<link rel="stylesheet" href="/resources/css/common.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .sidebar .notice-active {
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        color: #333;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0px 10px;
+        margin: 20px 10px 15px 10px;
+        position: relative;
+    }
+    .header-left {
+        display: flex;
+        align-items: center;
+    }
+    .header-left h1 {
+    	font-size: 36px;
+    	color:#ff3366;
+    	margin: 0px;
+    }
+    .header-right {
+        display: flex;
+    }
+    .header-right a {
+        font-size: 13px;
+        text-decoration: none;
+        color: #333;
+        margin-left: 10px;
+    }
+    .search-container {
+    	width: 240px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        margin-left: 110px;
+        background-color: #fff;
+    }
+    .search-box {
+    	font-size: 14px;
+        border: none;
+        outline: none;
+        flex-grow: 1;
+    }        
+    .search-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #ff3366;
+        padding: 5px;
+    }
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #ccc; /* 상단 메뉴 구분선 */
+        border-radius: 10px;
+        padding: 20px;
+        align-items: flex-end;
+    }
+    .nav a {
+        font-size: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #333;
+        margin-right: 30px;
+    }
+    .nav-right a {
+        text-decoration: none;
+        color: #FF748B;
+        font-size: 16px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+    .body-container {
+    	display: flex;
+    	margin: 20px;
+    }
+    .sidebar {
+    	width: 180px; /* 사이드 메뉴 너비 고정 */
+        min-width: 180px;
+        max-width: 180px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 10px;
+        margin-right: 20px;
+        align-self: flex-start; /* 내부 콘텐츠 크기만큼 높이 조정 */
+    }
+    .sidebar h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    .sidebar a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        cursor: pointer;
+    }
+    .sidebar .active {
     	font-weight: 600;
         background-color: #ff7f9d;
-        color: white;
+        color: #fff;
         border-radius: 5px;
     }
-    
     .post-container {
     	width: 100%;
     	margin: 50px 10px 0px 10px;
@@ -30,29 +135,33 @@
     	border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
     }
-    .post-content .title {
+    .title {
         font-weight: bold;
         text-align: center;
-        margin: 16px 0 10px 0;
+        margin-bottom: 10px;
     }
-    .post-content .date {
+    .date {
         text-align: right;
         color: gray;
-        font-size: 14px;
+        font-size: 0.9em;
     }
-    
-    .post-content img {
-	    max-width: 100%; /* 이미지가 컨테이너를 초과하지 않도록 설정 */
-	    height: auto; /* 비율에 맞게 이미지 크기 조정 */
-	}
-    
+    .section {
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
     .button-container {
     	justify-content: center;
         margin: 20px auto;
     }
-    
-    .multiple {
-        justify-content: space-between; /* 버튼이 여러 개일 때 좌우 정렬 */
+    .button-container button {
+        background: #ff7f9d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 </style>
 </head>

@@ -40,4 +40,4 @@ public class ProductsDto {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-} 
+}

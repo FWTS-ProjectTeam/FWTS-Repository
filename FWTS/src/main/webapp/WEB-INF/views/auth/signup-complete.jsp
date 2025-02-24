@@ -6,29 +6,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 회원가입</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <style>
-    p {
-        font-size: 16px;
-        margin: 14px 0 20px 0;
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
-    
     .container {
         max-width: 600px;
+        width: 100%;
+        background-color: #fefefe;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
-    
-    button {
-    	width: 150px;
-    	margin: 0 auto;
-    	justify-content: center;
+    h1 {
+        color: #ff6699;
+        font-weight: 600;
+    }
+    p {
+        font-size: 16px;
+        margin: 15px 0;
+    }
+    .button-container {
+    	margin-top: 30px;
+    }
+    .button-container a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff6699;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>가입을 축하합니다!</h1>
-    <p>이제 생화24의 다양한 서비스를 마음껏 즐겨보세요.</p>
-    <button type="button" onclick="location.href='/login'">로그인 하기</button>
+    <h1>가입 완료</h1>
+    <p>가입을 축하합니다. 이제 다양한 생화24 서비스를 이용해보세요.</p>
+    <div class="button-container">
+        <a href="/login">로그인 하기</a>
+    </div>
 </div>
 </body>
 </html>

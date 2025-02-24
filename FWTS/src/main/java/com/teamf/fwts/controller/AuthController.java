@@ -2,7 +2,6 @@ package com.teamf.fwts.controller;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +45,7 @@ public class AuthController {
     
     // 로그인
     @PostMapping("/login")
-    public String login(UserDto dto) {
+    public String login(UserDto dto, Model model) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
@@ -67,7 +66,7 @@ public class AuthController {
     
     // 회원가입 페이지
     @GetMapping("/sign-up")
-    public String signupForm(@RequestParam(name = "step", defaultValue = "1") int step) {
+    public String signupForm(@RequestParam(name = "step", defaultValue = "1") Integer step) {
     	if (step == 1)
     		return "auth/signup-agreement"; // 약관동의 페이지
     	return "auth/signup"; // 정보입력 페이지
@@ -94,15 +93,9 @@ public class AuthController {
     }
     
     // 중복 확인 (이메일, 아이디)
-    @PostMapping("/check-duplicate")
-    public ResponseEntity<Boolean> checkDuplicate(@RequestBody Map<String, String> request){
-    	String type = request.get("type");
-        String value = request.get("value");
-        
-        // 유효성 검사
-        if (type == null || value == null)
-            return ResponseEntity.ok(true);
-    	
+    @GetMapping("/check-duplicate")
+    public ResponseEntity<Boolean> checkDuplicate(@RequestParam("type") String type,
+    											  @RequestParam("value") String value) {
     	boolean isDuplicate = userService.isDuplicate(type, value);
         return ResponseEntity.ok(isDuplicate);
     }
@@ -137,16 +130,13 @@ public class AuthController {
     public String findUsername(UserDto dto, Model model) {
     	String email = dto.getEmail();
     	
-    	// 유효성 검사
-    	if (email == null)
-    		return "redirect:/find-id";
-    	
-    	model.addAttribute("email", email);
-        model.addAttribute("username", userService.findUsernameByEmail(email));
+    	String username = userService.findUsernameByEmail(email);
+        model.addAttribute("username", username);
+        model.addAttribute("email", email);
         return "auth/find-username-result";
     }
     
-    // 인증 코드 요청    
+    // 인증 코드 요청
     @PostMapping("/find-password/send-code")
     public ResponseEntity<?> sendCode(@RequestBody Map<String, String> request, HttpSession session) {
         String email = request.get("email");
@@ -183,8 +173,10 @@ public class AuthController {
     // 인증 코드 입력 페이지
     @GetMapping("/find-password/verify-code")
     public String verifyCodeForm(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+
         // 이메일이 존재하지 않으면 제한
-        if (session.getAttribute("email") == null)
+        if (email == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
         return "auth/verify-code";
     }
@@ -192,30 +184,36 @@ public class AuthController {
     // 인증 코드 확인 처리
     @PostMapping("/find-password/verify-code")
     public String verifyCode(VerificationCodeDto dto, HttpSession session, Model model) {
+        String code = dto.getCode();
+        
     	String verificationCode = (String) session.getAttribute("verificationCode");
         LocalDateTime expiryTime = (LocalDateTime) session.getAttribute("verificationCodeExpiry");
+        String email = (String) session.getAttribute("email");
         
-        // 유효성 검사
-        if (verificationCode == null)
+        // 이메일이 존재하지 않거나 세션에 인증 코드가 없으면 제한
+        if (email == null || verificationCode == null) {
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
+        }
 
         // 현재 시간이 만료시간보다 늦으면 실패
         if (LocalDateTime.now().isAfter(expiryTime)) {
             model.addAttribute("errorMessage", "만료된 인증 코드입니다.");
-            model.addAttribute("code", verificationCode);
             
             // 만료된 인증 코드 삭제
             session.removeAttribute("verificationCode");
             session.removeAttribute("verificationCodeExpiry");
-
             return "auth/verify-code"; // 인증 코드 입력 페이지
         }
 
         // 인증 코드가 일치하는지 확인
-        if (!Objects.equals(verificationCode, dto.getCode())) {
+        if (!verificationCode.equals(code)) {
             model.addAttribute("errorMessage", "잘못된 인증 코드입니다.");
             return "auth/verify-code"; // 인증 코드 입력 페이지
         }
+        
+        // 인증 코드 삭제
+        session.removeAttribute("verificationCode");
+        session.removeAttribute("verificationCodeExpiry");
         
         return "redirect:/find-password/reset-password";
     }
@@ -223,8 +221,10 @@ public class AuthController {
     // 비밀번호 재설정 페이지
     @GetMapping("/find-password/reset-password")
     public String resetPasswordForm(HttpSession session) {
-    	// 세션에 이메일이 없으면 제한
-        if (session.getAttribute("email") == null)
+    	String email = (String) session.getAttribute("email");
+    	
+    	// 이메일이 존재하지 않으면 제한
+        if (email == null)
         	return "redirect:/find-password"; // 비밀번호 찾기 페이지
     	return "auth/reset-password";
     }
@@ -234,9 +234,10 @@ public class AuthController {
     public String resetPassword(@Valid ResetPasswordDto dto, BindingResult bindingResult, HttpSession session, Model model) {    	
     	String email = (String) session.getAttribute("email");
         String password = dto.getPassword();
+        String confirmPassword = dto.getConfirmPassword();
         
         // 유효성 검사
-        if (bindingResult.hasErrors() || !password.equals(dto.getConfirmPassword()))
+        if (bindingResult.hasErrors() || !password.equals(confirmPassword))
         	return "redirect:/find-password/reset-password"; // 비밀번호 재설정 페이지
 
         try {

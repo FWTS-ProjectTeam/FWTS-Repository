@@ -12,16 +12,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+	@SuppressWarnings("removal")
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
 	    security.csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
 	            .authorizeHttpRequests(auth -> auth
-	                    .requestMatchers(
-	                    		"/my-page/**", "/support-center/inquirys/edit/**", "/support-center/inquirys/delete/**"
-	                    ).authenticated() // 인증자 허용 경로
-	                    .requestMatchers(
-	                    		"/manage-page/**", "/support-center/notices/edit/**", "/support-center/notices/delete/**"
-	                    ).hasRole("ADMIN") // 관리자 허용 경로
+	                    .requestMatchers("/mypage/**").authenticated() // 인증자 허용 경로
+	                    .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 허용 경로
 	                    .anyRequest().permitAll()
 	            )
 	            .formLogin(login -> login
@@ -31,8 +28,8 @@ public class SecurityConfig {
 	                    .permitAll())
 	            .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/").permitAll())
 	            .headers(headers -> headers
-                    .frameOptions(customizer -> customizer.sameOrigin())  // X-Frame-Options 설정
-                );
+	                .frameOptions().sameOrigin()  // X-Frame-Options 설정: 같은 도메인에서만 iframe 사용 가능
+	            );
 
 	    return security.build();
 	}
