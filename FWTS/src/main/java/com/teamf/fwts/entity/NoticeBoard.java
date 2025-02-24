@@ -2,6 +2,8 @@ package com.teamf.fwts.entity;
 
 import java.util.Date;
 
+import com.teamf.fwts.validation.NotEmptyHtml;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -12,7 +14,7 @@ public class NoticeBoard {
 	@NotBlank
 	@Size(max = 64)
 	private String noticeTitle;
-	@NotBlank
+	@NotEmptyHtml
 	private String noticeContent;
 	private Date createdDate;
 }

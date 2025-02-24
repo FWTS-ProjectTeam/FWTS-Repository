@@ -2,9 +2,7 @@ package com.teamf.fwts.controller;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -23,16 +21,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamf.fwts.dto.OrderDetail;
 import com.teamf.fwts.dto.OrderList;
-import com.teamf.fwts.service.BuyerOrderService;
 import com.teamf.fwts.service.SellerOrderService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,52 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class SellerOrderController { // 판매자 - 주문 관리
 
 	private final SellerOrderService orderService;
-	private final UsersService userService;
-    
-//    @GetMapping("/orderNow")
-//    public String orderNow(Model model) {
-//    	
-//    	return "order/order_now";
-//    }
-    
-//    // ✅ 모든 주문 목록 조회
-//    @GetMapping("/orderList")
-//    public String getOrders(@RequestParam(value = "page", defaultValue = "1") int page,
-//    						Model model) {
-//    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    	// Spring Security에서 현재 로그인한 사용자의 인증 정보 가져오기
-//    	// 로그인하지 않은 경우 authentication 값이 null이거나 isAuthenticated()가 false일 수 있음
-//    	
-//    	if (authentication == null || !authentication.isAuthenticated()) {
-//    		return "redirect:/login"; // 로그인이 안 된 경우 로그인 페이지로 이동
-//    	}
-//    	
-//    	String username = authentication.getName(); // 현재 로그인한 판매자의 username
-//    	int sellerId = userService.findByUsername(username).getUserId(); // 판매자의 ID 조회
-//    	// .getUserId() : 조회된 판매자 객체에서 판매자의 ID 가져옴
-//    	
-//    	int pageSize = 10; // ✅ 한 페이지당 10개씩 조회
-//        int offset = (page - 1) * pageSize; // 페이지별로 조회할 데이터의 시작 위치(offset) 설정
-//        int totalOrders = orderService.getOrderCount(sellerId); // 해당 사용자의 총 주문 개수를 조회하여 저장
-//        int totalPages = (int) Math.ceil((double) totalOrders / pageSize); // 전체 주문 개수를 10개씩 나누어 총 페이지 수신
-//    	
-//        List<OrderList> orderList = orderService.getPagedOrderList(sellerId, offset, pageSize);
-//        // 현재 페이지에 해당하는 주문 리스트 조회
-//        
-//    	model.addAttribute("orderList", orderList);
-//    	// "orders" : jsp에서 사용할 변수 이름
-//    	// orders : 서비스 계층에서 조회한 주문 내역 정보 객체
-//    
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", totalPages);
-//    	
-//    	model.addAttribute("activeMenu", "orders"); // ✅ 메뉴 활성화 추가
-//    	
-//    	//System.out.println("현재 로그인한 판매자의 ID: " + sellerId);
-//
-//    	
-//    	return "order/seller/order_list";
-//    }
+	private final UserService userService;
 	
 	// 주문 목록 조회
 	@GetMapping("/orderList")

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,28 +19,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.teamf.fwts.dto.Cart;
 import com.teamf.fwts.service.BuyerCartService;
-import com.teamf.fwts.service.BuyerOrderService;
-import com.teamf.fwts.service.UsersService;
+import com.teamf.fwts.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 
+@Controller
 @RequestMapping("/buyer")
 @RequiredArgsConstructor // private final 자동 추가
-@Controller
 public class BuyerCartController {
-
 	private final BuyerCartService cartService;
-	private final UsersService userService;
+	private final UserService userService;
 	
-	// ✅ 장바구니에 상품 추가
-	@PostMapping("/addToCart")
-	public String addToCart(@RequestParam("proId") int proId,
+	// 장바구니에 상품 추가
+	@GetMapping("/addToCart/{proId}")
+	public String addToCart(@PathVariable("proId") int proId,
 							@RequestParam("selectedQuantity") int selectedQuantity,
 							RedirectAttributes redirectAttributes) {
-		// Q. 왜 proId와 selectedQauntity만 요청 파라미터로 받는가?
-		// A. buyerId는 Spring Security를 통해 로그인된 사용자의 정보를 가져올 수 있기 때문
-		//    + 클라이언트(브라우줘)에서는 buyer_id를 직접 보낼 필요 x -> 보안상 안전
-		//    + buyerId는 서버에서 SecurityContextHolder를 통해 로그인된 사용자의 정보를 가져와 자동으로 조회
-		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -60,7 +55,7 @@ public class BuyerCartController {
 		return "redirect:/productList"; // 상품 목록으로 리다이렉트
 	}
 	
-	// ✅ 장바구니 리스트 조회 (로그인한 사용자만 조회)
+	// 장바구니 리스트 조회 (로그인한 사용자만 조회)
 	@GetMapping("/cartList")
 	public String cartList(
 	    @RequestParam(value = "page", defaultValue = "1") int page, 
@@ -88,7 +83,7 @@ public class BuyerCartController {
 	    return "cart/cart_list";
 	}
 	
-	// ✅ 장바구니 특정 상품 삭제
+	// 장바구니 특정 상품 삭제
 	@PostMapping("/removeFromCart")
 	@ResponseBody
 	public Map<String, String> removeFromCart(@RequestParam("cartId") int cartId) {
@@ -108,11 +103,11 @@ public class BuyerCartController {
 	        return response;
 	    }
 
-	    // ✅ 로그인된 사용자 ID 가져오기
+	    // 로그인된 사용자 ID 가져오기
 	    String username = authentication.getName();
 	    int buyerId = userService.findByUsername(username).getUserId();
 
-	    // ✅ 삭제 실행 (로그인한 사용자의 장바구니만 삭제)
+	    // 삭제 실행 (로그인한 사용자의 장바구니만 삭제)
 	    boolean success = cartService.deleteCartItem(buyerId, cartId);
 
 	    if (success) {
@@ -124,8 +119,5 @@ public class BuyerCartController {
 	    }
 
 	    return response;
-	    
-	    
 	}
-
 }

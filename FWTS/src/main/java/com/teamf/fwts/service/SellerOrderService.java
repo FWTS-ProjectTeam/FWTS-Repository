@@ -2,16 +2,17 @@ package com.teamf.fwts.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.teamf.fwts.dao.SellerOrderDao;
+
 import com.teamf.fwts.dto.OrderList;
+import com.teamf.fwts.mapper.SellerOrderMapper;
 import com.teamf.fwts.dto.OrderDetail;
 
 @Service
 public class SellerOrderService {
 	
-    private final SellerOrderDao orderDao;
+    private final SellerOrderMapper orderDao;
 
-    public SellerOrderService(SellerOrderDao orderDao) {
+    public SellerOrderService(SellerOrderMapper orderDao) {
         this.orderDao = orderDao;
     }
 

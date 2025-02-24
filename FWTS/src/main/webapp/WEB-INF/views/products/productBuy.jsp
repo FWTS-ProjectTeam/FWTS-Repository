@@ -212,28 +212,28 @@ img {
 						<hr class="solid-line">
 						<p>구매 가능 수량: ${product.minPossible}~${product.maxPossible}개</p>
 						<hr class="solid-line">
-					<div>
 						<div>
-        					<p>구매 수량:</p>
-        				</div>
-        				<div class="sum">
-        					<div>
-        						<button type="button" id="decrease" onclick="updateQuantity(false)">-</button>
-        						<input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.inventory}" onchange="updateTotal()">
-        						<button type="button" id="increase" onclick="updateQuantity(true)">+</button>
-        					</div>
-        					<div>
-        						<p>상품금액: <span id="Price">${product.unitPrice}</span>원</p>
-        						<p>배송비: ${product.deliveryFee}원</p>
-        						<p>총 주문 금액: <span id="totalPrice">${product.unitPrice + product.deliveryFee}</span>원</p>
-        					</div>
-        				</div>
-    				</div>
+							<div>
+	        					<p>구매 수량:</p>
+	        				</div>
+	        				<div class="sum">
+	        					<div>
+	        						<button type="button" id="decrease" onclick="updateQuantity(false)">-</button>
+	        						<input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.inventory}" onchange="updateTotal()">
+	        						<button type="button" id="increase" onclick="updateQuantity(true)">+</button>
+	        					</div>
+	        					<div>
+	        						<p>상품금액: <span id="Price">${product.unitPrice}</span>원</p>
+	        						<p>배송비: ${product.deliveryFee}원</p>
+	        						<p>총 주문 금액: <span id="totalPrice">${product.unitPrice + product.deliveryFee}</span>원</p>
+	        					</div>
+	        				</div>
+	    				</div>
 					</div>
 					<hr class="solid-line">
 					<div class="button-container">
-						<button class="btn1"  onclick="location.href='/products/carts/${product.proId}'">장바구니</button>
-						<button class="btn2" onclick="location.href='/products/order/${product.proId}'">바로구매</button>
+						<button class="btn1" onclick="addToCart(${product.proId})">장바구니</button>
+    					<button class="btn2" onclick="orderNow(${product.proId})">바로구매</button>
 					</div>
 				</div>
 			</div>
@@ -255,6 +255,16 @@ img {
 	</div>
 
 	<script>
+		function addToCart(proId) {
+	        let quantity = document.getElementById('quantity').value;
+	        location.href = `/buyer/addToCart?proId=${proId}&selectedQuantity=${quantity}`;
+	    }
+	    
+	    function orderNow(proId) {
+	        let quantity = document.getElementById('quantity').value;
+	        location.href = `/buyer/orderNow?proId=${proId}&selectedQuantity=${quantity}`;
+	    }
+	
         const maxStock = ${product.inventory}; // 최대 재고 수량
         const unitPrice = ${product.unitPrice}; // 단일 가격
         const deliveryFee = ${product.deliveryFee}; // 배송비
