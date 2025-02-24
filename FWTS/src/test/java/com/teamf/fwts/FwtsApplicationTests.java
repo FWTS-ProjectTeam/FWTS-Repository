@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProjectApplicationTests {
+class FwtsApplicationTests {
 
-    @Test
-    void contextLoads() {
-        // 애플리케이션이 정상적으로 실행되는지 확인
-    }
+	@Test
+	void contextLoads() {
+	}
+
 }

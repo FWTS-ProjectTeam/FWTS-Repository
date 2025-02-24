@@ -6,26 +6,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 회원가입</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <style>
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 0;
+		background-color: #fff;
+		color: #333;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+	}
 	.container {
 		max-width: 500px;
+		width: 100%;
+		background-color: #fefefe;
+		border: 1px solid #ddd;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		text-align: left;
 	}
-	
 	p {
 		text-align: center;
 	}
 	h1 {
+		color: #ff6699;
+		font-weight: 600;
 		text-align: center;
 	}
-    
 	label {
 		font-weight: 600;
 		display: block;
 		margin-top: 5px;
 	}
-	
 	.terms-box {
 		width: 100%;
 		padding: 10px;
@@ -40,7 +55,6 @@
 		font-size: 12.5px;
 		line-height: 1.4;
 	}
-	
 	.checkbox-container {
 		display: flex;
 		align-items: center;
@@ -55,22 +69,26 @@
 		vertical-align: middle;
 	}
 	.checkbox-container label { line-height: 18px; }
-	
-	.container button {
+	.button {
+		width: 100%;
+		padding: 10px;
 		background-color: #ffb6c1;
-		color: white;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
 		cursor: not-allowed;
+		font-size: 16px;
 		margin-top: 20px;
 	}
-	.container button.enabled {
-		background-color: #ff7f9d;
+	.button.enabled {
+		background-color: #ff6699;
 		cursor: pointer;
 	}
 </style>
 </head>
 <body>
 <div class="container">
-	<h1><a href="/">생화24</a></h1>
+	<h1>생화24</h1>
 	<p>가입을 환영합니다!</p>
 
 	<label for="terms">약관 동의</label>
@@ -96,14 +114,14 @@
 		<input type="checkbox" id="agree" name="privacy-consent" onclick="toggleButton()"> <label for="agree">개인정보 수집에 동의합니다.</label>
 	</div>
 
-	<button id="next-button" disabled>다음</button>
+	<button id="nextButton" class="button" disabled>다음</button>
 </div>
 </body>
 <script>
 	// 체크박스를 체크하면 버튼 활성화
 	function toggleButton() {
 		var checkbox = document.getElementById("agree");
-		var button = document.getElementById("next-button");
+		var button = document.getElementById("nextButton");
 		if (checkbox.checked) {
 			button.classList.add("enabled");
 			button.disabled = false;
@@ -114,7 +132,7 @@
 	}
 
 	//다음 페이지 이동
-	document.getElementById("next-button").addEventListener("click", function() {
+	document.getElementById("nextButton").addEventListener("click", function() {
 		fetch("/sign-up?step=2") // 서버에서 다음 단계로 변경된 JSP를 요청
 	        .then(response => response.text())
 	        .then(html => {
@@ -122,7 +140,8 @@
 	            document.open(); // 기존 문서 비우기
 	            document.write(html); // 서버에서 받은 새로운 JSP 내용 삽입
 	            document.close();
-	        });
+	        })
+	        .catch(error => console.error("페이지 로드 중 오류 발생:", error));
 	});
 </script>
 </html>

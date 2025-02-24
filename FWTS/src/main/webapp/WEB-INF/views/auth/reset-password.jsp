@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     String email = (String) session.getAttribute("email");
@@ -11,16 +11,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 비밀번호 재설정</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        background-color: #fefefe;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .container h1 {
+        color: #ff6699;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
     .description {
         font-size: 14px;
         color: #666;
         margin-bottom: 20px;
     }
-    
     .input-group {
         width: 100%;
         text-align: left;
@@ -44,14 +68,13 @@
     .input-group input:focus {
         border-color: #ff6699;
     }
-    
-    .password-field {
+    .password-container {
 	    position: relative;
 	    display: flex;
 	    align-items: center;
 	    width: 100%;
 	}
-	.password-field input {
+	.password-container input {
 	    width: 100%;
 	    padding: 12px;
 	    border: 1px solid #ddd;
@@ -61,17 +84,21 @@
 	    box-sizing: border-box;
 	    padding-right: 40px; /* 아이콘 공간 확보 */
 	}
-	.password-field i {
+	.password-container i {
 	    position: absolute;
 	    right: 10px;
 	    cursor: pointer;
 	    font-size: 18px;
 	    color: #888;
 	}
-	.password-field i:hover {
+	.password-container i:hover {
 		color: #ff6699;
 	}
-
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
     .button-container button {
         width: 100%;
         padding: 12px;
@@ -81,7 +108,12 @@
         border-radius: 6px;
         cursor: pointer;
         background-color: #ff6699;
-        color: white;
+        color: #fff;
+    }
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-bottom: 10px;
     }
 </style>
 </head>
@@ -93,7 +125,7 @@
     <form id="password-content" action="/find-password/reset-password" method="post"> 
 		<div class="input-group">
 		   <label for="password">비밀번호</label>
-		   <div class="password-field">
+		   <div class="password-container">
 		       <input type="password" id="password" name="password" value="${inputData.password}" maxlength="20">
 		       <i class="fa-solid fa-eye" id="toggle-password" onclick="togglePassword('password', this)"></i>
 		    </div>
@@ -101,7 +133,7 @@
 
 		<div class="input-group">
 		    <label for="confirm-password">비밀번호 확인</label>
-		    <div class="password-field">
+		    <div class="password-container">
 		        <input type="password" id="confirm-password" name="confirmPassword" value="${inputData.confirmPassword}" maxlength="20">
 		       <i class="fa-solid fa-eye" id="toggle-confirm-password" onclick="togglePassword('confirm-password', this)"></i>
 		    </div>
@@ -115,7 +147,7 @@
 	</form>
 </div>
 <script>    
-	// 재설정 실패 알림창
+	// 인증 실패 알림창
   	window.onload = function() {
       	<c:if test="${not empty errorMessage}">
           	Swal.fire({
@@ -174,7 +206,7 @@
              icon.classList.remove("fa-eye-slash");
              icon.classList.add("fa-eye");
          }
-	}
+     }
 </script>
 </body>
 </html>

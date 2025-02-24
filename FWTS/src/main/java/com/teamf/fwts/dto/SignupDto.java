@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class SignupDto {
-	// 회원 기본 정보
+	// 기본 회원 정보
 	@NotBlank
     @Size(max=320)
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
@@ -29,11 +29,14 @@ public class SignupDto {
     @Min(1) @Max(2)
     private Integer role;
     
-    // 회원 상세 정보
+    // 상세 회원 정보
+    @NotBlank
+    @Size(min = 13, max = 13, message = "휴대폰 번호는 13자(하이픈 포함)여야 합니다.")
     @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$", message = "유효한 휴대폰 번호 형식을 입력하세요.")
     private String phoneNum;
-    @Pattern(regexp = "^(\\d{2,3}-\\d{3,4}-\\d{4}|\\d{4}-\\d{4})?$",
-            message = "유효한 업체 전화번호 형식을 입력하세요.")
+    @Size(min = 9, max = 13, message = "업체 전화번호는 9~13자 이내(하이픈 포함)여야 합니다.")
+    @Pattern(regexp = "^(\\d{2,3}-\\d{3,4}-\\d{4}|\\d{4}-\\d{4})$",
+    		 message = "유효한 업체 전화번호 형식을 입력하세요.")
     private String companyNum;
     @NotNull
     @Size(max = 12, message = "사업자 등록번호는 10자리여야 합니다.") 

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -7,9 +7,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 로그인</title>
-<link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        background-color: #fefefe;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
     .container h1 {
         margin-bottom: 20px;
     }
@@ -17,14 +37,20 @@
     	text-decoration: none;
     	color: #ff6699;
     }
-    
-    .input-group input {
+    .container input[type="text"],
+    .container input[type="password"] {
         width: 100%;
-        margin: 5px 0;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
         box-sizing: border-box;
         outline: none;
     }
-	
+    .container input[type="text"]:focus,
+    .container input[type="password"]:focus {
+		border-color: #ff6699;
+	}
     .remember-me {
         display: flex;
         align-items: center;
@@ -34,23 +60,47 @@
     .remember-me label {
         font-size: 14px;
     }
-    
+    .container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #ff6699;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+    }
     .links-container {
-    	justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        font-size: 14px;
     }
-    .links-container .normal {
-        font-weight: normal;
+    .bold-text {
+        font-weight: 600;
+        text-decoration: none;
+        color: #333;
     }
+    .no-underline {
+        text-decoration: none;
+        color: #333;
+    }
+    
+    /* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>
 <div class="container">
     <h1><a href="/">생화24</a></h1>
     <form id="login-content" action="/login" method="POST">
-    	<div class="input-group">
-    		<input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
-        	<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
-    	</div>
+        <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
+        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
         
         <div class="remember-me">
             <input type="checkbox" id="remember">
@@ -60,16 +110,16 @@
     </form>
     
     <div class="links-container">
-        <a href="/sign-up">회원가입</a>
+        <a href="/sign-up" class="bold-text">회원가입</a>
         <div>
-            <a href="/find-id" class="normal">아이디 찾기</a>
+            <a href="/find-id" class="no-underline">아이디 찾기</a>
             <span>|</span>
-            <a href="/find-password" class="normal">비밀번호 찾기</a>
+            <a href="/find-password" class="no-underline">비밀번호 찾기</a>
         </div>
     </div>
 </div>
 <script>
-	// 페이지 로드 시 실행
+	//로그인 페이지 로드 시 실행
 	window.onload = function () {
 		// 로그인 실패 알림창
 		<c:if test="${not empty errorMessage}">
@@ -116,7 +166,7 @@
 	  
 		if (!username || !password) {
 			alert("아이디 또는 비밀번호를 입력하세요.");
-			return false;
+			return;
 		}
 	
 		form.requestSubmit(); // 폼 제출 실행
