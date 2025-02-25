@@ -19,11 +19,6 @@
         color: white;
         border-radius: 5px;
     }
-
-	.order-container {
-		width: 100%;
-	    margin: 30px 20px;
-	}
 	
 	th:nth-child(1), td:nth-child(1) { 
 	    width: 70px;  /* 번호 열의 너비 고정 */
@@ -101,7 +96,7 @@
     	<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
 
 		<!-- 주문 내역 페이지 -->
-    	<div class="order-container">
+    	<div class="table-container">
             <div class="table-top-container">
             	<!-- 엑셀 다운로드 버튼 -->
 	            <form action="/buyer/downloadExcel" method="get">

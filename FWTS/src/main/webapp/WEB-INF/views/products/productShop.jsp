@@ -143,55 +143,52 @@
 </style>
 </head>
 <body>
-	<div class="container">
-		<!-- 공통 -->
-		<%@ include file="/WEB-INF/views/common/header.jsp"%>
-		<div class="body-container">
-			<div class="sidebar">
-				<img src="/resources/img/user.png" class="sidebar-img">
-				<h2>${userDetails.ceoName} 대표님</h2>
-				<p>${userDetails.phoneNum}</p>
-				<p>${userDetails.companyNum}</p>
-			</div>
-			<div class="table-container">
-				<div class="array-container">
-					<div class="array-notice">
-						<p>
-							<span style="color: var(--main4); font-size: 30px;">${userDetails.companyName}</span>
-						</p>
-					</div>
+<div class="container">
+	<!-- 공통 -->
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
+	
+	<div class="body-container">
+		<div class="sidebar">
+			<img src="/resources/img/user.png" class="sidebar-img">
+			<h2>${userDetails.ceoName} 대표님</h2>
+			<p>M. ${userDetails.phoneNum}</p>
+			<p>${not empty userDetails.companyNum ? String.format("O. %s", userDetails.companyNum) : ''}</p>
+		</div>
+		
+		<div class="table-container">
+			<div class="array-container">
+				<div class="array-notice">
+					<p>
+						<span style="color: var(--main4); font-size: 30px;">${userDetails.companyName}</span>
+					</p>
 				</div>
+			</div>
 
-				<ul class="product-list">
+			<ul class="product-list">
 				<c:choose>
-					<c:when test="${empty products}">
-						<li class="no-products">"${category == '0' ? 'ALL' : (category == '1' ? '절화' : (category == '2' ? '난' : (category == '3' ? '관엽' : '기타')))}"에
-							해당하는 상품이 없습니다.</li>
-					</c:when>
-					<c:otherwise>
+					<c:when test="${not empty products}">
 						<c:forEach var="product" items="${products}">
 							<li class="product-item" data-category="${product.categoryId}"
 								onclick="window.location='/products/buy/${product.proId}'">
 								<h3>
 									<c:choose>
 										<c:when test="${fn:length(product.proName) > 15}">
-                                ${fn:substring(product.proName, 0, 15)}...
-                            </c:when>
+											${fn:substring(product.proName, 0, 15)}...
+		                           		</c:when>
 										<c:otherwise>
-                                ${product.proName}
-                            </c:otherwise>
+			                            	${product.proName}
+			                           	</c:otherwise>
 									</c:choose>
 								</h3>
-								<img src="${product.imgPath}" alt="이미지가 없습니다"
-								class="product-image">
+								<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
 								<span style="font-size:12px;">
 									<c:choose>
 										<c:when test="${fn:length(product.description) > 25}">
-                                ${fn:substring(product.description, 0, 25)}...
-                            </c:when>
+	                               			${fn:substring(product.description, 0, 25)}...
+	                           			</c:when>
 										<c:otherwise>
-                                ${product.description}
-                            </c:otherwise>
+	                               			${product.description}
+	                           			</c:otherwise>
 									</c:choose>
 								</span>
 								<div class="product-details">
@@ -200,34 +197,35 @@
 								</div>
 							</li>
 						</c:forEach>
-					</c:otherwise>
+					</c:when>
 				</c:choose>
 			</ul>
-			
-				<!-- 페이지네이션 -->
-				<div class="pagination">
-				    <c:choose>
-				        <c:when test="${count > 0}">
-				            <c:if test="${currentPage > 1}">
-				                <a href="?page=${currentPage - 1}">« 이전</a>
-				            </c:if>
-				            
-				            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
-	    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
-				            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-						        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-						    </c:forEach>
-				            
-				            <c:if test="${currentPage < totalPages}">
-				                <a href="?page=${currentPage + 1}">다음 »</a>
-				            </c:if>
-				        </c:when>
-				        <c:otherwise><p>등록된 상품이 없습니다.</p></c:otherwise>
-				    </c:choose>
-				</div>
+		
+			<!-- 페이지네이션 -->
+			<div class="pagination">
+			    <c:choose>
+			        <c:when test="${count > 0}">
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+			            
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}">다음 »</a>
+			            </c:if>
+			        </c:when>
+			        <c:otherwise><p>등록된 상품이 없습니다.</p></c:otherwise>
+			    </c:choose>
 			</div>
 		</div>
-		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
+	
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+</div>
 </body>
 </html>
