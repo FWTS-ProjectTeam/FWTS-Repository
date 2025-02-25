@@ -16,7 +16,7 @@ public class ProductsDto {
     private int maxPossible;       // 최대 가능 수량
     private int minPossible;       // 최소 가능 수량
     private int unitPrice;         // 단가
-    private boolean isSales;       // 판매 중 여부
+    private int isSales;       // 판매 중 여부
     private String description;    // 상품 설명
     private int totalSales;        // 총 판매 수량
     private String imgPath;        // 이미지 경로
@@ -25,7 +25,11 @@ public class ProductsDto {
     private int deliveryFee;       // 배송비
 
     public boolean isSales() {
-        return isSales;
+        return isSales == 1; // 1이면 true 반환
+    }
+
+    public void setSales(boolean sales) {
+        this.isSales = sales ? 1 : 0; // true이면 1, false이면 0 저장
     }
 
     public Date getFormattedDate() {

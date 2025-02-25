@@ -69,12 +69,12 @@
 }
 
 .product-image {
-	width: 180px;
-	height: 180px;
-	border-radius: 5px;
-	background-color: #f2f2f2; /* 기본 배경 색상 */
-	display: block;
-	object-fit: cover; /* 이미지를 덮어 씌우는 방식 */
+   width: 100%; /* 부모 크기에 맞게 자동 조정 */
+   height: 200px; /* 비율 유지 */
+   border-radius: 5px;
+   background-color: #f2f2f2; 
+   display: block;
+   object-fit: cover;
 }
 
 .product-image[alt]:empty {
@@ -201,26 +201,26 @@
 			</ul>
 
 			<!-- 페이징 처리 -->
-		    <div class="pagination">
-		    	<c:set var="queryString" value="" />
-	            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
-	                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-	            </c:if>
-		    
-		        <c:if test="${currentPage > 1}">
-		            <a href="?page=${currentPage - 1}">« 이전</a>
-		        </c:if>
-		        
-		        <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
-		        <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
-	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-			        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-			    </c:forEach>
-			    
-		        <c:if test="${currentPage < totalPages}">
-		            <a href="?page=${currentPage + 1}">다음 »</a>
-		        </c:if>
-		    </div>
+          <div class="pagination">
+             <c:set var="queryString" value="" />
+               <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
+                   <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+               </c:if>
+          
+              <c:if test="${currentPage > 1}">
+                  <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
+              </c:if>
+              
+              <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+              <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+               <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                 <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+             </c:forEach>
+             
+              <c:if test="${currentPage < totalPages}">
+                  <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
+              </c:if>
+          </div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
