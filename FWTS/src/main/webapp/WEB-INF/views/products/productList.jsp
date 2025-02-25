@@ -208,17 +208,17 @@
 	            </c:if>
 		    
 		        <c:if test="${currentPage > 1}">
-		            <a href="?page=${currentPage - 1}">« 이전</a>
+		            <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
 		        </c:if>
 		        
 		        <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
 		        <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
 	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-			        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+			        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
 			    </c:forEach>
 			    
 		        <c:if test="${currentPage < totalPages}">
-		            <a href="?page=${currentPage + 1}">다음 »</a>
+		            <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
 		        </c:if>
 		    </div>
 		</div>

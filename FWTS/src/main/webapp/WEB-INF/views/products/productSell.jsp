@@ -211,7 +211,7 @@ table th, table td {
 			<!-- 사이드바 -->
 			<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp"%>
 			<div class="table-container">
-				<h1>상품 관리</h1>
+				<h1>상품 상세</h1>
 				<div class="pro-info1">
 					<div class="img-container">
 						<img src="${product.imgPath}">
