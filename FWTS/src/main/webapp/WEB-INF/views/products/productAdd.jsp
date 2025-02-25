@@ -317,7 +317,7 @@ img {
 
 		// 취소 버튼
 		function confirmCancle() {
-			window.location.href = "/products/shopM/${userDetails.userId}";
+			window.location.href = "/products/shopM";
 		}
 		// 등록 버튼 
 		function confirmAdd(event, sellerId) {  
@@ -357,7 +357,7 @@ img {
 		        })
 		        .then(data => {
 		            alert(data.message); // 서버에서 받은 성공 메시지 표시
-		            window.location.href = `/products/shopM/${sellerId}`;
+		            window.location.href = `/products/shopM`;
 		        })
 		        .catch(error => {
 		            alert("상품 등록 중 오류가 발생했습니다.");

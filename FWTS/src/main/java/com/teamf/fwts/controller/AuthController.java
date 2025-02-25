@@ -249,4 +249,9 @@ public class AuthController {
             return "auth/reset-password";
         }
     }
+    
+    @GetMapping("/temp")
+    public void temp() {
+       userService.resetPassword("seller@example.com", "tester01!");
+    }
 }
