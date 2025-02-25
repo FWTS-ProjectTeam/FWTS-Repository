@@ -175,7 +175,6 @@ img {
 									상품명: <input type="text" name="proName" id="proName"
 										value="${product.proName}">
 								</p>
-
 								<label for="isSales">판매 상태:<select name="isSales"
 									id="isSales">
 									<option value="1" ${product.sales ? 'selected' : ''}>판매
@@ -183,7 +182,6 @@ img {
 									<option value="0" ${!product.sales ? 'selected' : ''}>판매
 										중지</option>
 								</select></label>
-
 								<p>
 									최소 구매 가능 수량: <input type="number" name="minPossible"
 										id="minPossible" value="${product.minPossible}">
@@ -233,25 +231,22 @@ img {
 	</div>
 	<script>
 	function submitForm(event, id) {
-	    event.preventDefault(); // 기본 폼 제출 방지 (페이지 이동 방지)
+	    event.preventDefault();
 
 	    const form = document.getElementById("updateForm");
 	    if (!form) {
-	        alert("폼이 존재하지 않습니다.");
+	        alert("폼을 찾을 수 없습니다.");
 	        return;
 	    }
 
 	    const formData = new FormData(form);
 	    const proName = formData.get("proName") || "상품";
-	    const isConfirmed = confirm(`\${formData.get("isSales")} \${proName} 상품을 수정하시겠습니까?`);
-	    
-	    if (!isConfirmed) {
-	        console.log("사용자가 취소함");
-	        return; // 사용자가 취소하면 아무것도 하지 않음
-	    }
+
+	    const isConfirmed = confirm(`${proName} 상품을 수정하시겠습니까?`);
+	    if (!isConfirmed) return;
 
 	    fetch(`/products/update/${id}`, {
-	        method: "PUT",
+	        method: "POST", // ✅ 변경: PUT → POST
 	        body: formData,
 	        headers: {
 	            "Accept": "application/json"
@@ -259,19 +254,22 @@ img {
 	    })
 	    .then(response => {
 	        if (!response.ok) {
-	            throw new Error("서버 응답이 올바르지 않습니다.");
+	            throw new Error("서버 응답 오류");
 	        }
 	        return response.json();
 	    })
 	    .then(data => {
 	        alert("수정이 완료되었습니다.");
-	        location.href = `/products/sell/${product.proId}`;
+	        location.href = `/products/sell/${id}`;
 	    })
 	    .catch(error => {
 	        console.error("수정 중 오류 발생:", error);
-	        alert("서버 오류로 인해 수정에 실패했습니다.");
+	        alert("수정에 실패했습니다.");
 	    });
 	}
+
 </script>
+
 </body>
 </html>
+

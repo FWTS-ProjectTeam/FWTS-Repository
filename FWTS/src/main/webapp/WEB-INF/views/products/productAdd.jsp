@@ -212,13 +212,6 @@ img {
 									<option value="0" ${!product.sales ? 'selected' : ''}>판매
 										중지</option>
 								</select></label>
-								<label for="categoryId">카테고리:<select name="categoryId"
-									id="categoryId">
-									<option value="1" ${product.categoryId == 1 ? 'selected' : ''}>절화</option>
-									<option value="2" ${product.categoryId == 2 ? 'selected' : ''}>관엽</option>
-									<option value="3" ${product.categoryId == 3 ? 'selected' : ''}>난</option>
-									<option value="4" ${product.categoryId == 4 ? 'selected' : ''}>기타</option>
-								</select></label>
 								<p>
 									최소 구매 가능 수량: <input type="number" name="minPossible"
 										value="${product.minPossible}">
@@ -239,6 +232,13 @@ img {
 									배송비: <input type="number" name="deliveryFee"
 										value="${product.deliveryFee}">
 								</p>
+								<label for="categoryId">카테고리:<select name="categoryId"
+									id="categoryId">
+									<option value="1" ${product.categoryId == 1 ? 'selected' : ''}>절화</option>
+									<option value="2" ${product.categoryId == 2 ? 'selected' : ''}>관엽</option>
+									<option value="3" ${product.categoryId == 3 ? 'selected' : ''}>난</option>
+									<option value="4" ${product.categoryId == 4 ? 'selected' : ''}>기타</option>
+								</select></label>
 							</div>
 						</div>
 					</div>

@@ -139,8 +139,8 @@
 							<c:choose>
 								<c:when test="${category == '0'}">ALL</c:when>
 								<c:when test="${category == '1'}">절화</c:when>
-								<c:when test="${category == '2'}">난</c:when>
-								<c:when test="${category == '3'}">관엽</c:when>
+								<c:when test="${category == '2'}">관엽</c:when>
+								<c:when test="${category == '3'}">난</c:when>
 								<c:when test="${category == '4'}">기타</c:when>
 								<c:otherwise>ALL</c:otherwise>
 							</c:choose>
@@ -162,7 +162,7 @@
 			<ul class="product-list">
 				<c:choose>
 					<c:when test="${empty products}">
-						<li class="no-products">"${category == '0' ? 'ALL' : (category == '1' ? '절화' : (category == '2' ? '난' : (category == '3' ? '관엽' : '기타')))}"에
+						<li class="no-products">"${category == '0' ? 'ALL' : (category == '1' ? '절화' : (category == '2' ? '관엽' : (category == '3' ? '난' : '기타')))}"에
 							해당하는 상품이 없습니다.</li>
 					</c:when>
 					<c:otherwise>

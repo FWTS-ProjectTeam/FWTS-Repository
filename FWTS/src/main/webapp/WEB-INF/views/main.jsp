@@ -31,7 +31,7 @@
 .banner {
 	width: 64%;
 	height: 200px;
-	object-fit: contain;
+	object-fit: cover;
 	border-radius: 8px;
 	background-color: #f0f0f0;
 }
