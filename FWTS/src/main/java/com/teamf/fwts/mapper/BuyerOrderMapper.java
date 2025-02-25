@@ -1,7 +1,7 @@
 package com.teamf.fwts.mapper;
 
 import com.teamf.fwts.dto.OrderList;
-import com.teamf.fwts.dto.OrderNow;
+import com.teamf.fwts.dto.OrderDto;
 import com.teamf.fwts.dto.OrderDetail;
 
 import org.apache.ibatis.annotations.Insert;
@@ -15,38 +15,37 @@ import java.util.List;
 
 @Mapper
 public interface BuyerOrderMapper {
-	
-	// ✅ 상품 주문
-	@Select("SELECT buyer.ceo_name, buyer.phone_num, buyer.postal_code, buyer.address, buyer.address_detail, " + // 구매자 정보
-	        "p.pro_id, p.pro_name, p.seller_id, " + // 상품 정보
-	        "b.account_num, b.bank_name, " + // 판매자 계좌번호
-	        "seller.company_name " + // 판매 업체 이름
-	        "FROM products p " +
-	        "JOIN account b ON p.seller_id = b.user_id " + 
-	        "JOIN user_details seller ON p.seller_id = seller.user_id " + // 판매자 정보
-	        "JOIN user_details buyer ON buyer.user_id = #{buyerId} " + // 구매자 정보
-	        "WHERE p.pro_id = #{proId}")
-	OrderNow getOrderNow(@Param("buyerId") int buyerId, @Param("proId") int proId);
+	// 주문을 위한 정보 가져오기
+	@Select({"SELECT buyer.ceo_name, buyer.phone_num, buyer.postal_code, buyer.address, buyer.detail_address,", // 구매자 정보
+	        "p.pro_id, p.pro_name, p.seller_id, p.unit_price, p.delivery_fee,", // 상품 정보
+	        "b.account_num, b.bank_name,", // 판매자 계좌번호
+	        "seller.company_name", // 판매 업체 이름
+	        "FROM products p",
+	        "JOIN account b ON p.seller_id = b.user_id",
+	        "JOIN user_details seller ON p.seller_id = seller.user_id", // 판매자 정보
+	        "JOIN user_details buyer ON buyer.user_id = #{buyerId}", // 구매자 정보
+	        "WHERE p.pro_id = #{proId}"})
+	OrderDto getOrderNow(@Param("buyerId") int buyerId, @Param("proId") int proId);
 
 	// ✅ 사용자의 최근 배송지 가져오기
-	@Select("SELECT CONCAT('(', postal_code, ') ', address, ', ', address_detail) " +
+	@Select("SELECT CONCAT('(', postal_code, ') ', address, ', ', detail_address) " +
 	        "FROM user_details WHERE user_id = #{buyerId}")
 	String getSavedAddress(@Param("buyerId") int buyerId);
 
 	// ✅ 새로운 배송지 업데이트 - user_details
 	@Update("UPDATE user_details SET postal_code = #{postalCode}, " +
-			"address = #{address}, address_detail = #{addressDetail} " +
+			"address = #{address}, detail_address = #{detailAddress} " +
 			"WHERE user_id = #{buyerId}")
 	int updateUserAddress(@Param("buyerId") int buyerId,
 						  @Param("postalCode") String postalCode,
 						  @Param("address") String address,
-						  @Param("addressDetail") String addressDetail);
+						  @Param("detailAddress") String detailAddress);
 	
 	// ✅ 주문 데이터 INSERT - orders
     @Insert("INSERT INTO orders (seller_id, buyer_id, pro_id, purchase_quantity, total_price, order_state, order_date, delivery_address) " +
             "VALUES (#{sellerId}, #{buyerId}, #{proId}, #{purchaseQuantity}, #{totalPrice}, 0, NOW(), #{deliveryAddress})")
     @Options(useGeneratedKeys = true, keyProperty = "orderNum") // order_num 자동 증가
-    int insertOrder(OrderNow order);
+    int insertOrder(OrderDto order);
     
     // ✅ 상품 재고 수량 조회
     @Select("SELECT inventory FROM products WHERE pro_id = #{proId}")

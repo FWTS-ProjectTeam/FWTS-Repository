@@ -41,7 +41,7 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	private final UserService userService;
 	
 	// 주문 목록 조회
-	@GetMapping("/orderList")
+	@GetMapping("/orders")
 	public String getOrderList(
 	        @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
 	        @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
@@ -74,7 +74,7 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	        
 	        model.addAttribute("activeMenu", "orders"); // ✅ 메뉴 활성화 추가
 
-	        return "order/seller/order_list";
+	        return "order/seller/orders";
 	     
 	}
     
@@ -84,7 +84,7 @@ public class SellerOrderController { // 판매자 - 주문 관리
     	OrderDetail orderDetail = orderService.getOrderWithProducts(orderNum);
     	model.addAttribute("order", orderDetail);
     	
-    	return "order/seller/order_detail";
+    	return "order/seller/order-detail";
     }
     
     // @ResponseBody를 이용해 JSON 형식의 데이터 반환
@@ -188,5 +188,4 @@ public class SellerOrderController { // 판매자 - 주문 관리
         style.setAlignment(HorizontalAlignment.CENTER);
         return style;
     }
-
 }

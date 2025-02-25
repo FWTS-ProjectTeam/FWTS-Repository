@@ -1,7 +1,7 @@
 package com.teamf.fwts.service;
 
 import com.teamf.fwts.dto.OrderList;
-import com.teamf.fwts.dto.OrderNow;
+import com.teamf.fwts.dto.OrderDto;
 import com.teamf.fwts.mapper.BuyerCartMapper;
 import com.teamf.fwts.mapper.BuyerOrderMapper;
 
@@ -19,15 +19,15 @@ public class BuyerOrderService {
     private final BuyerCartMapper cartMapper;
     
     // ✅ 상품 주문
-    public OrderNow getOrderNow(int buyerId, int proId) {
+    public OrderDto getOrderNow(int buyerId, int proId) {
     	return orderMapper.getOrderNow(buyerId, proId);
     }
     
-    // ✅ 상품 데이터 삽입
+    // 상품 데이터 삽입
     public boolean placeOrder(int buyerId, int cartId, int proId, int purchaseQuantity, int totalPrice, 
             				  String postalCode, String address, String addressDetail) {
-		// ✅ 주문 정보 조회 (판매자 및 상품 정보 포함)
-		OrderNow order = orderMapper.getOrderNow(buyerId, proId);
+		// 주문 정보 조회 (판매자 및 상품 정보 포함)
+    	OrderDto order = orderMapper.getOrderNow(buyerId, proId);
 		
 		if (order == null) {
 			return false; // 상품 정보 조회 실패

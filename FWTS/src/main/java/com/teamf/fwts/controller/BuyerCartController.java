@@ -32,7 +32,7 @@ public class BuyerCartController {
 	// 장바구니에 상품 추가
 	@GetMapping("/addToCart")
 	public String addToCart(@RequestParam("proId") Integer proId,
-							@RequestParam("selectedQuantity") Integer selectedQuantity,
+							@RequestParam("quantity") Integer quantity,
 							RedirectAttributes redirectAttributes) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
@@ -43,7 +43,7 @@ public class BuyerCartController {
         String username = authentication.getName(); 
         int buyerId = userService.findByUsername(username).getUserId(); // 로그인한 사용자의 ID 조회
 
-        boolean success = cartService.addToCart(buyerId, proId, selectedQuantity);
+        boolean success = cartService.addToCart(buyerId, proId, quantity);
 
         if (success) {
             redirectAttributes.addFlashAttribute("message", "✅ 장바구니에 추가되었습니다!");
@@ -55,7 +55,7 @@ public class BuyerCartController {
 	}
 	
 	// 장바구니 리스트 조회 (로그인한 사용자만 조회)
-	@GetMapping("/cartList")
+	@GetMapping("/carts")
 	public String cartList(
 	    @RequestParam(value = "page", defaultValue = "1") int page, 
 	    Model model) {
@@ -79,7 +79,7 @@ public class BuyerCartController {
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("totalPages", totalPages);
 
-	    return "cart/cart_list";
+	    return "cart/carts";
 	}
 	
 	// 장바구니 특정 상품 삭제
