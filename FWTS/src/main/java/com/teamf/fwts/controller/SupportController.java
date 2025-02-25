@@ -63,7 +63,7 @@ public class SupportController {
 	    }
 
 	    model.addAttribute("count", count);
-	    return "support/notice";
+	    return "support/notices";
 	}
 	
 	// 공지사항 상세 조회
@@ -191,7 +191,7 @@ public class SupportController {
 	    model.addAttribute("count", count);
 	    model.addAttribute("tCategory", category);
 	    model.addAttribute("tKeyword", keyword);
-		return "support/inquiry";
+		return "support/inquirys";
     }
 	
 	// 문의사항 상세 조회

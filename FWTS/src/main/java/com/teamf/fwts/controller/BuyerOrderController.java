@@ -1,8 +1,8 @@
 package com.teamf.fwts.controller;
 
 import com.teamf.fwts.dto.OrderList;
-import com.teamf.fwts.dto.OrderNow;
 import com.teamf.fwts.dto.OrderDetail;
+import com.teamf.fwts.dto.OrderDto;
 import com.teamf.fwts.service.BuyerOrderService;
 import com.teamf.fwts.service.UserService;
 
@@ -33,37 +33,37 @@ import java.util.List;
 @RequiredArgsConstructor // private final 자동 추가
 @RequestMapping("/buyer")
 public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
-
     private final BuyerOrderService orderService;
     private final UserService userService;
     
     // 상품 주문
     @GetMapping("/orderNow")
-    public String orderNow(@RequestParam("proId") int proId, Model model) {
+    public String orderNow(@RequestParam("proId") Integer proId,
+    					   @RequestParam("quantity") Integer quantity,
+    					   Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated())
             return "redirect:/login"; // 로그인 안 된 경우 로그인 페이지로 리다이렉트
-        }
 
         String userId = authentication.getName(); // 로그인한 사용자의 username 가져오기
         int buyerId = userService.findByUsername(userId).getUserId(); // username으로 userId 조회
 
-        OrderNow orderNow = orderService.getOrderNow(buyerId, proId);
+        OrderDto orderNow = orderService.getOrderNow(buyerId, proId);
+        orderNow.setPurchaseQuantity(quantity);
         model.addAttribute("orderNow", orderNow);
-
-        return "order/buyer/order_now"; 
+        return "order/buyer/order"; 
     }
     
     // 상품 주문 (최종 주문 요청 처리)
     @PostMapping("/placeOrder")
     public String placeOrder(@RequestParam("proId") int proId,
-    						 @RequestParam(value = "cartId", required = false, defaultValue = "0") int cartId, // ✅ cartId 기본값 0 설정
+    						 @RequestParam(value = "cartId", defaultValue = "0") int cartId, // ✅ cartId 기본값 0 설정
                              @RequestParam("purchaseQuantity") int purchaseQuantity,
                              @RequestParam("totalPrice") int totalPrice,
                              @RequestParam(value = "postalCode", required = false) String postalCode,
                              @RequestParam(value = "address", required = false) String address,
-                             @RequestParam(value = "addressDetail", required = false) String addressDetail,
+                             @RequestParam(value = "detailAddress", required = false) String detailAddress,
                              
                              // 리다이렉트할 때 한 번만 사용할 메시지를 저장하는 객체
                              // 주문 성공 또는 실패 메시지를 저장하는 용도로 사용됨
@@ -81,24 +81,20 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         String username = authentication.getName();
         int buyerId = userService.findByUsername(username).getUserId(); // ✅ 로그인된 유저 ID 조회
 
-        boolean orderSuccess = orderService.placeOrder(buyerId, cartId, proId, purchaseQuantity, totalPrice, postalCode, address, addressDetail);
+        boolean orderSuccess = orderService.placeOrder(buyerId, cartId, proId, purchaseQuantity, totalPrice, postalCode, address, detailAddress);
         // 주문 성공 여부를 boolean 값으로 받음
         
         if (orderSuccess) {
             redirectAttributes.addFlashAttribute("message", "✅ 주문이 완료되었습니다!");
-            return "redirect:/productList"; // ✅ 주문 완료 후 상품 목록으로 이동
+            return "redirect:/products"; // ✅ 주문 완료 후 상품 목록으로 이동
         } else {
             redirectAttributes.addFlashAttribute("message", "⚠ 주문 처리 중 오류가 발생했습니다.");
             return "redirect:/productDetail?proId=" + proId; // ✅ 주문 실패 시 상품 상세 페이지로 이동
         }
-        // redirectAttributes.addFlashAttribute()
-        // : 리다이렉트할 때 한 번만 사용할 메시지를 저장하는 기능
-
-        // return "redirect:/productList"; // ✅ 주문 완료 후 상품 목록으로 이동
     }
     
     // 주문 목록 조회
-    @GetMapping("/orderList")
+    @GetMapping("/orders")
     public String getOrderList(
         @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
         @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
@@ -134,7 +130,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         
         model.addAttribute("activeMenu", "orders"); // ✅ 메뉴 활성화 추가
 
-        return "order/buyer/order_list";
+        return "order/buyer/orders";
     }
     
     // "orders" : jsp에서 사용할 변수 이름
@@ -146,9 +142,8 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     	OrderDetail orderDetail = orderService.getOrderWithProducts(orderNum);
     	model.addAttribute("order", orderDetail);
     	
-    	return "order/buyer/order_detail";
+    	return "order/buyer/order-detail";
     }
-    
     
     // 엑셀 다운로드 기능
     @GetMapping("/downloadExcel")
@@ -233,5 +228,4 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         style.setAlignment(HorizontalAlignment.CENTER); // 가운데 정렬
         return style;
     }
-    
 }
