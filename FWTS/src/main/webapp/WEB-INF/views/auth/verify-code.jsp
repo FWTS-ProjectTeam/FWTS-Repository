@@ -14,28 +14,10 @@
 <link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .container h1 {
-        color: #ff6699;
-        font-weight: 600;
-        margin-bottom: 15px;
-    }
-    
-    .description {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 20px;
-    }
-    
     .input-group {
 	    width: 100%;
 	    text-align: left;
 	    margin-bottom: 20px;
-	}
-	.input-group label {
-		font-size: 14px;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 5px;
 	}
     
     .row-group {
@@ -44,43 +26,24 @@
 	}
 	.row-group input {
 	    flex: 1; /* 입력 필드가 남은 공간을 다 차지하도록 */
-	    padding: 12px;
-	    border: 1px solid #ddd;
-	    border-radius: 6px;
-	    font-size: 14px;
-	    outline: none;
-	    transition: border-color 0.3s;
-	    box-sizing: border-box;
 	}
 	.row-group input:focus {
-		border-color: #ff6699;
+		border-color: var(--pink2);
 	}
 	
 	.resend-code {
+		width: 80px;
 		background: white;
-	    color: #ffb6c1;
-	    border: 1px solid #ffb6c1;
+	    color: var(--pink3);
+	    border: 1px solid var(--pink3);
 	    padding: 8px 12px;
 	    font-size: 12px;
 	    border-radius: 8px;
-	    cursor: pointer;
 	}
 	.resend-code:hover {
-	    background: #ffb6c1;
+	    background: var(--pink3);
 	    color: white;
 	}
-	
-    .button-container button {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        background-color: #ff6699;
-        color: white;
-    }
 </style>
 </head>
 <body>
@@ -94,7 +57,7 @@
         <div class="input-group">
 		   <label for="code">인증 코드</label>
 		   <div class="row-group">
-		       <input type="text" id="code" name="code" placeholder="6자리 인증 코드를 입력하세요" maxlength="6"
+		       <input id="code" name="code" placeholder="6자리 인증 코드를 입력해주세요" maxlength="6"
 		       		  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 		       <button type="button" class="resend-code" onclick="resendCode()">재전송</button>
 		    </div>
@@ -129,7 +92,7 @@
 		const code = document.getElementById("code").value;
 	  
 		if (!code) {
-			alert("인증 코드를 입력하세요.");
+			alert("인증 코드를 입력해주세요.");
 			return false;
 		}
 	
@@ -160,13 +123,13 @@
 	    	Swal.close();
       	    Swal.fire({
       	        icon: 'error',
-      	        title: '오류 발생',
+      	        title: '재전송 실패',
       	        text: '처리 중 오류가 발생했습니다. 다시 시도해 주세요.',
       	        confirmButtonColor: '#d33',
       	        confirmButtonText: '확인'
       	    });
       	    
-      	  	messageElement.innerHTML = `<span style="color: red;">인증 코드 전송에 실패했습니다.</span>`;
+      	  	messageElement.innerHTML = `<span style="color: red;">인증 코드 재전송에 실패했습니다.</span>`;
 	    });
 	}
 </script>

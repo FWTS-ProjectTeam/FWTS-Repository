@@ -16,15 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NoticeBoardService {
 	private final NoticeBoardMapper noticeBoardMapper;
-
-	// 공지사항 조회
-	public List<NoticeListDto> findAll(Map<String, Object> params) {
-		return noticeBoardMapper.findAll(params);
-	}
 	
 	// 공지사항 수 확인
 	public int count() {
 		return noticeBoardMapper.count();
+	}
+
+	// 공지사항 조회
+	public List<NoticeListDto> findAll(Map<String, Object> params) {
+		return noticeBoardMapper.findAll(params);
 	}
 
 	// 공지사항 상세 조회

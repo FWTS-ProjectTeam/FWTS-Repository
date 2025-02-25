@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -46,19 +46,16 @@
 	font-weight: bold;
 	position: absolute; /* 부모 중앙에 텍스트 배치 */
 	text-align: center;
-	width: 30%;
-	height: 300px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top:30px;
+	margin-top: 30px;
 	white-space: pre;
+	z-index: 1;
 }
 
 img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover; /* 이미지 비율 유지하며 크기에 맞게 자르기 */
+	z-index: 2;
 }
 
 .pro-detail {
@@ -215,28 +212,28 @@ img {
 						<hr class="solid-line">
 						<p>구매 가능 수량: ${product.minPossible}~${product.maxPossible}개</p>
 						<hr class="solid-line">
-					<div>
 						<div>
-        					<p>구매 수량:</p>
-        				</div>
-        				<div class="sum">
-        					<div>
-        						<button type="button" id="decrease" onclick="updateQuantity(false)">-</button>
-        						<input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.inventory}" onchange="updateTotal()">
-        						<button type="button" id="increase" onclick="updateQuantity(true)">+</button>
-        					</div>
-        					<div>
-        						<p>상품금액: <span id="Price">${product.unitPrice}</span>원</p>
-        						<p>배송비: ${product.deliveryFee}원</p>
-        						<p>총 주문 금액: <span id="totalPrice">${product.unitPrice + product.deliveryFee}</span>원</p>
-        					</div>
-        				</div>
-    				</div>
+							<div>
+	        					<p>구매 수량:</p>
+	        				</div>
+	        				<div class="sum">
+	        					<div>
+	        						<button type="button" id="decrease" onclick="updateQuantity(false)">-</button>
+	        						<input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.inventory}" onchange="updateTotal()">
+	        						<button type="button" id="increase" onclick="updateQuantity(true)">+</button>
+	        					</div>
+	        					<div>
+	        						<p>상품금액: <span id="Price">${product.unitPrice}</span>원</p>
+	        						<p>배송비: ${product.deliveryFee}원</p>
+	        						<p>총 주문 금액: <span id="totalPrice">${product.unitPrice + product.deliveryFee}</span>원</p>
+	        					</div>
+	        				</div>
+	    				</div>
 					</div>
 					<hr class="solid-line">
 					<div class="button-container">
-						<button class="btn1"  onclick="location.href='/products/carts/${product.proId}'">장바구니</button>
-						<button class="btn2" onclick="location.href='/products/order/${product.proId}'">바로구매</button>
+						<button class="btn1" onclick="addToCart(${product.proId})">장바구니</button>
+    					<button class="btn2" onclick="orderNow(${product.proId})">바로구매</button>
 					</div>
 				</div>
 			</div>
@@ -258,6 +255,16 @@ img {
 	</div>
 
 	<script>
+		function addToCart(proId) {
+	        var quantity = document.getElementById('quantity').value;
+	        location.href = "/buyer/addToCart?proId=" + proId + "&selectedQuantity=" + quantity;
+	    }
+	    
+	    function orderNow(proId) {
+	        let quantity = document.getElementById('quantity').value;
+	        location.href = `/buyer/orderNow?proId=${proId}&selectedQuantity=${quantity}`;
+	    }
+	
         const maxStock = ${product.inventory}; // 최대 재고 수량
         const unitPrice = ${product.unitPrice}; // 단일 가격
         const deliveryFee = ${product.deliveryFee}; // 배송비

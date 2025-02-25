@@ -21,26 +21,19 @@
         border-radius: 5px;
     }
    	
-    td:nth-child(2) {
-   		text-align: left; /* 제목만 왼쪽 정렬 */
-   	}
     th:nth-child(1), td:nth-child(1) { 
 	    width: 60px;  /* 번호 열의 너비 고정 */
 	    min-width: 60px;
 	    max-width: 60px;
-	    text-align: center;
 	}
-	th:nth-child(3), td:nth-child(3) { 
-	    width: 100px; /* 작성자 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
-	}
+	td:nth-child(2) {
+   		text-align: left; /* 제목만 왼쪽 정렬 */
+   	}
+	th:nth-child(3), td:nth-child(3),
 	th:nth-child(4), td:nth-child(4) { 
-	    width: 100px; /* 작성일 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
+	    width: 96px; /* 작성자, 작성일 열의 너비 고정 */
+	    min-width: 96px;
+	    max-width: 96px;
 	}
     
 	.hidden {
@@ -72,13 +65,13 @@
 				</div>
 	         
 	         	<!-- 게시글 검색 -->
-	         	<form class="search-board-container" action="/support-center/inquirys">
-				    <select class="search-category" name="category">
-				        <option value="all" ${category == 'all' ? 'selected' : ''}>전체</option>
-				        <option value="title" ${category == 'title' ? 'selected' : ''}>제목</option>
-				        <option value="content" ${category == 'content' ? 'selected' : ''}>내용</option>
+	         	<form class="search-table-form" action="/support-center/inquirys" onsubmit="return cleanEmptyQuery()">
+				    <select class="search-category" id="category" name="category">
+				        <option value="all" ${tCategory == 'all' ? 'selected' : ''}>전체</option>
+				        <option value="title" ${tCategory == 'title' ? 'selected' : ''}>제목</option>
+				        <option value="content" ${tCategory == 'content' ? 'selected' : ''}>내용</option>
 				    </select>
-				    <input class="search-board-box" name="keyword" type="text" placeholder="검색어를 입력하세요" value="${keyword}">
+				    <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="검색어를 입력해주세요">
 				    <button type="submit" class="button">검색</button>
 				</form>
          	</div>
@@ -96,54 +89,66 @@
                     <c:forEach var="inquiry" items="${inquirys}">
 			            <tr>
 			                <td>${inquiry.inquiryId}</td>
-			                <td><a href="/support-center/inquirys/${inquiry.inquiryId}"><c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
-			                <td>${inquiry.username}</td>
+			                <td title="${inquiry.inquiryTitle}">
+			                	<a href="/support-center/inquirys/${inquiry.inquiryId}">
+			                		<c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료]</span></c:if>
+			                		${inquiry.inquiryTitle}
+			                	</a>
+			                </td>
+			                <td title="${inquiry.username}">${inquiry.username}</td>
 			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
 			            </tr>
         			</c:forEach>
                 </tbody>
             </table>
-            
-			<!-- 페이지네이션 -->
+
+            <!-- 페이지네이션 -->
 			<div class="pagination">
 			    <c:choose>
 			        <c:when test="${count > 0}">
-			            <c:set var="queryString">
-						    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-						        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-						    </c:if>
-						</c:set>
+			        	<c:set var="queryString" value="" />
+			            <c:if test="${tCategory == 'all' || tCategory == 'title' || tCategory == 'content'}">
+			                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(tCategory)}&keyword=${fn:escapeXml(tKeyword)}" />
+			            </c:if>
 			
-			            <!-- 이전 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage > 1}">
-			                    <a href="/support-center/inquirys?page=${currentPage - 1}${queryString}">◀</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>◀</a>
-			                </c:otherwise>
-			            </c:choose>
-			
-			            <!-- 현재 페이지 / 전체 페이지 표시 -->
-			            <span>${currentPage} / ${totalPages}</span>
-			
-			            <!-- 다음 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage < totalPages}">
-			                    <a href="/support-center/inquirys?page=${currentPage + 1}${queryString}">▶</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>▶</a>
-			                </c:otherwise>
-			            </c:choose>
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+			            
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
+			            </c:if>
 			        </c:when>
-			        <c:otherwise>
-			            <p>조회된 글이 없습니다.</p>
-			        </c:otherwise>
+			        <c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
 			    </c:choose>
 			</div>
         </div>
     </div>
+    
+    <!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
+<script>
+	//빈 쿼리 제거
+	function cleanEmptyQuery() {
+	    const form = document.getElementById("search-table-form");
+	    
+	    var categoryInput = document.getElementById("category");
+	    var keywordInput = document.getElementById("keyword");
+	    
+	    if (keywordInput && !keywordInput.value.trim()) {
+	        keywordInput.removeAttribute("name");
+	        categoryInput.removeAttribute("name");
+	    }
+	    
+	    form.requestSubmit(); // 폼 제출 실행
+	}
+</script>
 </body>
 </html>

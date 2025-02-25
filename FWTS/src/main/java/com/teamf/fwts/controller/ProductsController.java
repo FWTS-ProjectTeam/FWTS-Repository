@@ -1,8 +1,8 @@
 package com.teamf.fwts.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +30,7 @@ public class ProductsController {
 	// 상품 목록 페이지 - 기본
 	@GetMapping
 	public String getProductsList(@RequestParam(name = "page", defaultValue = "1") Integer page,
-	                              @RequestParam(name = "category", required = false, defaultValue = "0") String category,
+	                              @RequestParam(name = "category", defaultValue = "0") String category,
 	                              @RequestParam(name = "keyword", required = false) String keyword,
 	                              @RequestParam(name = "sort", required = false, defaultValue = "default") String sort,
 	                              Model model) {
@@ -119,7 +119,7 @@ public class ProductsController {
 	    model.addAttribute("sort", sort);
 	    
 	    // 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 	    model.addAttribute("userDetails", userDetails);	    
 
 	    return "products/productShop";
@@ -127,19 +127,21 @@ public class ProductsController {
 
 
 	// 상품 목록 페이지 - 상품관리
-	@GetMapping("/shopM/{sellerId}")
-	public String getProductsBySellerId(@PathVariable("sellerId") int sellerId,
-			@RequestParam(name = "page", defaultValue = "1") Integer page, Model model) {
+	@GetMapping("/shopM")
+	public String getProductsBySellerId(@RequestParam(name = "page", defaultValue = "1") Integer page,
+										Authentication authentication, Model model) {
+		Integer userId = userService.findByUsername(authentication.getName()).getUserId();
+		
 		int perPage = 8; // 한 페이지에 보여줄 수
 		int startRow = (page - 1) * perPage; // 페이지 번호
 
 		// sellerId에 맞는 상품 목록을 가져오는 서비스 메서드 수정 필요
-		int count = productsService.countAllBySellerId(sellerId); // 해당 sellerId에 맞는 총 상품 수
+		int count = productsService.countAllBySellerId(userId); // 해당 sellerId에 맞는 총 상품 수
 		int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
 		// 페이지네이션 파라미터 설정
 		Map<String, Object> params = new HashMap<>();
-		params.put("sellerId", sellerId);
+		params.put("sellerId", userId);
 		params.put("start", startRow);
 		params.put("count", perPage);
 
@@ -153,7 +155,7 @@ public class ProductsController {
 		model.addAttribute("count", count);
 
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(userId);
 		model.addAttribute("userDetails", userDetails);
 		
 		return "products/productShopManager";
@@ -168,13 +170,13 @@ public class ProductsController {
 	}
 
 	// 상품 상세 페이지-구매자 (구매 전)
-	@GetMapping("/buy/{id}/{sellerId}")
-	public String getProductBuy(@PathVariable("id") int id, @PathVariable("sellerId") int sellerId, Model model) {
+	@GetMapping("/buy/{id}")
+	public String getProductBuy(@PathVariable("id") int id, Model model) {
 		ProductsDto product = productsService.getProductById(id);
 		model.addAttribute("product", product); // 상품 데이터 모델에 담기
 		
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(product.getSellerId());
 	    model.addAttribute("userDetails", userDetails);
 	    
 		return "products/productBuy";
@@ -184,7 +186,7 @@ public class ProductsController {
 	@GetMapping("/add/{sellerId}")
 	public String getProductAddPage(@PathVariable("sellerId") int sellerId, Model model) {
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 		
 		return "products/productAdd";
@@ -202,7 +204,6 @@ public class ProductsController {
 				
 		return "products/productEdit";
 	}
-
     // 상품 등록 처리
     @PostMapping("/add/{sellerId}")
     public ResponseEntity<Map<String, Object>> registerProduct(@PathVariable("sellerId") int sellerId,@ModelAttribute ProductsDto products,Model model) {
@@ -216,7 +217,6 @@ public class ProductsController {
      		model.addAttribute("userDetails", userDetails);
         return ResponseEntity.ok(response);
     }
-
     // 상품 삭제 처리
     @PutMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") int id) {

@@ -30,12 +30,12 @@
 		width: 100%;
 		padding: 10px;
 		margin: 5px 0;
-		border: 1px solid #ddd;
+		border: 1px solid var(--gray6);
 		border-radius: 5px;
 		box-sizing: border-box;
 		height: 150px;
 		overflow-y: auto;
-		background-color: #f9f9f9;
+		background-color: var(--white);
 		white-space: pre-line;
 		font-size: 12.5px;
 		line-height: 1.4;
@@ -57,13 +57,13 @@
 	.checkbox-container label { line-height: 18px; }
 	
 	.container button {
-		background-color: #ffb6c1;
+		background-color: var(--pink3);
 		color: white;
 		cursor: not-allowed;
 		margin-top: 20px;
 	}
 	.container button.enabled {
-		background-color: #ff7f9d;
+		background-color: var(--pink2);
 		cursor: pointer;
 	}
 </style>
@@ -81,11 +81,10 @@
 		회사는 원활한 서비스 제공을 위해 아래와 같은 개인정보를 수집합니다.
 		
 		- 이메일 주소: 회원 식별
+		- 상호명: 사업장 정보 확인
+		- 대표자명: 상호 대표 확인
 		- 사업자등록번호: 사업자 확인
-		- 휴대폰 번호: 주문·거래 관련 연락
-		- 업체 전화번호: 사업장 연락처 확인
-		- 업체명: 사업장 정보 확인
-		- 대표자명: 사업장 대표 확인
+		- 전화번호: 주문·거래 관련 연락
 		- 우편주소: 상품 배송 및 청구서 발송
 
 		<strong>제3조 (개인정보 보관 및 이용 기간)</strong>
@@ -104,6 +103,7 @@
 	function toggleButton() {
 		var checkbox = document.getElementById("agree");
 		var button = document.getElementById("next-button");
+		
 		if (checkbox.checked) {
 			button.classList.add("enabled");
 			button.disabled = false;

@@ -23,10 +23,12 @@ import com.teamf.fwts.dto.NoticeListDto;
 import com.teamf.fwts.dto.ReplyDto;
 import com.teamf.fwts.entity.InquiryBoard;
 import com.teamf.fwts.entity.NoticeBoard;
+import com.teamf.fwts.service.ImageService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.NoticeBoardService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +39,7 @@ public class SupportController {
 	private final NoticeBoardService noticeBoardService;
 	private final InquiryBoardService inquiryBoardService;
 	private final UserService userService;
+	private final ImageService imageService;
 	
 	// 공지사항 조회
 	@GetMapping("/notices")
@@ -44,7 +47,7 @@ public class SupportController {
 	    int count = noticeBoardService.count();
 
 	    if (count > 0) {
-	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int perPage = 10; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
@@ -132,11 +135,19 @@ public class SupportController {
 	// 공지사항 삭제
 	@ResponseBody
 	@DeleteMapping("/notices/delete/{id}")
-	public Map<String, Boolean> deleteNotice(@PathVariable("id") int id) {
-	    Map<String, Boolean> response = new HashMap<>();
+	public Map<String, Object> deleteNotice(@PathVariable("id") int id, HttpServletRequest request) {
+	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
-	    	noticeBoardService.deleteNoticeById(id);
+	    	NoticeBoard notice = noticeBoardService.findByNoticeId(id);
+	        if (notice == null) {
+	            response.put("success", false);
+	            response.put("errorMessage", "존재하지 않는 글입니다.");
+	            return response;
+	        }
+	    	
+	    	noticeBoardService.deleteNoticeById(id); // 게시글 삭제
+	    	imageService.deleteImage(notice.getNoticeContent(), request); // 이미지 삭제
 	        response.put("success", true);
 	    } catch (Exception e) {
 	        response.put("success", false);
@@ -163,7 +174,7 @@ public class SupportController {
 		int count = inquiryBoardService.count(params);
 
 	    if (count > 0) {
-	        int perPage = 8; // 한 페이지에 보여줄 수
+	        int perPage = 10; // 한 페이지에 보여줄 수
 	        int startRow = (page - 1) * perPage; // 페이지 번호
 	        int totalPages = (int) Math.ceil((double) count / perPage); // 전체 페이지 수
 
@@ -178,8 +189,8 @@ public class SupportController {
 	    }
 	    
 	    model.addAttribute("count", count);
-	    model.addAttribute("category", category);
-	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("tCategory", category);
+	    model.addAttribute("tKeyword", keyword);
 		return "support/inquiry";
     }
 	
@@ -263,19 +274,26 @@ public class SupportController {
 	// 문의사항 삭제
 	@ResponseBody
 	@DeleteMapping("/inquirys/delete/{id}")
-	public Map<String, Boolean> deleteInquiry(@PathVariable("id") int id, Authentication authentication) {
-	    Map<String, Boolean> response = new HashMap<>();
+	public Map<String, Object> deleteInquiry(@PathVariable("id") int id, Authentication authentication, HttpServletRequest request) {
+	    Map<String, Object> response = new HashMap<>();
 	    
 	    try {
 	    	InquiryBoard inquiry = inquiryBoardService.findByInquiryId(id);
+	    	if (inquiry == null) {
+	    		response.put("success", false);
+	            response.put("errorMessage", "존재하지 않는 글입니다.");
+	            return response;
+	    	}
+	    	
+	    	// 작성자 검증 및 처리
 		    String currentUsername = inquiry.getWriter().getUsername();
-		    
-		    // 작성자 검증 및 처리
 		    if (currentUsername.equals(authentication.getName())) {
-		    	inquiryBoardService.deleteInquiryById(id);
+		    	inquiryBoardService.deleteInquiryById(id); // 게시글 삭제
+		    	imageService.deleteImage(inquiry.getInquiryContent(), request); // 이미지 삭제
 		        response.put("success", true);
 		    } else {
 		    	response.put("success", false);
+		    	response.put("errorMessage", "삭제 권한이 없는 글입니다.");
 		    }
 	    } catch (Exception e) {
 	        response.put("success", false);

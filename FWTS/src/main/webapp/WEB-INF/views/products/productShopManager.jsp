@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -11,18 +11,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 상품 관리</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="/resources/css/sidebar.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
-.body-container {
-	display: flex;
-	margin: 20px 20px 0px 20px;
-}
 .sidebar .product-active {
-    font-weight: 600;
+	font-weight: 600;
     background-color: #ff7f9d;
-    color: #fff;
+    color: white;
     border-radius: 5px;
 }
 
@@ -145,16 +139,9 @@
 	font-weight: bold;
 }
 
-.product-list, .sidebar a {
+.product-list {
 	list-style-type: none; /* 목록 앞의 점을 없앰 */
 	padding-left: 0; /* 기본적으로 나오는 패딩도 없애기 */
-}
-
-.sidebar a {
-	display: block; /* 링크를 블록 요소로 만들어서 클릭 영역 확장 */
-	text-decoration: none;
-	color: #333;
-	cursor: pointer;
 }
 </style>
 </head>
@@ -218,44 +205,26 @@
 			<div class="pagination">
 			    <c:choose>
 			        <c:when test="${count > 0}">
-			            <c:set var="queryString">
-						    <c:if test="${category == 'all' || category == 'title' || category == 'content'}">
-						        <c:set var="queryString" value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-						    </c:if>
-						</c:set>
-			
-			            <!-- 이전 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage > 1}">
-			                    <a href="${sellerId}?page=${currentPage - 1}${queryString}">◀</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>◀</a>
-			                </c:otherwise>
-			            </c:choose>
-			
-			            <!-- 현재 페이지 / 전체 페이지 표시 -->
-			            <span>${currentPage} / ${totalPages}</span>
-			
-			            <!-- 다음 페이지 버튼 -->
-			            <c:choose>
-			                <c:when test="${currentPage < totalPages}">
-			                    <a href="${sellerId}?page=${currentPage + 1}${queryString}">▶</a>
-			                </c:when>
-			                <c:otherwise>
-			                    <a>▶</a>
-			                </c:otherwise>
-			            </c:choose>
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+			            
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}">다음 »</a>
+			            </c:if>
 			        </c:when>
-			        <c:otherwise>
-			            <p>등록된 상품이 없습니다.</p>
-			        </c:otherwise>
+			        <c:otherwise><p>등록된 상품이 없습니다.</p></c:otherwise>
 			    </c:choose>
 			</div>
 		</div>
 	</div>
-		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
-	
 </body>
 </html>
