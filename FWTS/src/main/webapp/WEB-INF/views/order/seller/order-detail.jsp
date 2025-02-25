@@ -18,23 +18,27 @@
         border-radius: 5px;
     }
     
-    .content {
-        flex-grow: 1;
+    .order-container {
+    	width: 100%;
         background-color: #fff;
+        margin: 0 10px;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+    
     .section {
         margin-bottom: 20px;
-        padding: 15px;
+        margin: 20px 10px;
+        padding: 0 15px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        background-color: #f9f9f9;
     }
     
     .status-group {
 	    display: flex;
-	    justify-content: space-between; /* 요소들을 좌우 끝으로 배치 */
 	    align-items: center; /* 수직 중앙 정렬 (필요하면 추가) */
 	    width: 100%; /* 부모 요소의 전체 너비 사용 */
 	}
@@ -49,20 +53,44 @@
     .status-blue { color: blue; }     /* 배송완료 */
     
     .status-box {
-        width: 50%;
+        width: 20%;
         padding: 8px;
-        margin-top: 5px;
+        margin-left: 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
     }
     
-    .input-box {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+    .input-group {
+        display: flex;
+        flex-direction: column;
     }
+    .input-group label {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .input-group input {
+        width: 50%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+    .input-group input:focus {
+        border-color: #ff6699;
+    }
+    .input-group #postal-code {
+    	width: 192px;
+    }
+    .input-field {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    margin-bottom: 10px;
+	}
     
     .save-button {
         width: 100%;
@@ -86,7 +114,7 @@
 		<!-- 사이드바 -->
     	<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
 
-        <div class="content">
+        <div class="order-container">
             <h1>주문 상세</h1>
 
             <!-- 주문 정보 -->
@@ -111,14 +139,14 @@
                     </span>
                 </p>
 
-				<div class="status-group">
-					<label for="orderState"><strong>주문 상태 변경:</strong></label>
+				<p class="status-group">
+					<label for="orderState"><strong>상태 변경:</strong></label>
 	                <select id="orderState" class="status-box">
 	                    <option value="1" ${order.orderState == 1 ? 'selected' : ''}>배송준비중</option>
 	                    <option value="2" ${order.orderState == 2 ? 'selected' : ''}>배송중</option>
 	                    <option value="3" ${order.orderState == 3 ? 'selected' : ''}>배송완료</option>
 	                </select>
-				</div>
+				</p>
             </div>
 
             <!-- 구매자 정보 -->
@@ -132,13 +160,16 @@
             </div>
 
             <!-- 운송장 정보 -->
-            <div class="section">
+            <div class="section input-group">
                 <h2>운송장 정보</h2>
-                <label for="courier">택배사:</label>
-                <input type="text" id="courier" class="input-box" value="${order.courier}">
-
-                <label for="shipmentNum">운송번호:</label>
-                <input type="text" id="shipmentNum" class="input-box" value="${order.shipmentNum}">
+                <label for="courier">택배사</label>
+                <div class="input-field">
+                	<input type="text" id="courier" value="${order.courier}">
+				</div>
+                <label for="shipmentNum">운송장 번호</label>
+                <div class="input-field">
+                	<input type="text" id="shipmentNum" value="${order.shipmentNum}">
+                </div>
             </div>
 
             <!-- 모든 변경 사항을 저장하는 하나의 버튼 -->
@@ -147,6 +178,8 @@
             </button>
         </div>
     </div>
+    
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </div>
 <script>
     function saveOrderInfo() {

@@ -175,10 +175,8 @@ img {
 								</p>
 								<p>
 									판매 상태: <select name="isSales" id="isSales">
-										<option value="true" ${product.isSales() ? 'selected' : ''}>판매
-											중</option>
-										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
-											중지</option>
+										<option value="true" ${product.isSales() ? 'selected' : ''}>판매 중</option>
+										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매 중지</option>
 									</select>
 								</p>
 								<p>
@@ -242,7 +240,7 @@ img {
 
 	    const formData = new FormData(form);
 	    const proName = formData.get("proName") || "상품";
-	    const isConfirmed = confirm(`${proName} 상품을 수정하시겠습니까?`);
+	    const isConfirmed = confirm(`\${formData.get("isSales")} \${proName} 상품을 수정하시겠습니까?`);
 	    
 	    if (!isConfirmed) {
 	        console.log("사용자가 취소함");
@@ -271,9 +269,6 @@ img {
 	        alert("서버 오류로 인해 수정에 실패했습니다.");
 	    });
 	}
-
-
 </script>
 </body>
 </html>
-

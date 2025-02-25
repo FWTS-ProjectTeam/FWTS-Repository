@@ -14,12 +14,13 @@
 <style>
     .order-container {
     	width: 100%;
-        max-width: 550px;
+        max-width: 600px;
         margin: 20px auto;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 10px;
         background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     h1 {
@@ -127,7 +128,7 @@
 		        <p><strong>대표자명:</strong> ${orderNow.ceoName}</p>
 		        <p><strong>연락처:</strong> ${orderNow.phoneNum}</p>
 		        
-		        <p><strong>기존 배송지:</strong> 
+		        <p><strong>배송지:</strong> 
 		            <c:choose>
 		                <c:when test="${not empty orderNow.address}">
 		                    (${orderNow.postalCode}) ${orderNow.address}
