@@ -155,39 +155,38 @@
                         </td>
                     </tr>
                 </c:forEach>
-
-                <c:if test="${empty orderList}">
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: gray;">
-                            현재 주문 내역이 없습니다.
-                        </td>
-                    </tr>
-                </c:if>
             </table>
 
             <!-- 페이징 네비게이션 (검색어 유지) -->
             <div class="pagination">
-            	<c:set var="queryString" value="" />
-	            <c:if test="${not empty searchKeyword}">
-	                <c:set var="queryString" value="${queryString}&keyword=${fn:escapeXml(searchKeyword)}" />
-	            </c:if>
-            
-                <c:if test="${currentPage > 1}">
-                    <a href="?page=${currentPage - 1}&searchKeyword=${searchKeyword}">« 이전</a>
-                </c:if>
-
-				<c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
-  					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
-	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-			        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-			    </c:forEach>
-
-                <c:if test="${currentPage < totalPages}">
-                    <a href="?page=${currentPage + 1}&searchKeyword=${searchKeyword}">다음 »</a>
-                </c:if>
+            	<c:choose>
+			        <c:when test="${not empty orderList}">
+		            	<c:set var="queryString" value="" />
+			            <c:if test="${not empty searchKeyword}">
+			                <c:set var="queryString" value="${queryString}&keyword=${fn:escapeXml(searchKeyword)}" />
+			            </c:if>
+		            
+		                <c:if test="${currentPage > 1}">
+		                    <a href="?page=${currentPage - 1}&searchKeyword=${searchKeyword}">« 이전</a>
+		                </c:if>
+		
+						<c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+		  					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+		
+		                <c:if test="${currentPage < totalPages}">
+		                    <a href="?page=${currentPage + 1}&searchKeyword=${searchKeyword}">다음 »</a>
+		                </c:if>
+		             </c:when>
+			        <c:otherwise><p>조회된 주문이 없습니다.</p></c:otherwise>
+			    </c:choose>
             </div>
         </div>
     </div>
+    
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </div>
 </body>
 </html>

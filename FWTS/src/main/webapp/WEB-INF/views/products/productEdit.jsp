@@ -175,6 +175,7 @@ img {
 									상품명: <input type="text" name="proName" id="proName"
 										value="${product.proName}">
 								</p>
+
 								<label for="isSales">판매 상태:<select name="isSales"
 									id="isSales">
 									<option value="1" ${product.sales ? 'selected' : ''}>판매
@@ -182,6 +183,7 @@ img {
 									<option value="0" ${!product.sales ? 'selected' : ''}>판매
 										중지</option>
 								</select></label>
+
 								<p>
 									최소 구매 가능 수량: <input type="number" name="minPossible"
 										id="minPossible" value="${product.minPossible}">
@@ -241,7 +243,7 @@ img {
 
 	    const formData = new FormData(form);
 	    const proName = formData.get("proName") || "상품";
-	    const isConfirmed = confirm(`${proName} 상품을 수정하시겠습니까?`);
+	    const isConfirmed = confirm(`\${formData.get("isSales")} \${proName} 상품을 수정하시겠습니까?`);
 	    
 	    if (!isConfirmed) {
 	        console.log("사용자가 취소함");
@@ -270,9 +272,6 @@ img {
 	        alert("서버 오류로 인해 수정에 실패했습니다.");
 	    });
 	}
-
-
 </script>
 </body>
 </html>
-
