@@ -249,6 +249,7 @@ table th, table td {
 										<c:when test="${product.categoryId == '1'}">절화</c:when>
 										<c:when test="${product.categoryId == '2'}">관엽</c:when>
 										<c:when test="${product.categoryId == '3'}">난</c:when>
+										<c:when test="${product.categoryId == '4'}">기타</c:when>
 									</c:choose>
 								</p>
 								<p>
@@ -292,7 +293,7 @@ table th, table td {
 
 				<div class="button-container">
 					<button class="btn1"
-						onclick="location.href='/products/edit/${product.proId}'">수정</button>
+						onclick="location.href='/products/edit/${product.proId}/${product.sellerId}'">수정</button>
 					<button class="btn2"
 						onclick="confirmDelete(${product.proId}, '${product.proName}', '${product.sellerId}')">삭제</button>
 				</div>

@@ -22,6 +22,10 @@
 	margin: 0 auto;
 }
 
+.product-container {
+	margin: 30px 0;
+}
+
 .pro-info1 {
 	display: flex;
 	flex-direction: row;
@@ -188,75 +192,76 @@ img {
 		<div class="body-container">
 			<div class="product-container">
 				<h1>상품 등록</h1>
-				<div class="pro-info1">
-					<div class="img-container">
-						<div class="img">
-							<img src="${product.imgPath}">
+				<form id="productForm" method="POST" enctype="multipart/form-data">
+					<div class="pro-info1">
+						<div class="img-container">
+							<div class="img">
+								<img src="${product.imgPath}">
+							</div>
+							<input type="file" name="productImage" accept="image/*">
 						</div>
-						<input type="file" name="productImage" accept="image/*">
-					</div>
-					<div class="pro-detail">
-						<div class="pro-detail1">
-							<h3>${userDetails.companyName }</h3>
-							<p>상품 ID는 상품 등록 시 자동 생성됩니다 :)</p>
-						</div>
-						<div class="pro-detail2">
-							<p>
-								상품명: <input type="text" name="proName"
-									value="${product.proName}">
-							</p>
-							<p>
-								판매 상태: <select name="isSales">
-									<option value="true" ${product.isSales() ? 'selected' : ''}>판매
-										중</option>
-									<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
-										중지</option>
-								</select>
-							</p>
-							<p>
-								최소 구매 가능 수량: <input type="number" name="minPossible"
-									value="${product.minPossible}">
-							</p>
-							<p>
-								최대 구매 가능 수량: <input type="number" name="maxPossible"
-									value="${product.maxPossible}">
-							</p>
-							<p>
-								재고: <input type="number" name="inventory"
-									value="${product.inventory}">
-							</p>
-							<p>
-								가격: <input type="number" name="unitPrice"
-									value="${product.unitPrice}">
-							</p>
-							<p>
-								카테고리: <select name="category">
-									<option value="절화"
-										${product.categoryId == '1' ? 'selected' : ''}>절화</option>
-									<option value="관엽"
-										${product.categoryId == '2' ? 'selected' : ''}>관엽</option>
-									<option value="난"
-										${product.categoryId == '3' ? 'selected' : ''}>난</option>
-									<option value="기타"
-										${product.categoryId == '4' ? 'selected' : ''}>기타</option>
-								</select>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="pro-info2">
-					<p class="description-title">상품 설명</p>
-					<div class="post-content">
-						<div id="smarteditor">
-							<textarea id="content" name="description" rows="20"></textarea>
-						</div>
-					</div>
-				</div>
+						<div class="pro-detail">
+							<div class="pro-detail1">
+								<h3>${userDetails.companyName }</h3>
+								<p>상품 ID는 상품 등록 시 자동 생성됩니다 :)</p>
+							</div>
+							<div class="pro-detail2">
+								<p>
+									상품명: <input type="text" name="proName"
+										value="${product.proName}">
+								</p>
+								<p>
+									판매 상태: <select name="isSales">
+										<option value="true" ${product.isSales() ? 'selected' : ''}>판매
+											중</option>
+										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
+											중지</option>
+									</select>
+								</p>
+								<p>
+									최소 구매 가능 수량: <input type="number" name="minPossible"
+										value="${product.minPossible}">
+								</p>
+								<p>
+									최대 구매 가능 수량: <input type="number" name="maxPossible"
+										value="${product.maxPossible}">
+								</p>
+								<p>
+									재고: <input type="number" name="inventory"
+										value="${product.inventory}">
+								</p>
+								<p>
+									가격: <input type="number" name="unitPrice"
+										value="${product.unitPrice}">
+								</p>
+								<p>
+									카테고리: <select name="category">
+										<option value="1"
+											${product.categoryId == '1' ? 'selected' : ''}>절화</option>
+										<option value="2"
+											${product.categoryId == '2' ? 'selected' : ''}>관엽</option>
+										<option value="3"
+											${product.categoryId == '3' ? 'selected' : ''}>난</option>
+										<option value="4"
+											${product.categoryId == '4' ? 'selected' : ''}>기타</option>
 
-				<form id="productForm" method="POST" action="/add">
+									</select>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="pro-info2">
+						<p class="description-title">상품 설명</p>
+						<div class="post-content">
+							<div id="smarteditor">
+								<textarea id="content" name="description" rows="20"></textarea>
+							</div>
+						</div>
+					</div>
 					<div class="button-container">
 						<button type="button" class="btn1" onclick="confirmCancle()">취소</button>
-						<button type="submit" class="btn2" onclick="confirmAdd()">등록</button>
+						<button type="submit" class="btn2"
+							onclick="confirmAdd(event, '${userDetails.userId}')">등록</button>
 					</div>
 				</form>
 			</div>
@@ -317,16 +322,64 @@ img {
 
 		// 취소 버튼
 		function confirmCancle() {
-			window.location.href = "/products/shopM/1";
+			window.location.href = "/products/shopM/${userDetails.userId}";
+		}
+		// 등록 버튼 
+		function confirmAdd(event, sellerId) {  
+		    event.preventDefault(); // 기본 폼 제출 방지 (페이지 이동 방지)
+
+		    const form = document.getElementById("productForm");
+		    if (!form) {
+		        alert("폼이 존재하지 않습니다.");
+		        return;
+		    }
+
+		    // 스마트 에디터 내용 반영
+		    oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+
+		    // 입력값 유효성 검사
+		    const inputs = form.querySelectorAll("input[type='text'], input[type='number'], select, textarea");
+		    for (let input of inputs) {
+		        if (!input.value.trim()) {
+		            alert("모든 항목을 작성해주세요.");
+		            input.focus();
+		            return;
+		        }
+		    }
+
+		    if (confirm("상품을 등록하시겠습니까?")) {
+		        const formData = new FormData(form); // 폼 데이터 생성
+
+		        fetch(`/products/add/${sellerId}`, {  // URL에 sellerId 추가
+		            method: "POST",
+		            body: formData
+		        })
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error("서버 응답 오류");
+		            }
+		            return response.json();
+		        })
+		        .then(data => {
+		            alert(data.message); // 서버에서 받은 성공 메시지 표시
+		            window.location.href = `/products/shopM/${sellerId}`;
+		        })
+		        .catch(error => {
+		            alert("상품 등록 중 오류가 발생했습니다.");
+		            console.error("Error:", error);
+		        });
+		    }
 		}
 
-		// 등록 버튼 
-		function confirmAdd() {
-			const isConfirmed = confirm(`상품을 등록하시겠습니까?`);
-			if (isConfirmed) {
-				document.getElementById("productForm").submit(); // 폼 제출
-			}
-		}
+
+
+$(document).ready(function () {
+    // 유효성 검사 실패 시 alert
+    <c:if test="${not empty errorMessage}">
+        alert("${errorMessage}");
+    </c:if>
+});
+
 	</script>
 
 </body>

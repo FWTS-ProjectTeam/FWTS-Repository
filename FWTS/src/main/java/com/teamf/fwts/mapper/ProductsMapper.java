@@ -15,8 +15,8 @@ import java.util.Map;
 public interface ProductsMapper {
 
 	// 상품 등록
-	@Insert("INSERT INTO products (seller_id, category_id, color_id, pro_name, inventory, max_possible, min_possible, unit_price, is_sales, description, img_path, is_delete, regist_date, delivery_fee) "
-			+ "VALUES (#{sellerId}, #{categoryId}, #{colorId}, #{proName}, #{inventory}, #{maxPossible}, #{minPossible}, #{unitPrice}, #{isSales}, #{description}, #{imgPath}, #{isDelete}, #{registDate}, #{deliveryFee})")
+	@Insert("INSERT INTO products (seller_id, category_id, pro_name, inventory, max_possible, min_possible, unit_price, is_sales, description, img_path, is_delete, regist_date, delivery_fee) "
+			+ "VALUES (#{sellerId}, #{categoryId}, #{proName}, #{inventory}, #{maxPossible}, #{minPossible}, #{unitPrice}, #{isSales}, #{description}, #{imgPath}, #{isDelete}, NOW(), #{deliveryFee})")
 	void insertProduct(ProductsDto product);
 
     // 상품 조회
@@ -59,7 +59,7 @@ public interface ProductsMapper {
     List<ProductsDto> findAllBySellerIdWithPage(Map<String, Object> params);
     
 	// 상품 업데이트
-	@Update("UPDATE products SET pro_name = #{proName}, inventory = #{inventory}, unit_price = #{unitPrice}, description = #{description}, is_sales = #{isSales}, img_path = #{imgPath}, regist_date = #{registDate} WHERE pro_id = #{proId}")
+	@Update("UPDATE products SET pro_name = #{proName}, category_id= #{categoryId}, inventory = #{inventory},max_possible=#{maxPossible},min_possible= #{minPossible}, unit_price = #{unitPrice}, description = #{description}, is_sales = #{isSales}, img_path = #{imgPath}, regist_date = NOW() WHERE pro_id = #{proId}")
 	void updateProduct(ProductsDto product);
 
 	// 상품 삭제

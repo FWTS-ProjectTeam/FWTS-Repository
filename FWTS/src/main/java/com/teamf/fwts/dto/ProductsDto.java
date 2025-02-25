@@ -11,7 +11,6 @@ public class ProductsDto {
     private int proId;             // 상품 ID
     private int sellerId;          // 판매자 ID
     private int categoryId;        // 카테고리 ID
-    private int colorId;           // 색상 ID
     private String proName;        // 상품 이름
     private int inventory;         // 재고
     private int maxPossible;       // 최대 가능 수량

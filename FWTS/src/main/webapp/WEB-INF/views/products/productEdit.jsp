@@ -9,7 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 상품수정</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 .body-container {
 	display: flex;
@@ -25,7 +26,7 @@
 	margin: 0 auto;
 }
 
-.img-container{
+.img-container {
 	width: 30%;
 	height: 300px;
 }
@@ -39,8 +40,8 @@
 	background-color: #f0f0f0; /* 이미지가 없을 때 '이미지가 없습니다' 텍스트 표시용 */
 	overflow: hidden;
 	position: relative; /* :before를 중앙에 배치하려면 필요 */
-	margin-top:30px;
-	margin-bottom:10px;
+	margin-top: 30px;
+	margin-bottom: 10px;
 }
 
 .img:before {
@@ -55,8 +56,8 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top:30px;
-	margin-bottom:10px;
+	margin-top: 30px;
+	margin-bottom: 10px;
 }
 
 img {
@@ -138,25 +139,7 @@ img {
 	cursor: pointer;
 }
 
-.button-container .btn2 {
-	background-color: #fff;
-	color: var(--main4);
-	padding: 10px 40px;
-	border: 1px solid var(--main4);
-	border-radius: 5px;
-	cursor: pointer;
-}
-
 .button-container .btn1:hover {
-	background-color: var(--main4);
-	color: #fff;
-	padding: 10px 40px;
-	border: 1px solid var(--main4);
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.button-container .btn2:hover {
 	background-color: var(--main4);
 	color: #fff;
 	padding: 10px 40px;
@@ -168,33 +151,33 @@ img {
 
 </head>
 <body>
-	<div class="container">	
+	<div class="container">
 		<!-- 공통 -->
-   		<%@ include file="/WEB-INF/views/common/header.jsp" %>
+		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
 			<div class="product-container">
 				<h1>상품 수정</h1>
-				<form method="POST" action="/products/update/${product.proId}"
-					enctype="multipart/form-data">
+				<form id="updateForm" method="post" enctype="multipart/form-data"
+					onsubmit="submitForm(event, '${product.proId}')">
 					<div class="pro-info1">
 						<div class="img-container">
-						<div class="img">
-							<img src="${product.imgPath}">
-						</div>
+							<div class="img">
+								<img src="${product.imgPath}">
+							</div>
 							<input type="file" name="productImage" accept="image/*">
 						</div>
 						<div class="pro-detail">
 							<div class="pro-detail1">
-								<h3>A플라워(수정필요)</h3>
+								<h3>${userDetails.companyName}</h3>
 								<p>상품 ID: ${product.proId}</p>
 							</div>
 							<div class="pro-detail2">
 								<p>
-									상품명: <input type="text" name="proName"
+									상품명: <input type="text" name="proName" id="proName"
 										value="${product.proName}">
 								</p>
 								<p>
-									판매 상태: <select name="isSales">
+									판매 상태: <select name="isSales" id="isSales">
 										<option value="true" ${product.isSales() ? 'selected' : ''}>판매
 											중</option>
 										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매
@@ -203,47 +186,97 @@ img {
 								</p>
 								<p>
 									최소 구매 가능 수량: <input type="number" name="minPossible"
-										value="${product.minPossible}">
+										id="minPossible" value="${product.minPossible}">
 								</p>
 								<p>
 									최대 구매 가능 수량: <input type="number" name="maxPossible"
-										value="${product.maxPossible}">
+										id="maxPossible" value="${product.maxPossible}">
 								</p>
 								<p>
-									재고: <input type="number" name="inventory"
+									재고: <input type="number" name="inventory" id="inventory"
 										value="${product.inventory}">
 								</p>
 								<p>
-									가격: <input type="number" name="unitPrice"
+									가격: <input type="number" name="unitPrice" id="unitPrice"
 										value="${product.unitPrice}">
 								</p>
 								<p>
-									카테고리: <select name="category">
-										<option value="절화"
-											${product.categoryId == '1' ? 'selected' : ''}>절화</option>
-										<option value="관엽"
-											${product.categoryId == '2' ? 'selected' : ''}>관엽</option>
-										<option value="난"
-											${product.categoryId == '3' ? 'selected' : ''}>난</option>
+									카테고리: <select name="category" id="category">
+										<option value="1"
+											${product.categoryId == 1 ? 'selected="selected"' : ''}>절화</option>
+										<option value="2"
+											${product.categoryId == 2 ? 'selected="selected"' : ''}>관엽</option>
+										<option value="3"
+											${product.categoryId == 3 ? 'selected="selected"' : ''}>난</option>
+										<option value="4"
+											${product.categoryId == 4 ? 'selected="selected"' : ''}>기타</option>
 									</select>
 								</p>
+
 							</div>
 						</div>
 					</div>
 					<div class="pro-info2">
 						<p class="description-title">상품 설명</p>
-						<p><textarea name="proName" style="width: 100%; height: 300px; overflow-y: auto; padding: 0; line-height: 1.5; vertical-align: top;">
-  ${product.description}</textarea></p>
-  					</div>
+						<p>
+							<textarea name="description"
+								style="width: 100%; height: 300px; overflow-y: auto; padding: 0; line-height: 1.5; vertical-align: top;">
+  ${product.description}</textarea>
+						</p>
+					</div>
 					<div class="button-container">
-						<button class="btn1" type="submit">수정 완료</button>
+						<button class="btn1" type="button"
+							onclick="submitForm(event, '${product.proId}')">수정 완료</button>
 					</div>
 				</form>
 			</div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
+	<script>
+	function submitForm(event, id) {
+	    event.preventDefault(); // 기본 폼 제출 방지 (페이지 이동 방지)
 
+	    const form = document.getElementById("updateForm");
+	    if (!form) {
+	        alert("폼이 존재하지 않습니다.");
+	        return;
+	    }
+
+	    const formData = new FormData(form);
+	    const proName = formData.get("proName") || "상품";
+	    const isConfirmed = confirm(`${proName} 상품을 수정하시겠습니까?`);
+	    
+	    if (!isConfirmed) {
+	        console.log("사용자가 취소함");
+	        return; // 사용자가 취소하면 아무것도 하지 않음
+	    }
+
+	    fetch(`/products/update/${id}`, {
+	        method: "PUT",
+	        body: formData,
+	        headers: {
+	            "Accept": "application/json"
+	        }
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            throw new Error("서버 응답이 올바르지 않습니다.");
+	        }
+	        return response.json();
+	    })
+	    .then(data => {
+	        alert("수정이 완료되었습니다.");
+	        location.href = `/products/sell/${product.proId}`;
+	    })
+	    .catch(error => {
+	        console.error("수정 중 오류 발생:", error);
+	        alert("서버 오류로 인해 수정에 실패했습니다.");
+	    });
+	}
+
+
+</script>
 </body>
 </html>
 
