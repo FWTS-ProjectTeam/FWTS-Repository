@@ -35,12 +35,34 @@
 }
 
 .array-notice {
+	display: flex;
+	flex-direction: row;	
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
 	font-size: 20px;
 	font-weight: bold;
 	text-decoration: none;
 	color: #333;
 }
 
+.btn1 {
+	background-color: #fff;
+	color: var(--main4);
+	padding: 10px 20px;
+	margin: 0 10px;
+	border: 2px solid var(--main4);
+	border-radius: 10px;
+	cursor: pointer;
+}
+ .btn1:hover {
+	background-color: var(--main4);
+	color: #fff;
+	padding: 10px 20px;
+	border: 2px solid var(--main4);
+	border-radius: 10px;
+	cursor: pointer;
+}
 .table-container {
 	width: 100%;
 	margin: 20px 10px 0px 10px;
@@ -149,6 +171,9 @@
 						<p>
 							<span style="color: var(--main4); font-size: 30px;">${userDetails.companyName}</span> 의 판매 상품 목록
 						</p>
+						<button class="btn1"
+							onclick="location.href='/products/add/${userDetails.userId}'">새 상품 등록
+						</button>
 					</div>
 				</div>
 

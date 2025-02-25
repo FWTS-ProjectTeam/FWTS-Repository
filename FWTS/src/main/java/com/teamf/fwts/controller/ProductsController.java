@@ -191,14 +191,32 @@ public class ProductsController {
 	}
 
 	// 상품 수정 페이지
-	@GetMapping("/edit/{id}")
-	public String getProductEditPage(@PathVariable("id") int id, Model model) {
+	@GetMapping("/edit/{id}/{sellerId}")
+	public String getProductEditPage(@PathVariable("id") int id, @PathVariable("sellerId") int sellerId, Model model) {
 		ProductsDto product = productsService.getProductById(id);
 		model.addAttribute("product", product); // 수정할 상품 데이터 모델에 담기
+		
+		// 판매자 정보
+		UserDetails userDetails = userService.findBySellerId(sellerId);
+		model.addAttribute("userDetails", userDetails);
+				
 		return "products/productEdit";
 	}
-	
-    
+
+    // 상품 등록 처리
+    @PostMapping("/add/{sellerId}")
+    public ResponseEntity<Map<String, Object>> registerProduct(@PathVariable("sellerId") int sellerId,@ModelAttribute ProductsDto products,Model model) {
+        productsService.addProduct(products);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "상품이 성공적으로 등록되었습니다.");
+        response.put("productId", products.getProId());
+     // 판매자 정보
+     		UserDetails userDetails = userService.findBySellerId(sellerId);
+     		model.addAttribute("userDetails", userDetails);
+        return ResponseEntity.ok(response);
+    }
+
     // 상품 삭제 처리
     @PutMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") int id) {
@@ -208,29 +226,20 @@ public class ProductsController {
         response.put("message", "상품이 삭제되었습니다.");
         return ResponseEntity.ok(response);
     }
+    
+    // 상품 수정 처리
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable ("id")int id, @ModelAttribute ProductsDto products) {
+        products.setProId(id);
+        productsService.updateProduct(products);
 
-	// 상품 등록 처리
-    @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute("productsDto") ProductsDto products,
-                             BindingResult bindingResult,
-                             Model model) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "상품이 성공적으로 수정되었습니다.");
+        response.put("productId", id);
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("validMessage", "입력값을 확인해주세요.");
-            return "products/add/1";  // 리다이렉트가 아니라 JSP 템플릿 직접 반환
-        }
-
-        productsService.addProduct(products);  
-
-        return "redirect:/products/shopM/1";
+        return ResponseEntity.ok(response);
     }
 
 
-	// 상품 수정 처리
-	@PostMapping("/edit/{id}")
-	public String updateProduct(@PathVariable int id, @ModelAttribute ProductsDto product) {
-		product.setProId(id); // 수정할 상품 ID 설정
-		productsService.updateProduct(product); // 상품 수정 서비스 호출
-		return "products/redirect:/products/" + id; // 수정 후 상세 페이지로 리다이렉트
-	}
+
 }
