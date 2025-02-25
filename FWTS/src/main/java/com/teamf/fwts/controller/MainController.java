@@ -24,9 +24,9 @@ public class MainController {
 	private final NoticeBoardService noticeBoardService;
 	private final ProductsService productsService;
 	private final FlowerPriceService flowerPriceService;
-
-	@GetMapping("/FWTS")
-    public String home(Model model) {
+	
+	@GetMapping
+    public String main(Model model) {
         try {
         	Map<String, Object> params = new HashMap<>();
 	        params.put("start", 0);
