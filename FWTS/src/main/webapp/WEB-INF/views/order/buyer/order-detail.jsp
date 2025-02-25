@@ -18,12 +18,23 @@
         border-radius: 5px;
     }
     
-    .content {
-        flex-grow: 1;
+    .order-container {
+    	width: 100%;
         background-color: #fff;
+        margin: 0 10px;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section {
+        margin-bottom: 20px;
+        margin: 20px 10px;
+        padding: 0 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
     }
     
     .status {
@@ -35,13 +46,6 @@
     .status-yellow { color: orange; } /* 배송준비중 */
     .status-green { color: green; }   /* 배송중 */
     .status-blue { color: blue; }     /* 배송완료 */
-    
-    .section {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
 </style>
 </head>
 <body>
@@ -53,7 +57,7 @@
 		<!-- 사이드바 -->
     	<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
 
-        <div class="content">
+        <div class="order-container">
             <h1>주문 상세</h1>
 
             <div class="section">
@@ -62,7 +66,7 @@
                 <p><strong>상품명:</strong> ${order.proName}</p>
                 <p><strong>주문번호:</strong> ${order.orderNum}</p>
                 <p><strong>주문일:</strong> ${order.orderDate}</p>
-                <p><strong>수량:</strong> ${order.purchaseQuantity}개</p>
+                <p><strong>수량:</strong> ${order.purchaseQuantity} 개</p>
                 <p><strong>가격:</strong> <fmt:formatNumber value="${order.totalPrice}" type="number" /> 원</p>
                 
                 <p><strong>상태:</strong>
@@ -91,9 +95,10 @@
                 <p><strong>택배사:</strong> ${order.courier}</p>
                 <p><strong>운송장번호:</strong> ${order.shipmentNum}</p>
             </div>
-            
         </div>
     </div>
+    
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </div>
 </body>
 </html>
