@@ -28,7 +28,6 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>🛒 주문 확인</h1>
 
@@ -57,6 +56,5 @@
 
     <a href="/productList" class="button" style="background-color: gray;">❌ 취소</a>
 </div>
-
 </body>
 </html>

@@ -231,10 +231,13 @@ img {
 	    				</div>
 					</div>
 					<hr class="solid-line">
-					<div class="button-container">
-						<button class="btn1" onclick="addToCart(${product.proId})">장바구니</button>
-    					<button class="btn2" onclick="orderNow(${product.proId})">바로구매</button>
-					</div>
+					<!-- 비로그인 또는 소매업자 -->
+					<sec:authorize access="!(hasRole('ROLE_WHOLESALER') or hasRole('ROLE_ADMIN'))">
+			        	<div class="button-container">
+							<button class="btn1" onclick="addToCart(${product.proId})">장바구니</button>
+	    					<button class="btn2" onclick="orderNow(${product.proId})">바로구매</button>
+						</div>
+					</sec:authorize>
 				</div>
 			</div>
 			<div class="pro-info2">

@@ -131,7 +131,7 @@
         
         <div class="profile-container">
             <h2>회원정보 수정</h2>
-               <form class="profile-form" id="profile-form">
+              <form class="profile-form" id="profile-form">
     			<div class="input-group">
 			        <label for="company">상호명 <span class="required">*</span></label>
 			        <div class="input-field">

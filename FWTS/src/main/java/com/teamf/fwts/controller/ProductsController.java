@@ -5,12 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import com.teamf.fwts.service.ProductsService;
 import com.teamf.fwts.service.UserService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import com.teamf.fwts.dto.ProductsDto;
@@ -204,6 +202,7 @@ public class ProductsController {
 				
 		return "products/productEdit";
 	}
+	
     // 상품 등록 처리
     @PostMapping("/add/{sellerId}")
     public ResponseEntity<Map<String, Object>> registerProduct(@PathVariable("sellerId") int sellerId,@ModelAttribute ProductsDto products,Model model) {
@@ -217,6 +216,7 @@ public class ProductsController {
 		model.addAttribute("userDetails", userDetails);
         return ResponseEntity.ok(response);
     }
+    
     // 상품 삭제 처리
     @PutMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteProduct(@PathVariable("id") int id) {
@@ -229,7 +229,7 @@ public class ProductsController {
     
     // 상품 수정 처리
     @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable ("id")int id, @ModelAttribute ProductsDto products) {
+    public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable ("id") int id, @ModelAttribute ProductsDto products) {
         products.setProId(id);
         productsService.updateProduct(products);
 
@@ -239,7 +239,4 @@ public class ProductsController {
 
         return ResponseEntity.ok(response);
     }
-
-
-
 }

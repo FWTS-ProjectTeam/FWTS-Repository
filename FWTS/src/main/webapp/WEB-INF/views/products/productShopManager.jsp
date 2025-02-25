@@ -20,6 +20,16 @@
     border-radius: 5px;
 }
 
+.table-container {
+	width: 100%;
+	margin: 20px 10px 0px 10px;
+}
+
+.array-container {
+    width: 100%;
+    margin: 0 10px;
+}
+
 .array-container {
 	display: flex;
 	justify-content: space-between;
@@ -57,10 +67,6 @@
 	border-radius: 10px;
 	cursor: pointer;
 }
-.table-container {
-	width: 100%;
-	margin: 20px 10px 0px 10px;
-}
 
 .product-list {
 	display: grid;
@@ -75,6 +81,8 @@
 	box-sizing: border-box;
 	cursor: pointer;
 	transition: transform 0.3s ease-in-out;
+	width: 100%; /* grid-item 크기에 맞게 조정 */
+	max-width: 250px; /* 최대 크기 제한 */
 }
 
 .product-item:hover {
@@ -83,12 +91,12 @@
 }
 
 .product-image {
-	width: 200px;
+	width: 100%; /* 부모 크기에 맞게 자동 조정 */
 	height: 200px;
 	border-radius: 5px;
-	background-color: #f2f2f2; /* 기본 배경 색상 */
+	background-color: #f2f2f2; 
 	display: block;
-	object-fit: cover; /* 이미지를 덮어 씌우는 방식 */
+	object-fit: cover;
 }
 
 .product-image[alt]:empty {
@@ -118,14 +126,7 @@
 
 .pagination {
 	text-align: center;
-	margin:100px 0px 50px 0px;
-}
-
-.pagination span {
-	background-color: #ff7f9d;
-	padding: 5px 10px;
-	border-radius: 5px;
-	color: #fff;
+	margin: 100px 0px 50px 0px;
 }
 
 .header-right a {
