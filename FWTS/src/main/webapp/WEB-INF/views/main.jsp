@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -27,7 +28,7 @@
     .banner {
         width: 64%;
         height: 200px;
-        object-fit: contain;
+        object-fit: fill;
         border-radius: 8px;
         background-color: #f0f0f0;
     }
@@ -83,6 +84,9 @@
 	.item-list {
 	    display: flex;
 	    gap: 20px;
+	}
+	.item {
+		cursor: pointer;
 	}
 	.item img {
 	    width: 160px;
@@ -211,26 +215,20 @@
         <section class="hot-items">
         	<h2>HOT!</h2>
             <div class="item-list">
-                <div class="item">
-                    <img src="" alt="해바라기">
-                    <p>해바라기 <span class="price">3,000원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="튤립">
-                    <p>튤립 <span class="price">1,500원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="백합">
-                    <p>백합 <span class="price">5,600원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="캐모마일">
-                    <p>캐모마일 <span class="price">3,200원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="장미">
-                    <p>장미 <span class="price">12,000원</span></p>
-                </div>
+            	<c:forEach var="product" items="${products}" varStatus="status">
+			        <div class="item" onclick="location.href='/products/buy/${product.proId}'">
+			            <img src="${product.imgPath}" alt="${product.proName}">
+			            <p>${product.proName} <span class="price">${product.unitPrice}</span>원</p>
+			        </div>
+			    </c:forEach>
+			
+			    <!-- 부족한 상품을 "상품이 없습니다"로 채우기 -->
+			    <c:forEach begin="${fn:length(products)}" end="4" var="empty" varStatus="status">
+			        <div class="item">
+			        	<img>
+			            <p>상품이 없습니다.</p>
+			        </div>
+			    </c:forEach>
             </div>
         </section>
         
