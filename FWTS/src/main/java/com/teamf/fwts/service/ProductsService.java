@@ -1,5 +1,6 @@
 package com.teamf.fwts.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,18 @@ public class ProductsService {
     // 셀러의 상품 목록 페이지 조회 (판매 x 상품 포함)
     public List<ProductsDto> findAllBySellerIdWithPage(Map<String, Object> params) {
         return productsMapper.findAllBySellerIdWithPage(params);
+    }
+    
+    // 메인 페이지 HOT 상품 조회
+    public List<ProductsDto> getTop5Products() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("category", "0");      // 모든 카테고리 조회
+        params.put("keyword", "");        // 검색어 없이 전체 조회
+        params.put("sort", "total_sales"); // 판매량 기준 정렬
+        params.put("start", 0);           // 0번부터 시작
+        params.put("count", 5);           // 상위 5개만 조회
+
+        return productsMapper.findProductsWithPage(params);
     }
     
 }
