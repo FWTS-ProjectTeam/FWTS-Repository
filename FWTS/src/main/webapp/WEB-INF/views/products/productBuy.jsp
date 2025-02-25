@@ -257,12 +257,12 @@ img {
 	<script>
 		function addToCart(proId) {
 	        var quantity = document.getElementById('quantity').value;
-	        location.href = "/buyer/addToCart?proId=" + proId + "&selectedQuantity=" + quantity;
+	        location.href = "/buyer/addToCart?proId=" + proId + "&quantity=" + quantity;
 	    }
 	    
 	    function orderNow(proId) {
-	        let quantity = document.getElementById('quantity').value;
-	        location.href = `/buyer/orderNow?proId=${proId}&selectedQuantity=${quantity}`;
+	    	var quantity = document.getElementById('quantity').value;
+	        location.href = "/buyer/orderNow?proId=" + proId + "&quantity=" + quantity;
 	    }
 	
         const maxStock = ${product.inventory}; // 최대 재고 수량

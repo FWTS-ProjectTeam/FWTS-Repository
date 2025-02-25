@@ -176,28 +176,28 @@
         
         <div class="table-container">
         	<div class="table-top-container">
-		    <!-- 제한된 회원 필터 -->
-		    <label>
-		        <input type="checkbox" id="limited-filter" onchange="toggleLimitedFilter()" ${isLimited ? 'checked' : ''}>
-				제한된 회원만 보기
-		    </label>
-		
-		    <!-- 회원 검색 -->
-		    <form class="search-table-form" id="search-table-form" action="/manage-page/retailers" onsubmit="return cleanEmptyQuery()">
-		        <select class="search-category" id="category" name="category">
-		            <option value="username" ${tCategory == 'username' ? 'selected' : ''}>아이디</option>
-		            <option value="email" ${tCategory == 'email' ? 'selected' : ''}>이메일</option>
-		            <option value="companyName" ${tCategory == 'companyName' ? 'selected' : ''}>상호명</option>
-		            <option value="ceoName" ${tCategory == 'ceoName' ? 'selected' : ''}>대표자명</option>
-		        </select>
-		        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="검색어를 입력해주세요">
-		
-		        <!-- 제한된 회원 여부를 hidden input으로 전송 -->
-		        <input type="hidden" id="limited-hidden" name="isLimited" value="${isLimited}">
-		
-		        <button type="submit" class="button">검색</button>
-		    </form>
-		</div>
+			    <!-- 제한된 회원 필터 -->
+			    <label>
+			        <input type="checkbox" id="limited-filter" onchange="toggleLimitedFilter()" ${isLimited ? 'checked' : ''}>
+					제한된 회원만 보기
+			    </label>
+			
+			    <!-- 회원 검색 -->
+			    <form class="search-table-form" id="search-table-form" action="/manage-page/retailers" onsubmit="return cleanEmptyQuery()">
+			        <select class="search-category" id="category" name="category">
+			            <option value="username" ${tCategory == 'username' ? 'selected' : ''}>아이디</option>
+			            <option value="email" ${tCategory == 'email' ? 'selected' : ''}>이메일</option>
+			            <option value="companyName" ${tCategory == 'companyName' ? 'selected' : ''}>상호명</option>
+			            <option value="ceoName" ${tCategory == 'ceoName' ? 'selected' : ''}>대표자명</option>
+			        </select>
+			        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="검색어를 입력해주세요">
+			
+			        <!-- 제한된 회원 여부를 hidden input으로 전송 -->
+			        <input type="hidden" id="limited-hidden" name="isLimited" value="${isLimited}">
+			
+			        <button type="submit" class="button">검색</button>
+			    </form>
+			</div>
         
             <table>
                 <thead>

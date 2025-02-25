@@ -208,6 +208,7 @@
             oncomplete: function(data) {
                 document.getElementById("postal-code").value = data.zonecode; // 우편번호 입력
                 document.getElementById("address").value = data.roadAddress; // 도로명 주소 입력
+                document.getElementById("detail-address").focus();
             }
         }).open();
     }

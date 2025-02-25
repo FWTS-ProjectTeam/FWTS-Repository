@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -25,9 +26,9 @@
     .cart-item {
         padding: 15px;
         margin-bottom: 15px;
-        border: 2px solid #ddd;
+        border: 1px solid #ddd;
         border-radius: 10px;
-        background-color: #f9f9f9;
+        background-color: #fefefe;
         position: relative;
     }
     .cart-header {
@@ -90,31 +91,27 @@
 		            <div class="cart-header">
 		                ${cartItem.proName}
 		                <div class="cart-controls">
-		                    <!-- ✅ 삭제 버튼 -->
+		                    <!-- 삭제 버튼 -->
 		                    <button class="button delete-button" onclick="deleteCartItem(${cartItem.cartId})">삭제</button>
 		                    
-		                    <!-- ✅ 결제 버튼 -->
-		                    <form id="orderForm-${cartItem.cartId}" action="/buyer/orderNow" method="post">
-		                        <input type="hidden" name="cartId" value="${cartItem.cartId}">
-		                        <input type="hidden" name="proId" value="${cartItem.proId}">
-		                        <input type="hidden" name="unitPrice" id="unitPrice-${cartItem.cartId}" value="${cartItem.unitPrice}">
-		                        <input type="hidden" name="deliveryFee" id="deliveryFee-${cartItem.cartId}" value="${cartItem.deliveryFee}">
-		                        <input type="hidden" name="purchaseQuantity" id="purchaseQuantity-${cartItem.cartId}" value="${cartItem.selectedQuantity}">
-		                        <input type="hidden" name="totalPrice" id="totalPrice-${cartItem.cartId}" value="${(cartItem.unitPrice * cartItem.selectedQuantity) + cartItem.deliveryFee}">
-		                        <button type="submit" class="button checkout-button">결제</button>
-		                    </form>
+		                    <!-- 결제 버튼 -->
+		                    <button class="button checkout-button" onclick="orderNow(${cartItem.cartId}, ${cartItem.proId})">결제</button>
 		                </div>
 		            </div>
 		            
-		            <p>상품 번호: ${cartItem.proId}</p>
+		            <p>상품 ID: ${cartItem.proId}</p>
 		
-		            <!-- ✅ 단가 표시 -->
+		            <!-- 단가 표시 -->
 		            <div class="price-info">
 		                <span>단가:</span> 
-		                <strong><span id="unitPriceDisplay-${cartItem.cartId}">${cartItem.unitPrice}</span> 원</strong>
+		                <strong>
+		                	<span id="unitPriceDisplay-${cartItem.cartId}">
+		                		<fmt:formatNumber value="${cartItem.unitPrice}" type="number" />
+		                	</span>원
+		                </strong>
 		            </div>
 		
-		            <!-- ✅ 수량 변경 -->
+		            <!-- 수량 변경 -->
 		            <div class="price-info">
 		                <span>수량:</span>
 		                <input type="number" id="quantity-${cartItem.cartId}" class="input-box"
@@ -122,22 +119,34 @@
 		                       oninput="updateTotal(${cartItem.cartId})">
 		            </div>
 		
-		            <!-- ✅ 상품 가격 -->
+		            <!-- 상품 가격 -->
 		            <div class="price-info">
 		                <span>상품 가격:</span>
-		                <strong><span id="productTotal-${cartItem.cartId}">${cartItem.unitPrice * cartItem.selectedQuantity}</span> 원</strong>
+		                <strong>
+		                	<span id="productTotal-${cartItem.cartId}">
+		                		<fmt:formatNumber value="${cartItem.unitPrice * cartItem.selectedQuantity}" type="number" />
+		                	</span>원
+		                </strong>
 		            </div>
 		
-		            <!-- ✅ 배송비 -->
+		            <!-- 배송비 -->
 		            <div class="price-info">
 		                <span>배송비:</span>
-		                <strong><span id="deliveryFeeDisplay-${cartItem.cartId}">${cartItem.deliveryFee}</span> 원</strong>
+		                <strong>
+		                	<span id="deliveryFeeDisplay-${cartItem.cartId}">
+		                		<fmt:formatNumber value="${cartItem.deliveryFee}" type="number" />
+		                	</span>원
+		                </strong>
 		            </div>
 		
-		            <!-- ✅ 총 결제액 -->
+		            <!-- 총 결제액 -->
 		            <div class="price-info total-price">
 		                <span>총 결제액:</span>
-		                <strong><span id="totalPriceDisplay-${cartItem.cartId}">${(cartItem.unitPrice * cartItem.selectedQuantity) + cartItem.deliveryFee}</span> 원</strong>
+		                <strong>
+		                	<span id="totalPriceDisplay-${cartItem.cartId}">
+		                		<fmt:formatNumber value="${(cartItem.unitPrice * cartItem.selectedQuantity) + cartItem.deliveryFee}" type="number" />
+		                	</span>원
+		                </strong>
 		            </div>
 		        </div>
 		    </c:forEach>
@@ -165,26 +174,37 @@
 		    </div>
 	    </div>
 	</div>
+	
+	<!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </div>
-
 <script>
+	function orderNow(cartId, proId) {
+		var quantity = document.getElementById(`quantity-\${cartId}`).value;
+	    location.href = "/buyer/orderNow?proId=" + proId + "&quantity=" + quantity;
+	}
+
     function updateTotal(cartId) {
-        console.log("✅ updateTotal 호출 - cartId:", cartId);
+        var quantityInput = document.getElementById(`quantity-\${cartId}`);
+        var unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
+        var deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).value);
+        var productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
+        var totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
 
-        let quantityInput = document.getElementById(`quantity-\${cartId}`);
-        let unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
-        let deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).value);
-        let productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
-        let totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
-
-        let quantity = parseInt(quantityInput.value);
-        let productTotal = unitPrice * quantity;
-        let totalPrice = productTotal + deliveryFee;
+        var quantity = parseInt(quantityInput.value);
+        var productTotal = unitPrice * quantity;
+        var totalPrice = productTotal + deliveryFee;
 
         productTotalDisplay.innerText = productTotal.toLocaleString();
         totalPriceDisplay.innerText = totalPrice.toLocaleString();
+        
+        var quantityInput = document.getElementById(`quantity-\${cartId}`);
+        var unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
+        var deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).value);
+        var productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
+        var totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
     }
-
+    
     function deleteCartItem(cartId) {
         if (!confirm("정말 삭제하시겠습니까?")) return;
 
@@ -194,11 +214,11 @@
                 alert(data.message);
                 if (data.status === "success") {
                     document.getElementById(`cart-\${cartId}`).remove();
+                    location.reload();
                 }
             })
             .catch(error => console.error("🚨 삭제 에러:", error));
     }
 </script>
-
 </body>
 </html>
