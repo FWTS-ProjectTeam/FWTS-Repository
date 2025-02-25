@@ -199,7 +199,7 @@ public class ProductsController {
 		model.addAttribute("product", product); // 수정할 상품 데이터 모델에 담기
 		
 		// 판매자 정보
-		UserDetails userDetails = userService.findBySellerId(sellerId);
+		UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
 		model.addAttribute("userDetails", userDetails);
 				
 		return "products/productEdit";
@@ -213,8 +213,8 @@ public class ProductsController {
         response.put("message", "상품이 성공적으로 등록되었습니다.");
         response.put("productId", products.getProId());
      // 판매자 정보
-     		UserDetails userDetails = userService.findBySellerId(sellerId);
-     		model.addAttribute("userDetails", userDetails);
+        UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
+		model.addAttribute("userDetails", userDetails);
         return ResponseEntity.ok(response);
     }
     // 상품 삭제 처리
