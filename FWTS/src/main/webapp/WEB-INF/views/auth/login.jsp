@@ -10,14 +10,10 @@
 <link rel="stylesheet" href="/resources/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .container h1 {
-        margin-bottom: 20px;
-    }
-    .container h1 a {
-    	text-decoration: none;
-    	color: #ff6699;
-    }
-    
+	.container h1 {
+		margin-bottom: 19px;
+	}
+	
     .input-group input {
         width: 100%;
         margin: 5px 0;
@@ -46,10 +42,10 @@
 <body>
 <div class="container">
     <h1><a href="/">생화24</a></h1>
-    <form id="login-content" action="/login" method="POST">
+    <form id="login-form" action="/login" method="POST">
     	<div class="input-group">
-    		<input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
-        	<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+    		<input id="username" name="username" placeholder="아이디를 입력해주세요">
+        	<input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요">
     	</div>
         
         <div class="remember-me">
@@ -81,8 +77,9 @@
 				confirmButtonText: '확인'
 			});
 		</c:if>
-			
-		var savedUsername = getCookie("savedUsername"); // 저장된 아이디 가져오기
+		
+		// 저장된 아이디 가져오기
+		var savedUsername = getCookie("savedUsername");
 	    if (savedUsername) {
 	        document.querySelector("input[name='username']").value = savedUsername;
 	        document.getElementById("remember").checked = true; // 체크박스 활성화
@@ -115,16 +112,18 @@
 		const password = document.getElementById("password").value;
 	  
 		if (!username || !password) {
-			alert("아이디 또는 비밀번호를 입력하세요.");
+			alert("아이디 또는 비밀번호를 입력해주세요.");
 			return false;
 		}
 	
+		saveUsername(); // 아이디 저장
 		form.requestSubmit(); // 폼 제출 실행
 	}
 
-	//폼 제출 시 실행되는 함수
-	document.querySelector("form").addEventListener("submit", function () {
-	    var username = document.querySelector("input[name='username']").value;
+	// 아이디 저장
+	function saveUsername() {
+		const form = document.getElementById("login-form");
+		var username = document.querySelector("input[name='username']").value;
 	    var rememberMe = document.getElementById("remember").checked;
 	
 	    if (rememberMe) {
@@ -134,7 +133,7 @@
 	    }
 	    
 	    form.requestSubmit(); // 폼 제출 실행
-	});
+	}
 </script>
 </body>
 </html>

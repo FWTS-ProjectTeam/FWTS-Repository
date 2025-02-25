@@ -9,11 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.teamf.fwts.dto.InquiryListDto;
 import com.teamf.fwts.dto.ProfileDto;
@@ -25,6 +27,7 @@ import com.teamf.fwts.service.AccountService;
 import com.teamf.fwts.service.InquiryBoardService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +43,7 @@ public class MyPageController {
 	@GetMapping("/info")
 	public String editProfilForm(Authentication authentication, Model model) {
 		Users user = userService.findByUsername(authentication.getName());
-		UserDetails userDetails = userService.findByUserId(user.getUserId());
+		UserDetails userDetails = userService.findUserDetailsByUserId(user.getUserId());
 
 		// 도매업자 처리
 		if (user.getRole() == 1) {
@@ -53,7 +56,7 @@ public class MyPageController {
 	}
 	
 	// 회원정보 수정
-	@PostMapping("/edit-profile")
+	@PostMapping("/info/edit-profile")
 	public ResponseEntity<?> editProfile(@Valid @RequestBody ProfileDto dto, BindingResult bindingResult, Authentication authentication) {
 		Users user = userService.findByUsername(authentication.getName());
 
@@ -75,8 +78,34 @@ public class MyPageController {
 		}
 	}
 	
+	// 회원탈퇴
+	@ResponseBody
+	@DeleteMapping("/info/delete")
+	public Map<String, Object> deleteUser(Authentication authentication, HttpSession session) {
+		Users user = userService.findByUsername(authentication.getName());
+	    Map<String, Object> response = new HashMap<>();
+
+	    // 탈퇴 제한 조건 추가
+	    if (user.isLimited()) {
+	        response.put("success", false);
+	        response.put("message", "회원 탈퇴가 제한된 상태입니다.");
+	        return response;
+	    }
+
+	    try {
+	        userService.deleteByUsername(authentication.getName());
+	        session.invalidate(); // 세션 무효화
+	        response.put("success", true);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "회원 탈퇴 중 오류가 발생했습니다.");
+	    }
+	    
+	    return response;
+	}
+	
 	// 비밀번호 재설정
-	@PostMapping("/reset-password")
+	@PostMapping("/info/reset-password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto dto, BindingResult bindingResult, Authentication authentication) {
 		String password = dto.getPassword();
 		String username = authentication.getName();
@@ -98,9 +127,9 @@ public class MyPageController {
         }
     }
 	
-	// 문의사항 내역 조회
+	// 문의 내역 조회
 	@GetMapping("/inquiry-history")
-	public String noticeList(@RequestParam(name = "page", defaultValue = "1") Integer page,
+	public String inquiryAll(@RequestParam(name = "page", defaultValue = "1") Integer page,
 							 Authentication authentication, Model model) {
 	    Users user = userService.findByUsername(authentication.getName());
 		

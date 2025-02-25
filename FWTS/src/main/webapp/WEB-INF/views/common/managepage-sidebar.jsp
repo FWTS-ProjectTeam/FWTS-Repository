@@ -2,7 +2,6 @@
     
 <div class="sidebar">
 	<h2>관리페이지</h2>
-	<a href="/manage-page/users" class="user-active">회원 관리</a>
-	<a href="#" class="product-active">전체 상품 관리</a>
-	<a href="#" class="order-active">전체 주문 내역</a>
+	<a href="/manage-page/wholesalers" class="wholesaler-active">도매업자 관리</a>
+	<a href="/manage-page/retailers" class="retailer-active">소매업자 관리</a>
 </div>

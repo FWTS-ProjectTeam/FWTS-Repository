@@ -14,13 +14,7 @@
 <link rel="stylesheet" href="/resources/css/auth.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .description {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 20px;
-    }
-    
+<style>    
     .input-group {
         width: 100%;
         text-align: left;
@@ -28,21 +22,9 @@
     }
     .input-group label {
         font-size: 14px;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 5px;
     }
     .input-group input {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 14px;
-        outline: none;
-        box-sizing: border-box;
-    }
-    .input-group input:focus {
-        border-color: #ff6699;
     }
     
     .password-field {
@@ -52,13 +34,6 @@
 	    width: 100%;
 	}
 	.password-field input {
-	    width: 100%;
-	    padding: 12px;
-	    border: 1px solid #ddd;
-	    border-radius: 6px;
-	    font-size: 14px;
-	    outline: none;
-	    box-sizing: border-box;
 	    padding-right: 40px; /* 아이콘 공간 확보 */
 	}
 	.password-field i {
@@ -66,29 +41,17 @@
 	    right: 10px;
 	    cursor: pointer;
 	    font-size: 18px;
-	    color: #888;
+	    color: var(--gray4);
 	}
 	.password-field i:hover {
-		color: #ff6699;
+		color: var(--pink2);
 	}
-
-    .button-container button {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        background-color: #ff6699;
-        color: white;
-    }
 </style>
 </head>
 <body>
 <div class="container">
     <h1>비밀번호 재설정</h1>
-    <p class="description">새 비밀번호를 입력하세요.</p>
+    <p class="description">새 비밀번호를 입력해주세요.</p>
 
     <form id="password-content" action="/find-password/reset-password" method="post"> 
 		<div class="input-group">
@@ -120,7 +83,7 @@
       	<c:if test="${not empty errorMessage}">
           	Swal.fire({
               	icon: 'error',
-              	title: '오류 발생',
+              	title: '재설정 실패',
               	text: "${errorMessage}", 
               	confirmButtonColor: '#d33',
 				confirmButtonText: '확인'

@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -135,8 +135,8 @@
 			<div class="array-container">
 				<div class="array-notice">
 					<p>
-						<span id="category-title"
-							style="color: var(--main4); font-size: 30px;"> <c:choose>
+						<span id="category-title" style="color: var(--main4); font-size: 30px;">
+							<c:choose>
 								<c:when test="${category == '0'}">ALL</c:when>
 								<c:when test="${category == '1'}">절화</c:when>
 								<c:when test="${category == '2'}">난</c:when>
@@ -168,7 +168,7 @@
 					<c:otherwise>
 						<c:forEach var="product" items="${products}">
 							<li class="product-item" data-category="${product.categoryId}"
-								onclick="window.location='/products/buy/${product.proId}/${product.sellerId}'">
+								onclick="window.location='/products/buy/${product.proId}'">
 								<h3>
 									<c:choose>
 										<c:when test="${fn:length(product.proName) > 15}">
@@ -179,8 +179,7 @@
                             </c:otherwise>
 									</c:choose>
 								</h3>
-								<img src="${product.imgPath}" alt="이미지가 없습니다"
-								class="product-image">
+								<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
 								<span style="font-size:12px;">
 									<c:choose>
 										<c:when test="${fn:length(product.description) > 25}">
@@ -201,45 +200,27 @@
 				</c:choose>
 			</ul>
 
-			<!-- 페이지네이션 -->
-			<div class="pagination">
-				<c:choose>
-					<c:when test="${count > 0}">
-						<c:set var="queryString">
-							<c:if
-								test="${category == 'all' || category == 'title' || category == 'content'}">
-								<c:set var="queryString"
-									value="&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-							</c:if>
-						</c:set>
-
-						<!-- 이전 페이지 버튼 -->
-						<c:choose>
-							<c:when test="${currentPage > 1}">
-								<a
-									href="?category=${category}&sort=${sort}&page=${currentPage - 1}${queryString}">◀</a>
-							</c:when>
-							<c:otherwise>
-								<a>◀</a>
-							</c:otherwise>
-						</c:choose>
-
-						<!-- 현재 페이지 / 전체 페이지 표시 -->
-						<span>${currentPage} / ${totalPages}</span>
-
-						<!-- 다음 페이지 버튼 -->
-						<c:choose>
-							<c:when test="${currentPage < totalPages}">
-								<a
-									href="?category=${category}&sort=${sort}&page=${currentPage + 1}${queryString}">▶</a>
-							</c:when>
-							<c:otherwise>
-								<a>▶</a>
-							</c:otherwise>
-						</c:choose>
-					</c:when>
-				</c:choose>
-			</div>
+			<!-- 페이징 처리 -->
+		    <div class="pagination">
+		    	<c:set var="queryString" value="" />
+	            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
+	                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
+	            </c:if>
+		    
+		        <c:if test="${currentPage > 1}">
+		            <a href="?page=${currentPage - 1}">« 이전</a>
+		        </c:if>
+		        
+		        <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+		        <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+			        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+			    </c:forEach>
+			    
+		        <c:if test="${currentPage < totalPages}">
+		            <a href="?page=${currentPage + 1}">다음 »</a>
+		        </c:if>
+		    </div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>

@@ -22,89 +22,87 @@
         border-radius: 5px;
     }
 	
-    td:nth-child(2) {
-   		text-align: left; /* 제목만 왼쪽 정렬 */
-   	}
-    th:nth-child(1), td:nth-child(1) { 
+	th:nth-child(1), td:nth-child(1) { 
 	    width: 60px;  /* 번호 열의 너비 고정 */
 	    min-width: 60px;
 	    max-width: 60px;
-	    text-align: center;
 	}
-	th:nth-child(3), td:nth-child(3) { 
-	    width: 100px; /* 작성자 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	    text-align: center;
+	th:nth-child(2), td:nth-child(2) { 
+		white-space: nowrap; /* 텍스트가 한 줄로 유지 */
+	    overflow: ellipsis; /* 넘칠 경우 숨김 처리 */
 	}
+	td:nth-child(2) {
+   		text-align: left; /* 제목만 왼쪽 정렬 */
+   	}
+	th:nth-child(3), td:nth-child(3),
 	th:nth-child(4), td:nth-child(4) { 
-	    width: 100px; /* 작성일 열의 너비 고정 */
+	    width: 100px; /* 작성자, 작성일 열의 너비 고정 */
 	    min-width: 100px;
 	    max-width: 100px;
-	    text-align: center;
 	}
 </style>
 </head>
 <body>
-    <div class="container">
-    	<!-- 공통 -->
-        <%@ include file="/WEB-INF/views/common/header.jsp" %>
-        
-        <div class="body-container">
-            <!-- 사이드바 -->
-    		<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
+<div class="container">
+	<!-- 공통 -->
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
+    
+    <div class="body-container">
+        <!-- 사이드바 -->
+		<%@ include file="/WEB-INF/views/common/mypage-sidebar.jsp" %>
 
-			<div class="table-container">
-            	<div class="table-top-container"></div>
+		<div class="table-container">
+			<div class="table-top-container"></div>
+         
+			<table>
+				<thead>
+                	<tr>
+                    	<th>번호</th>
+                    	<th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<c:forEach var="inquiry" items="${inquirys}">
+						<tr>
+			            	<td>${inquiry.inquiryId}</td>
+			                <td title="${inquiry.inquiryTitle}">
+			                	<a href="/support-center/inquirys/${inquiry.inquiryId}">
+			                	<c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
+			                <td title="${inquiry.username}">${inquiry.username}</td>
+			                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
+						</tr>
+        			</c:forEach>
+				</tbody>
+			</table>
             
-                <table>
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="inquiry" items="${inquirys}">
-				            <tr>
-				                <td>${inquiry.inquiryId}</td>
-				                <td>
-				                	<a href="/support-center/inquirys/${inquiry.inquiryId}">
-				                	<c:if test="${not empty inquiry.replyDate}"><span class="reply">[완료] </span></c:if>${inquiry.inquiryTitle}</a></td>
-				                <td>${inquiry.username}</td>
-				                <td><fmt:formatDate value="${inquiry.createdDate}" pattern="yyyy.MM.dd" /></td>
-				            </tr>
-				        </c:forEach>
-                    </tbody>
-                </table>
-                
-				<!-- 페이지네이션 -->
-	            <div class="pagination">
-			       	<c:choose>
-				        <c:when test="${count > 0}">
-				        	<c:choose>
-							    <c:when test="${currentPage > 1}">
-							        <a href="/my-page/inquiry-history?page=${currentPage - 1}">◀</a>
-							    </c:when>
-							    <c:otherwise><a>◀</a></c:otherwise>
-					        </c:choose>
-			        
-			       			<span>${currentPage} / ${totalPages}</span>
-			       		
-				       		<c:choose>
-							    <c:when test="${currentPage < totalPages}">
-							        <a href="/my-page/inquiry-history?page=${currentPage + 1}">▶</a>
-							    </c:when>
-							    <c:otherwise><a>▶</a></c:otherwise>
-							</c:choose>
-		       			</c:when>
-	       				<c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
-			       	</c:choose>
-			   	</div>
+			<!-- 페이지네이션 -->
+			<div class="pagination">
+			    <c:choose>
+			        <c:when test="${count > 0}">
+			            <c:if test="${currentPage > 1}">
+			                <a href="?page=${currentPage - 1}">« 이전</a>
+			            </c:if>
+			            
+			            <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+    					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+					        <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+					    </c:forEach>
+			            
+			            <c:if test="${currentPage < totalPages}">
+			                <a href="?page=${currentPage + 1}">다음 »</a>
+			            </c:if>
+			        </c:when>
+			        <c:otherwise><p>조회된 글이 없습니다.</p></c:otherwise>
+			    </c:choose>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
+	
+	<!-- 푸터 -->
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+ </div>
 </body>
 </html>

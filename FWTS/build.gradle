@@ -1,26 +1,26 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.2'
-	id 'io.spring.dependency-management' version '1.1.7'
+   id 'java'
+   id 'org.springframework.boot' version '3.4.2'
+   id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.teamf.fwts'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+   toolchain {
+      languageVersion = JavaLanguageVersion.of(17)
+   }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+   compileOnly {
+      extendsFrom annotationProcessor
+   }
 }
 
 repositories {
-	mavenCentral()
+   mavenCentral()
 }
 
 dependencies {
@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 	
 	// JSP 관련
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.33'
@@ -46,11 +47,14 @@ dependencies {
     
     // Jsoup
     implementation 'org.jsoup:jsoup:1.15.3'
+
+	// Apache POI
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'
     
     // DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+   useJUnitPlatform()
 }

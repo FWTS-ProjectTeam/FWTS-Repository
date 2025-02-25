@@ -4,7 +4,7 @@
     <div class="header-left">
 		<a href="/FWTS" class="special-font">생화24</a>
         <div class="search-container">
-            <input class="search-box" type="text" placeholder="찾으시는 꽃을 입력해주세요!">
+            <input class="search-box" placeholder="찾으시는 꽃을 입력해주세요!">
             <button class="search-button">
                 <i class="fas fa-search"></i>
             </button>
@@ -24,18 +24,18 @@
 
 <div class="nav-container">
     <div class="nav">
-				<a href="/products?category=0" class="${category == 'all' ? 'active' : ''}">
-					<span style="color: var(--main4);">ALL</span>
-				</a>
-				<a href="/products?category=1" class="${category == 1 ? 'active' : ''}">절화</a>
-				<a href="/products?category=2" class="${category == 2 ? 'active' : ''}">난</a>
-				<a href="/products?category=3" class="${category == 3 ? 'active' : ''}">관엽</a>
-				<a href="/products?category=4" class="${category == 4 ? 'active' : ''}">기타</a>
-			</div>
+		<a href="/products" class="${category == 'all' ? 'active' : ''}">
+			<span style="color: var(--main4);">ALL</span>
+		</a>
+		<a href="/products?category=1" class="${category == '1' ? 'active' : ''}">절화</a>
+		<a href="/products?category=2" class="${category == '2' ? 'active' : ''}">난</a>
+		<a href="/products?category=3" class="${category == '3' ? 'active' : ''}">관엽</a>
+		<a href="/products?category=4" class="${category == '4' ? 'active' : ''}">기타</a>
+	</div>
     <div class="nav-right">
     	<!-- 관리자 항목 -->
     	<sec:authorize access="hasRole('ROLE_ADMIN')">
-		    <a href="/manage-page/users">관리페이지</a>
+		    <a href="/manage-page/wholesalers">관리페이지</a>
 		</sec:authorize>
 		
 		<!-- 비관리자 항목 -->

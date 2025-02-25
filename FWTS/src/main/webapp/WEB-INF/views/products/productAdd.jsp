@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -9,11 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생화24 - 상품 등록</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
-	charset="utf-8"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
 .body-container {
 	display: flex;
@@ -58,19 +56,16 @@
 	font-weight: bold;
 	position: absolute; /* 부모 중앙에 텍스트 배치 */
 	text-align: center;
-	width: 100%;
-	height: 300px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	margin-top: 30px;
 	margin-bottom: 10px;
+	z-index: 1;
 }
 
 img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover; /* 이미지 비율 유지하며 크기에 맞게 자르기 */
+	z-index: 2;
 }
 
 .pro-detail {
