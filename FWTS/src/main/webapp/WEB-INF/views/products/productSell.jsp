@@ -238,6 +238,7 @@ table th, table td {
 								<p>최대 구매 가능 수량: ${product.maxPossible}</p>
 								<p>재고: ${product.inventory}</p>
 								<p>가격: ${product.unitPrice}</p>
+								<p>배송비: ${product.deliveryFee}</p>
 							</div>
 							<div>
 								<p>
