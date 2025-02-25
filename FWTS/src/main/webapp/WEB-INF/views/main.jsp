@@ -1,7 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -9,272 +11,302 @@
 <meta charset="UTF-8">
 <title>생화24</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <style>
-	.body-container {
-        flex-direction: column;
-        margin: 30px;
-        gap: 20px;
-    }
-    
-	.top-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .banner {
-        width: 64%;
-        height: 200px;
-        object-fit: contain;
-        border-radius: 8px;
-        background-color: #f0f0f0;
-    }
-    
-    .notice {
-        width: 30%;
-        height: 200px;
-        background-color: #fff;
-        padding: 5px 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .notice ul {
-    	display: flex;
-	    flex-direction: column;
-	    gap: 10px;
-	    list-style: none;
-	    padding: 0 10px;
-	}
-	.notice li {
-	    display: flex;
-	}
-	.notice span {
-	    color: var(--main4);
-	    margin-right: 10px;
-	    flex-shrink: 0;
-	}
-	.notice a {
-	    color: #333;
-	    text-decoration: none;
-	    flex-grow: 1;
-	    white-space: nowrap;
-	    overflow: hidden;
-	}
-    
-    .hot-items {
-    	width: 100%;
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    margin-top: 30px;
-	    gap: 20px;
-	}
-	.hot-items h2 {
-	    font-size: 40px;
-	    font-weight: bold;
-	    letter-spacing: 5px;
-	    margin: 0;
-	    color: #333;
-	}
-	
-	.item-list {
-	    display: flex;
-	    gap: 20px;
-	}
-	.item img {
-	    width: 160px;
-		height: 160px;
-		border-radius: 5px;
-		background-color: #f2f2f2;
-		display: block;
-		object-fit: cover;
-	}
-	.item p {
-	    margin-top: 10px;
-	    font-size: 16px;
-	}
-	
-	.price {
-	    font-weight: bold;
-	    color: var(--main1);
-	}
-	
-	/* 그래프 */
-	.flower-prices {
-    	width: 100%;
-    	text-align: center;
-    }
-    
-    /* 탭 */
-	.tab-list {
-	    display: flex;
-	    justify-content: center;
-	    list-style: none;
-	    padding: 0;
-	    margin: 10px 0;
-	}
-	.tab-item {
-	    padding: 10px 20px;
-	    cursor: pointer;
-	    border: 1px solid #ddd;
-	    border-radius: 6px;
-	    background-color: #f5f5f5;
-	    margin-right: 5px;
-	}
-	.tab-item:hover {
-		background-color: var(--main3);
-	    color: white;
-	}
-	.tab-item.active {
-		border: 1px solid #ff7f9d;
-	    background-color: #ff7f9d;
-	    color: white;
-	    font-weight: bold;
-	}
-	
-	/* 탭 콘텐츠 */
-	.tab-panel {
-	    display: none;
-	    padding: 15px;
-	    background: #f9f9f9;
-	    border: 1px solid #ddd;
-	    margin-top: 10px;
-	    height: 500px;
-	}
-	.tab-panel.active {
-	    display: block;
-	}
-	
-	.price-chart {
-	    position: relative;
-	    width: 100%;
-	    height: 100%;
-	}
-	.price-chart canvas {
-		margin: auto;
-        width: 100%;
-        height: 100%;
-    }
-    .error {
-	    position: absolute;
-	    top: 50%;
-	    left: 50%;
-	    transform: translate(-50%, -50%);
-	    color: gray;
-	    font-size: 18px;
-	}
-	
-	/* 로딩 애니메이션 */
-	.loading {
-		position: relative;
-	    top: 50%;
-	    left: 50%;
-	    color: #333;
-	    z-index: 9999; /* 다른 요소들 위에 오게 하기 */
-        border: 6px solid rgba(255, 255, 255, 0.3);
-        border-top: 6px solid #3498db;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+.body-container {
+	flex-direction: column;
+	margin: 30px;
+	gap: 20px;
+}
+
+.top-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.banner {
+	width: 64%;
+	height: 200px;
+	object-fit: contain;
+	border-radius: 8px;
+	background-color: #f0f0f0;
+}
+
+.notice {
+	width: 30%;
+	height: 200px;
+	background-color: #fff;
+	padding: 5px 12px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notice ul {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	list-style: none;
+	padding: 0 10px;
+}
+
+.notice li {
+	display: flex;
+}
+
+.notice span {
+	color: var(--main4);
+	margin-right: 10px;
+	flex-shrink: 0;
+}
+
+.notice a {
+	color: #333;
+	text-decoration: none;
+	flex-grow: 1;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.hot-items {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 30px;
+	gap: 20px;
+}
+
+.hot-items h2 {
+	font-size: 40px;
+	font-weight: bold;
+	letter-spacing: 5px;
+	margin: 0;
+	color: #333;
+}
+
+.item-list {
+	display: flex;
+	gap: 20px;
+}
+
+.item img {
+	width: 160px;
+	height: 160px;
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	display: block;
+	object-fit: cover;
+}
+
+.item p {
+	margin-top: 10px;
+	font-size: 16px;
+}
+
+.price {
+	font-weight: bold;
+	color: var(--main1);
+}
+
+/* 그래프 */
+.flower-prices {
+	width: 100%;
+	text-align: center;
+}
+
+/* 탭 */
+.tab-list {
+	display: flex;
+	justify-content: center;
+	list-style: none;
+	padding: 0;
+	margin: 10px 0;
+}
+
+.tab-item {
+	padding: 10px 20px;
+	cursor: pointer;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background-color: #f5f5f5;
+	margin-right: 5px;
+}
+
+.tab-item:hover {
+	background-color: var(--main3);
+	color: white;
+}
+
+.tab-item.active {
+	border: 1px solid #ff7f9d;
+	background-color: #ff7f9d;
+	color: white;
+	font-weight: bold;
+}
+
+/* 탭 콘텐츠 */
+.tab-panel {
+	display: none;
+	padding: 15px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	margin-top: 10px;
+	height: 500px;
+}
+
+.tab-panel.active {
+	display: block;
+}
+
+.price-chart {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.price-chart canvas {
+	margin: auto;
+	width: 100%;
+	height: 100%;
+}
+
+.error {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: gray;
+	font-size: 18px;
+}
+
+/* 로딩 애니메이션 */
+.loading {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	color: #333;
+	z-index: 9999; /* 다른 요소들 위에 오게 하기 */
+	border: 6px solid rgba(255, 255, 255, 0.3);
+	border-top: 6px solid #3498db;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	animation: spin 1s linear infinite;
+}
+
+@
+keyframes spin { 0% {
+	transform: rotate(0deg);
+}
+100
+
+
+%
+{
+transform
+
+
+:
+
+
+rotate
+(
+
+
+360deg
+
+
+)
+;
+
+
+}
+}
 </style>
 <body>
-<div class="container">
-	<!-- 공통 -->
-	<%@ include file="/WEB-INF/views/common/header.jsp"%>
-	
-	<div class="body-container">
-        <div class="top-section">
-            <img class="banner" src="/resources/img/banner.png" alt="배너">
-            
-            <div class="notice">
-                <h2>공지사항</h2>
-                <ul>
-                	<c:forEach var="notice" items="${notices}">
-			            <li>
-		                	<span><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></span>
-		                	<a href="/support-center/notices/${notice.noticeId}">${notice.noticeTitle}</a>
-		                </li>
-        			</c:forEach>
-                </ul>
-            </div>
-        </div>
-        
-        <section class="hot-items">
-        	<h2>HOT!</h2>
-            <div class="item-list">
-                <div class="item">
-                    <img src="" alt="해바라기">
-                    <p>해바라기 <span class="price">3,000원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="튤립">
-                    <p>튤립 <span class="price">1,500원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="백합">
-                    <p>백합 <span class="price">5,600원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="캐모마일">
-                    <p>캐모마일 <span class="price">3,200원</span></p>
-                </div>
-                <div class="item">
-                    <img src="" alt="장미">
-                    <p>장미 <span class="price">12,000원</span></p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="flower-prices">
-		    <h2>최근 3일 꽃 거래 동향</h2>
-		
-		    <!-- 탭 메뉴 -->
-		    <ul class="tab-list">
-			    <li class="tab-item active" data-tab="cut-flower">절화</li>
-			    <li class="tab-item" data-tab="orchid">난</li>
-			    <li class="tab-item" data-tab="foliage">관엽</li>
-			</ul>
-			
-			<!-- 그래프 영역 -->
-			<div class="tab-content">
-			    <div class="tab-panel active" id="cut-flower">
-			        <div class="price-chart">
-			            <div class="loading" id="cut-flower-loading"></div>
-			            <canvas id="cut-flower-chart"></canvas>
-			            <p class="error" id="cut-flower-error"></p>
-			        </div>
-			    </div>
-			    <div class="tab-panel" id="orchid">
-			        <div class="price-chart">
-			            <div class="loading" id="orchid-loading"></div>
-			            <canvas id="orchid-chart"></canvas>
-			            <p class="error" id="orchid-error"></p>
-			        </div>
-			    </div>
-			    <div class="tab-panel" id="foliage">
-			        <div class="price-chart">
-			            <div class="loading" id="foliage-loading"></div>
-			            <canvas id="foliage-chart"></canvas>
-			            <p class="error" id="foliage-error"></p>
-			        </div>
-			    </div>
+	<div class="container">
+		<!-- 공통 -->
+		<%@ include file="/WEB-INF/views/common/header.jsp"%>
+
+		<div class="body-container">
+			<div class="top-section">
+				<img class="banner" src="/resources/img/banner.png" alt="배너">
+
+				<div class="notice">
+					<h2>공지사항</h2>
+					<ul>
+						<c:forEach var="notice" items="${notices}">
+							<li><span><fmt:formatDate
+										value="${notice.createdDate}" pattern="yyyy.MM.dd" /></span> <a
+								href="/support-center/notices/${notice.noticeId}">${notice.noticeTitle}</a>
+							</li>
+						</c:forEach>
+					</ul>
+				</div>
 			</div>
-		</section>
-    </div>
-	
-	<!-- 푸터 -->
-	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
-</div>
-<script>
+			<section class="hot-items">
+				<h2>HOT!</h2>
+				<div class="item-list">
+					<c:forEach var="product" items="${top5Products}">
+						<div class="item"
+							onclick="location.href='/products/buy/${product.proId}'"
+							style="cursor: pointer;">
+							<img src="${product.imgPath}" alt="상품 이미지">
+							<p>${product.proName}
+								<span class="price">${product.unitPrice}원</span>
+							</p>
+						</div>
+					</c:forEach>
+
+				</div>
+			</section>
+
+			<section class="flower-prices">
+				<h2>최근 3일 꽃 거래 동향</h2>
+
+				<!-- 탭 메뉴 -->
+				<ul class="tab-list">
+					<li class="tab-item active" data-tab="cut-flower">절화</li>
+					<li class="tab-item" data-tab="orchid">난</li>
+					<li class="tab-item" data-tab="foliage">관엽</li>
+				</ul>
+
+				<!-- 그래프 영역 -->
+				<div class="tab-content">
+					<div class="tab-panel active" id="cut-flower">
+						<div class="price-chart">
+							<div class="loading" id="cut-flower-loading"></div>
+							<canvas id="cut-flower-chart"></canvas>
+							<p class="error" id="cut-flower-error"></p>
+						</div>
+					</div>
+					<div class="tab-panel" id="orchid">
+						<div class="price-chart">
+							<div class="loading" id="orchid-loading"></div>
+							<canvas id="orchid-chart"></canvas>
+							<p class="error" id="orchid-error"></p>
+						</div>
+					</div>
+					<div class="tab-panel" id="foliage">
+						<div class="price-chart">
+							<div class="loading" id="foliage-loading"></div>
+							<canvas id="foliage-chart"></canvas>
+							<p class="error" id="foliage-error"></p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- 푸터 -->
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+	</div>
+	<script>
 	document.addEventListener("DOMContentLoaded", function () { 
 	    // 페이지 로드 후 데이터 로드
 	    loadAllFlowerData();
