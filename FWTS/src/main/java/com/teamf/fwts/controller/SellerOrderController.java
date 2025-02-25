@@ -36,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor // private final 자동 추가
 @RequestMapping("/seller")
 public class SellerOrderController { // 판매자 - 주문 관리
-
 	private final SellerOrderService orderService;
 	private final UserService userService;
 	
@@ -44,7 +43,7 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	@GetMapping("/orders")
 	public String getOrderList(
 	        @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
-	        @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+	        @RequestParam(value = "keyword", required = false) String keyword,
 	        Model model) {
 		
 		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -59,8 +58,8 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	        int offset = (page - 1) * pageSize; 
 		
 	        // ✅ 검색어가 있으면 검색 + 페이징, 없으면 전체 조회 + 페이징
-	        List<OrderList> orderList = orderService.getOrdersWithPagination(sellerId, searchKeyword, offset, pageSize);
-	        int totalOrders = orderService.getTotalOrderCount(sellerId, searchKeyword); // 전체 주문 개수 (검색 포함)
+	        List<OrderList> orderList = orderService.getOrdersWithPagination(sellerId, keyword, offset, pageSize);
+	        int totalOrders = orderService.getTotalOrderCount(sellerId, keyword); // 전체 주문 개수 (검색 포함)
 
 	        int totalPages = (int) Math.ceil((double) totalOrders / pageSize);
 	        
@@ -68,14 +67,8 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	        model.addAttribute("orderList", orderList);
 	        model.addAttribute("currentPage", page);
 	        model.addAttribute("totalPages", totalPages);
-	        
-	        model.addAttribute("searchKeyword", searchKeyword); // 검색어 유지
-	        // 검색 후에도 입력했던 키워드 유지
-	        
-	        model.addAttribute("activeMenu", "orders"); // ✅ 메뉴 활성화 추가
-
+	        model.addAttribute("tKeyword", keyword); // 검색어 유지
 	        return "order/seller/orders";
-	     
 	}
     
     // ✅ 주문 상세 조회

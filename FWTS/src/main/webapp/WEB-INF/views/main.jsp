@@ -67,7 +67,7 @@
     
     .hot-items {
     	width: 100%;
-	    display: flex;
+    	display: flex;
 	    justify-content: space-between;
 	    align-items: center;
 	    margin-top: 30px;
@@ -85,25 +85,35 @@
 	    display: flex;
 	    gap: 20px;
 	}
-	.item {
+	.item-link {
 		cursor: pointer;
 	}
 	.item img {
 	    width: 160px;
 		height: 160px;
 		border-radius: 5px;
+		color: #999;
 		background-color: #f2f2f2;
 		display: block;
 		object-fit: cover;
 	}
 	.item p {
-	    margin-top: 10px;
+		width: 160px;
+	    margin: 10px 0 0 0;
 	    font-size: 16px;
+	    display: flex;
+	    justify-content: space-between;
 	}
 	
+	.name {
+		white-space: nowrap;
+		overflow: hidden;
+	}
 	.price {
+		flex-shrink: 0;
 	    font-weight: bold;
-	    color: var(--main1);
+	    color: var(--main4);
+	    margin-left: 5px;
 	}
 	
 	/* 그래프 */
@@ -205,7 +215,7 @@
                 	<c:forEach var="notice" items="${notices}">
 			            <li>
 		                	<span><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></span>
-		                	<a href="/support-center/notices/${notice.noticeId}">${notice.noticeTitle}</a>
+		                	<a href="/support-center/notices/${notice.noticeId}" title="${notice.noticeTitle}">${notice.noticeTitle}</a>
 		                </li>
         			</c:forEach>
                 </ul>
@@ -216,17 +226,20 @@
         	<h2>HOT!</h2>
             <div class="item-list">
             	<c:forEach var="product" items="${products}" varStatus="status">
-			        <div class="item" onclick="location.href='/products/buy/${product.proId}'">
+			        <div class="item item-link" onclick="location.href='/products/buy/${product.proId}'">
 			            <img src="${product.imgPath}" alt="${product.proName}">
-			            <p>${product.proName} <span class="price">${product.unitPrice}</span>원</p>
+			            <p title="${product.proName}">
+			            	<span class="name">${product.proName}</span>
+			            	<span class="price">${product.unitPrice}원</span>
+			            </p>
 			        </div>
 			    </c:forEach>
 			
-			    <!-- 부족한 상품을 "상품이 없습니다"로 채우기 -->
+			    <!-- 부족한 상품 처리 -->
 			    <c:forEach begin="${fn:length(products)}" end="4" var="empty" varStatus="status">
 			        <div class="item">
-			        	<img>
-			            <p>상품이 없습니다.</p>
+			        	<img alt="상품이 없습니다">
+			            <p>상품 없음</p>
 			        </div>
 			    </c:forEach>
             </div>

@@ -117,15 +117,4 @@ public class BuyerOrderService {
         }
         return orderMapper.getTotalOrderCount(buyerId, searchKeyword);
     }
-
-    
-    
-// // ✅ 주문 생성 서비스 메서드
-//    public boolean placeOrder(int buyerId, int proId, int purchaseQuantity, int unitPrice) {
-//        int totalPrice = purchaseQuantity * unitPrice; // 총 가격 계산
-//        int result = orderDao.insertOrder(buyerId, proId, purchaseQuantity, totalPrice);
-//        return result > 0; // 삽입 성공 여부 반환
-//    }
-
-
 }

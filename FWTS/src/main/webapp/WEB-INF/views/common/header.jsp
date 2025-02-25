@@ -2,13 +2,13 @@
 
 <div class="header">
     <div class="header-left">
-		<a href="/FWTS" class="special-font">생화24</a>
-        <div class="search-container">
-            <input class="search-box" placeholder="찾으시는 꽃을 입력해주세요!">
-            <button class="search-button">
+		<a href="/" class="special-font">생화24</a>
+        <form class="search-container" action="/products">
+       		<input class="search-box" name="keyword" value="${keyword}" placeholder="찾으시는 꽃을 입력해주세요!">
+            <button type="submit" class="search-button">
                 <i class="fas fa-search"></i>
             </button>
-        </div>
+        </form>
     </div>
     <div class="header-right">
         <sec:authorize access="isAnonymous()">
