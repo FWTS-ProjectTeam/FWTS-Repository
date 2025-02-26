@@ -209,7 +209,7 @@
         .then(response => response.text())
         .then(data => {
             alert(data);
-            location.reload(); // 업데이트 후 새로고침
+            location.href="/seller/orders"; // 주문 목록 페이지
         })
         .catch(error => console.error("Error:", error));
     }

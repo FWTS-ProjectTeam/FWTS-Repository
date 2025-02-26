@@ -99,7 +99,7 @@
     	<div class="table-container">
             <div class="table-top-container">
             	<!-- 엑셀 다운로드 버튼 -->
-	            <form action="/buyer/downloadExcel" method="get">
+	            <form action="/seller/downloadExcel" method="get">
 	                <button type="submit" class="excel-download">
 	                	<i class="fa-solid fa-file-arrow-down"></i>
 	                	엑셀 다운로드
