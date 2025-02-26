@@ -97,7 +97,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     @GetMapping("/orders")
     public String getOrderList(
         @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
-        @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+        @RequestParam(value = "keyword", required = false) String keyword,
         Model model) {
     	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -114,8 +114,8 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         int offset = (page - 1) * pageSize;
         
         // ✅ 검색어가 있으면 검색 + 페이징, 없으면 전체 조회 + 페이징
-        List<OrderList> orderList = orderService.getOrdersWithPagination(buyerId, searchKeyword, offset, pageSize);
-        int totalOrders = orderService.getTotalOrderCount(buyerId, searchKeyword); // 전체 주문 개수 (검색 포함)
+        List<OrderList> orderList = orderService.getOrdersWithPagination(buyerId, keyword, offset, pageSize);
+        int totalOrders = orderService.getTotalOrderCount(buyerId, keyword); // 전체 주문 개수 (검색 포함)
         // getTotalOrderCount() : 검색어가 있는 경우 검색된 총 개수 조회
         // 전체 개수(totalOrders)를 기준으로 totalPages 계산
         int totalPages = (int) Math.ceil((double) totalOrders / pageSize);
@@ -124,12 +124,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
         model.addAttribute("orderList", orderList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        
-        model.addAttribute("searchKeyword", searchKeyword); // 검색어 유지
-        // 검색 후에도 입력했던 키워드 유지
-        
-        model.addAttribute("activeMenu", "orders"); // ✅ 메뉴 활성화 추가
-
+        model.addAttribute("tKeyword", keyword); // 검색어 유지
         return "order/buyer/orders";
     }
     

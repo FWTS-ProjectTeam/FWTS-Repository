@@ -44,8 +44,13 @@ public class ProductsController {
 	    int count;
 
 	    // 카테고리 이름 처리
-	    String categoryName = "전체"; // 기본값
-	    if ("1".equals(category)) {
+	    String categoryName = "ALL"; // 기본값
+	    if (keyword != null) {
+	    	if (keyword.isBlank()) // 공백 검색어 처리
+	    		return "redirect:/products";
+	    	categoryName = "검색 결과";
+	    	category = "0";
+		} else if ("1".equals(category)) {
 	        categoryName = "절화";
 	    } else if ("2".equals(category)) {
 	        categoryName = "난";

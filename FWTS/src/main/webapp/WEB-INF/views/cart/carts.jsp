@@ -105,9 +105,8 @@
 		            <div class="price-info">
 		                <span>단가:</span> 
 		                <strong>
-		                	<span id="unitPriceDisplay-${cartItem.cartId}">
-		                		<fmt:formatNumber value="${cartItem.unitPrice}" type="number" />
-		                	</span>원
+		                	<input id="unitPrice-${cartItem.cartId}" hidden="hidden" value="${cartItem.unitPrice}">
+		                	<fmt:formatNumber value="${cartItem.unitPrice}" type="number" /> 원
 		                </strong>
 		            </div>
 		
@@ -133,7 +132,7 @@
 		            <div class="price-info">
 		                <span>배송비:</span>
 		                <strong>
-		                	<span id="deliveryFeeDisplay-${cartItem.cartId}">
+		                	<span id="deliveryFee-${cartItem.cartId}">
 		                		<fmt:formatNumber value="${cartItem.deliveryFee}" type="number" />
 		                	</span>원
 		                </strong>
@@ -185,24 +184,19 @@
 	}
 
     function updateTotal(cartId) {
-        var quantityInput = document.getElementById(`quantity-\${cartId}`);
-        var unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
-        var deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).value);
-        var productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
-        var totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
-
-        var quantity = parseInt(quantityInput.value);
+    	var quantityInput = document.getElementById(`quantity-\${cartId}`);
+    	var unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
+    	var deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).innerText);
+    	var productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
+    	var totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
+        
+    	var quantity = parseInt(quantityInput.value);
+    	console.log(unitPrice+":   " +quantity)
         var productTotal = unitPrice * quantity;
         var totalPrice = productTotal + deliveryFee;
 
         productTotalDisplay.innerText = productTotal.toLocaleString();
         totalPriceDisplay.innerText = totalPrice.toLocaleString();
-        
-        var quantityInput = document.getElementById(`quantity-\${cartId}`);
-        var unitPrice = parseInt(document.getElementById(`unitPrice-\${cartId}`).value);
-        var deliveryFee = parseInt(document.getElementById(`deliveryFee-\${cartId}`).value);
-        var productTotalDisplay = document.getElementById(`productTotal-\${cartId}`);
-        var totalPriceDisplay = document.getElementById(`totalPriceDisplay-\${cartId}`);
     }
     
     function deleteCartItem(cartId) {

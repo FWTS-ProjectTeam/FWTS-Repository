@@ -108,7 +108,7 @@
             
             	<!-- 검색 -->
 			    <form class="search-table-form" id="search-table-form" action="/buyer/orders">
-			        <input class="search-table-box" id="searchKeyword" name="searchKeyword" value="${searchKeyword}" placeholder="상품명을 입력해주세요">
+			        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="상품명을 입력해주세요">
 			        <button type="submit" class="button">검색</button>
 			    </form>
 			</div>
@@ -126,7 +126,7 @@
                 <c:forEach var="order" items="${orderList}">
                     <tr>
                         <td>${order.orderNum}</td>
-                        <td>${order.proName}</td>
+                        <td title="${order.proName}">${order.proName}</td>
                         <td>${order.purchaseQuantity}</td>
                         <td><fmt:formatNumber value="${order.totalPrice}" type="number" /></td>
                         <td>
@@ -162,12 +162,12 @@
             	<c:choose>
 			        <c:when test="${not empty orderList}">
 		            	<c:set var="queryString" value="" />
-			            <c:if test="${not empty searchKeyword}">
-			                <c:set var="queryString" value="${queryString}&keyword=${fn:escapeXml(searchKeyword)}" />
+			            <c:if test="${not empty tKeyword}">
+			                <c:set var="queryString" value="${queryString}&keyword=${fn:escapeXml(tKeyword)}" />
 			            </c:if>
 		            
 		                <c:if test="${currentPage > 1}">
-		                    <a href="?page=${currentPage - 1}&searchKeyword=${searchKeyword}">« 이전</a>
+		                    <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
 		                </c:if>
 		
 						<c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
@@ -177,7 +177,7 @@
 					    </c:forEach>
 		
 		                <c:if test="${currentPage < totalPages}">
-		                    <a href="?page=${currentPage + 1}&searchKeyword=${searchKeyword}">다음 »</a>
+		                    <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
 		                </c:if>
 		             </c:when>
 			        <c:otherwise><p>조회된 주문이 없습니다.</p></c:otherwise>

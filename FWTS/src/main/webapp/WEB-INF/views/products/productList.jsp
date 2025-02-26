@@ -136,14 +136,7 @@
 				<div class="array-notice">
 					<p>
 						<span id="category-title" style="color: var(--main4); font-size: 30px;">
-							<c:choose>
-								<c:when test="${category == '0'}">ALL</c:when>
-								<c:when test="${category == '1'}">절화</c:when>
-								<c:when test="${category == '2'}">관엽</c:when>
-								<c:when test="${category == '3'}">난</c:when>
-								<c:when test="${category == '4'}">기타</c:when>
-								<c:otherwise>ALL</c:otherwise>
-							</c:choose>
+							${categoryName}
 						</span> 에 대한 상품
 					</p>
 				</div>
@@ -162,8 +155,7 @@
 			<ul class="product-list">
 				<c:choose>
 					<c:when test="${empty products}">
-						<li class="no-products">"${category == '0' ? 'ALL' : (category == '1' ? '절화' : (category == '2' ? '관엽' : (category == '3' ? '난' : '기타')))}"에
-							해당하는 상품이 없습니다.</li>
+						<li class="no-products">"${not empty keyword ? keyword : categoryName}"에 해당하는 상품이 없습니다.</li>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="product" items="${products}">
@@ -201,26 +193,29 @@
 			</ul>
 
 			<!-- 페이징 처리 -->
-          <div class="pagination">
-             <c:set var="queryString" value="" />
-               <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
-                   <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}&keyword=${fn:escapeXml(keyword)}" />
-               </c:if>
-          
-              <c:if test="${currentPage > 1}">
-                  <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
-              </c:if>
-              
-              <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
-              <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
-               <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                 <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-             </c:forEach>
-             
-              <c:if test="${currentPage < totalPages}">
-                  <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
-              </c:if>
-          </div>
+		    <div class="pagination">
+		    	<c:set var="queryString" value="" />
+	            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
+	                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}" />
+	            </c:if>
+	            <c:if test="${not empty keyword}">
+	                <c:set var="queryString" value="&keyword=${fn:escapeXml(keyword)}" />
+	            </c:if>
+		    
+		        <c:if test="${currentPage > 1}">
+		            <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
+		        </c:if>
+		        
+		        <c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
+		        <c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
+	            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+			        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+			    </c:forEach>
+			    
+		        <c:if test="${currentPage < totalPages}">
+		            <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
+		        </c:if>
+		    </div>
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
