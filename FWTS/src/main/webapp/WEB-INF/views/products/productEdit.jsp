@@ -215,9 +215,9 @@ img {
 					<div class="pro-info2">
 						<p class="description-title">상품 설명</p>
 						<p>
-							<textarea name="description"
-								style="width: 100%; height: 300px; overflow-y: auto; padding: 0; line-height: 1.5; vertical-align: top;">
-  ${product.description}</textarea>
+							<textarea style="width: 100%; height: 300px; overflow-y: auto; padding: 0; line-height: 1.5; vertical-align: top;"
+								name="description">${product.description}
+							</textarea>
 						</p>
 					</div>
 					<div class="button-container">
@@ -267,9 +267,6 @@ img {
 	        alert("수정에 실패했습니다.");
 	    });
 	}
-
 </script>
-
 </body>
 </html>
-

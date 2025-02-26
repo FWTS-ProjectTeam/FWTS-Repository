@@ -10,8 +10,7 @@
 <meta charset="UTF-8">
 <title>생화24</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <style>
@@ -213,13 +212,20 @@
             <div class="notice">
                 <h2>공지사항</h2>
                 <ul>
-                	<c:forEach var="notice" items="${notices}">
-			            <li>
-		                	<span><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></span>
-		                	<a href="/support-center/notices/${notice.noticeId}" title="${notice.noticeTitle}">${notice.noticeTitle}</a>
-		                </li>
-        			</c:forEach>
-                </ul>
+                	<c:forEach var="notice" items="${notices}" varStatus="status">
+					    <c:if test="${status.index < 4}">
+					        <li>
+					            <span><fmt:formatDate value="${notice.createdDate}" pattern="yyyy.MM.dd" /></span>
+					            <a href="/support-center/notices/${notice.noticeId}" title="${notice.noticeTitle}">${notice.noticeTitle}</a>
+					        </li>
+					    </c:if>
+					</c:forEach>
+					
+					<!-- 부족한 공지사항 처리 -->
+					<c:forEach begin="1" end="${4 - fn:length(notices)}" var="empty">
+					    <li>공지사항이 없습니다.</li>
+					</c:forEach>
+	            </ul>
             </div>
         </div>
         
@@ -227,22 +233,24 @@
         	<h2>HOT!</h2>
             <div class="item-list">
             	<c:forEach var="product" items="${products}" varStatus="status">
-			        <div class="item item-link" onclick="location.href='/products/buy/${product.proId}'">
-			            <img src="${product.imgPath}" alt="${product.proName}">
-			            <p title="${product.proName}">
-			            	<span class="name">${product.proName}</span>
-			            	<span class="price">${product.unitPrice}원</span>
-			            </p>
-			        </div>
-			    </c:forEach>
-			
-			    <!-- 부족한 상품 처리 -->
-			    <c:forEach begin="${fn:length(products)}" end="4" var="empty" varStatus="status">
-			        <div class="item">
-			        	<img alt="상품이 없습니다">
-			            <p>상품 없음</p>
-			        </div>
-			    </c:forEach>
+				    <c:if test="${status.index < 5}">
+				        <div class="item item-link" onclick="location.href='/products/buy/${product.proId}'">
+				            <img src="${product.imgPath}" alt="${product.proName}">
+				            <p title="${product.proName}">
+				                <span class="name">${product.proName}</span>
+				                <span class="price">${product.unitPrice}원</span>
+				            </p>
+				        </div>
+				    </c:if>
+				</c:forEach>
+				
+				<!-- 부족한 상품 처리 -->
+				<c:forEach begin="1" end="${5 - fn:length(products)}" var="empty">
+				    <div class="item">
+				        <img alt="상품이 없습니다">
+				        <p>상품 없음</p>
+				    </div>
+				</c:forEach>
             </div>
         </section>
         
@@ -252,8 +260,8 @@
 				<!-- 탭 메뉴 -->
 				<ul class="tab-list">
 					<li class="tab-item active" data-tab="cut-flower">절화</li>
-					<li class="tab-item" data-tab="orchid">난</li>
 					<li class="tab-item" data-tab="foliage">관엽</li>
+					<li class="tab-item" data-tab="orchid">난</li>
 				</ul>
 
 				<!-- 그래프 영역 -->

@@ -132,6 +132,14 @@
 		<!-- 공통 -->
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div class="body-container">
+			<c:set var="queryString" value="" />
+            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
+                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}" />
+            </c:if>
+            <c:if test="${not empty keyword}">
+                <c:set var="queryString" value="&keyword=${fn:escapeXml(keyword)}" />
+            </c:if>
+		
 			<div class="array-container">
 				<div class="array-notice">
 					<p>
@@ -142,12 +150,12 @@
 				</div>
 				<div class="header-right">
 					<a
-						href="?page=${currentPage}&category=${category}&keyword=${keyword}&sort=default"
+						href="?page=${queryString}&sort=default"
 						class="sort-option ${sort == 'default' ? 'active' : ''}">인기순</a> <a
-						href="?page=${currentPage}&category=${category}&keyword=${keyword}&sort=price_high"
+						href="?page=${queryString}&sort=price_high"
 						class="sort-option ${sort == 'price_high' ? 'active' : ''}">가격높은순</a>
 					<a
-						href="?page=${currentPage}&category=${category}&keyword=${keyword}&sort=price_low"
+						href="?page=${queryString}&sort=price_low"
 						class="sort-option ${sort == 'price_low' ? 'active' : ''}">가격낮은순</a>
 				</div>
 			</div>
@@ -194,14 +202,6 @@
 
 			<!-- 페이징 처리 -->
 		    <div class="pagination">
-		    	<c:set var="queryString" value="" />
-	            <c:if test="${category == '1' || category == '2' || category == '3' || category == '4'}">
-	                <c:set var="queryString" value="${queryString}&category=${fn:escapeXml(category)}" />
-	            </c:if>
-	            <c:if test="${not empty keyword}">
-	                <c:set var="queryString" value="&keyword=${fn:escapeXml(keyword)}" />
-	            </c:if>
-		    
 		        <c:if test="${currentPage > 1}">
 		            <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
 		        </c:if>
@@ -219,5 +219,13 @@
 		</div>
 		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 	</div>
+<script>
+	//페이지 로드 시 실행
+	window.onload = function () {
+		<c:if test="${not empty message}">
+			alert("${message}");
+		</c:if>
+	};
+</script>
 </body>
 </html>

@@ -89,7 +89,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
             return "redirect:/products"; // ✅ 주문 완료 후 상품 목록으로 이동
         } else {
             redirectAttributes.addFlashAttribute("message", "⚠ 주문 처리 중 오류가 발생했습니다.");
-            return "redirect:/productDetail?proId=" + proId; // ✅ 주문 실패 시 상품 상세 페이지로 이동
+            return "redirect:/products/buy/" + proId; // 상품 목록으로 리다이렉트
         }
     }
     

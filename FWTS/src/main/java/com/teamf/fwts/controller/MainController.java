@@ -31,16 +31,12 @@ public class MainController {
         	Map<String, Object> params = new HashMap<>();
 	        params.put("start", 0);
 	        params.put("count", 4);
-	        params.put("sort", "default");  // 일반 상품 정렬 조건
 
 	        List<NoticeListDto> notices = noticeBoardService.findAll(params);
-	        List<ProductsDto> products = productsService.findProductsWithPage(params);
-	        List<ProductsDto> top5Products = productsService.getTop5Products(); // 🔥 HOT 상품 추가
+	        List<ProductsDto> products = productsService.getTop5Products();
 
 	        model.addAttribute("notices", notices);
 	        model.addAttribute("products", products);
-	        model.addAttribute("top5Products", top5Products); // ✅ HOT 상품 리스트 추가
-
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", "시세 정보를 불러오는 데 오류가 발생했습니다.");
