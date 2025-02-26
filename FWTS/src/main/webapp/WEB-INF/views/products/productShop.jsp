@@ -80,6 +80,8 @@
 	box-sizing: border-box;
 	cursor: pointer;
 	transition: transform 0.3s ease-in-out;
+	width: 100%; /* grid-item 크기에 맞게 조정 */
+	max-width: 250px; /* 최대 크기 제한 */
 }
 
 .product-item:hover {
@@ -88,21 +90,21 @@
 }
 
 .product-image {
-	width: 200px;
+	width: 100%; /* 부모 크기에 맞게 자동 조정 */
 	height: 200px;
 	border-radius: 5px;
-	background-color: #f2f2f2; /* 기본 배경 색상 */
+	background-color: #f2f2f2; 
 	display: block;
-	object-fit: cover; /* 이미지를 덮어 씌우는 방식 */
+	object-fit: cover;
 }
 
 .product-image[alt]:empty {
-	background-color: #f2f2f2; /* 이미지가 없을 때 배경색 */
-	color: #999; /* 텍스트 색상 */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 14px;
+    background-color: #f2f2f2; /* 이미지가 없을 때 배경색 */
+    color: #999; /* 텍스트 색상 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
 }
 
 .product-details {

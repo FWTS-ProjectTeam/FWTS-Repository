@@ -55,7 +55,9 @@ public class BuyerOrderService {
 		String deliveryAddress;
 		if (postalCode != null && !postalCode.isEmpty()) {
 			// 사용자가 새로운 배송지를 입력했다면 해당 값을 사용
-			deliveryAddress = "(" + postalCode + ") " + address + ", " + addressDetail;
+			deliveryAddress = "(" + postalCode + ") " + address;
+			if (!addressDetail.isBlank())
+				deliveryAddress += ", " + addressDetail;
 			// ✅ 새로운 배송지를 하나의 문자열로 변환하여 사용자의 주소 정보 업데이트
 			
 			// user_details 테이블의 기존 주소를 새 주소로 업데이트
