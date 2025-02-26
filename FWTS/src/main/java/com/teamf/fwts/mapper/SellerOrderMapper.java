@@ -69,7 +69,7 @@ public interface SellerOrderMapper {
     	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
     	    "</if> " +
     	    "<if test='endDate != null and endDate != \"\"'> " +
-    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "AND o.order_date <![CDATA[ < ]]> DATE_ADD(#{endDate}, INTERVAL 1 DAY) " +
     	    "</if> " +
 
     	    "ORDER BY o.order_date DESC " +
@@ -97,15 +97,12 @@ public interface SellerOrderMapper {
     	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
     	    "</if> " +
     	    "<if test='endDate != null and endDate != \"\"'> " +
-    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "AND o.order_date <![CDATA[ < ]]> DATE_ADD(#{endDate}, INTERVAL 1 DAY) " +
     	    "</if> " +
 
     	    "</script>")
     	int getTotalOrderCount(@Param("sellerId") int sellerId,
     	                       @Param("searchKeyword") String searchKeyword,
     	                       @Param("startDate") String startDate,
-    	                       @Param("endDate") String endDate);
-
-    
-    
+    	                       @Param("endDate") String endDate);   
 }

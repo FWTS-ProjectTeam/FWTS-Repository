@@ -180,7 +180,7 @@
 <script>
 	function orderNow(cartId, proId) {
 		var quantity = document.getElementById(`quantity-\${cartId}`).value;
-	    location.href = "/buyer/orderNow?proId=" + proId + "&quantity=" + quantity;
+	    location.href = "/buyer/orderNow?proId=" + proId + "&quantity=" + quantity + "&cartId=" + cartId;
 	}
 
     function updateTotal(cartId) {

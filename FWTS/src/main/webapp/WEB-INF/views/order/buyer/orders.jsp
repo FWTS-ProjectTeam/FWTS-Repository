@@ -23,13 +23,12 @@
 	/* 검색 입력창 크기 조절 */
 	.search-table-box {
 	    width: 150px;  /* 기존보다 폭을 줄임 */
-	    padding: 6px 8px;
-	    font-size: 14px;
+	    margin-left: 5px;
 	}
 	
 	/* 날짜 입력창 크기 조절 */
 	.search-table-box[type="date"] {
-	    width: 120px;  /* 날짜 선택 칸도 폭을 줄임 */
+	    width: 100px;  /* 날짜 선택 칸도 폭을 줄임 */
 	}
     
 	
@@ -92,11 +91,11 @@
             
             	<!-- ✅ 검색 (상품명 + 날짜 검색 추가됨) -->
 			    <form class="search-table-form" id="search-table-form" action="/buyer/orders">
-			        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="상품명을 입력해주세요">
-			        
 			        <!-- ✅ 주문 날짜 검색 추가 -->
 			        <input class="search-table-box" type="date" id="startDate" name="startDate" value="${startDate}">
 			        <input class="search-table-box" type="date" id="endDate" name="endDate" value="${endDate}">
+			        
+			        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="상품명을 입력해주세요">
 			        
 			        <button type="submit" class="button">검색</button>
 			    </form>

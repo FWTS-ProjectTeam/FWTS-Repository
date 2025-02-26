@@ -40,6 +40,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     @GetMapping("/orderNow")
     public String orderNow(@RequestParam("proId") Integer proId,
     					   @RequestParam("quantity") Integer quantity,
+    					   @RequestParam(name = "cartId", defaultValue = "0") Integer cartId,
     					   Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
@@ -51,6 +52,7 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
 
         OrderDto orderNow = orderService.getOrderNow(buyerId, proId);
         orderNow.setPurchaseQuantity(quantity);
+        orderNow.setCartId(cartId);
         model.addAttribute("orderNow", orderNow);
         return "order/buyer/order"; 
     }

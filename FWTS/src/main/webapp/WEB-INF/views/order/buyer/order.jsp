@@ -131,8 +131,7 @@
 		        <p><strong>배송지:</strong> 
 		            <c:choose>
 		                <c:when test="${not empty orderNow.address}">
-		                    (${orderNow.postalCode}) ${orderNow.address}
-		                    <c:if test="${not empty orderNow.detailAddress}">, ${orderNow.detailAddress}</c:if>
+		                    (${orderNow.postalCode}) ${orderNow.address}<c:if test="${not empty orderNow.detailAddress}">, ${orderNow.detailAddress}</c:if>
 		                </c:when>
 		                <c:otherwise>
 		                    <span style="color: red;">배송지 정보 없음</span>

@@ -56,7 +56,9 @@ public interface BuyerOrderMapper {
     int getInventory(@Param("proId") int proId);
     
     // ✅ 주문 성공 시, 상품 재고 차감
-    @Update("UPDATE products SET inventory = inventory - #{purchaseQuantity} WHERE pro_id = #{proId} AND inventory >= #{purchaseQuantity}")
+    @Update("UPDATE products SET inventory = inventory - #{purchaseQuantity}, " +
+           "total_sales = total_sales + #{purchaseQuantity} " +
+          "WHERE pro_id = #{proId} AND inventory >= #{purchaseQuantity}")
     int decreaseInventory(@Param("proId") int proId, @Param("purchaseQuantity") int purchaseQuantity);
     
     // Mybatis의 @Insert 어노테이션은 기본적으로 실행된 SQL 쿼리의 영향을 받은 행(row)의 수를 반환 -> method int로 return
@@ -128,7 +130,7 @@ public interface BuyerOrderMapper {
     	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
     	    "</if> " +
     	    "<if test='endDate != null and endDate != \"\"'> " +
-    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "AND o.order_date <![CDATA[ < ]]> DATE_ADD(#{endDate}, INTERVAL 1 DAY) " +
     	    "</if> " +
 
     	    "ORDER BY o.order_date DESC " +
@@ -156,7 +158,7 @@ public interface BuyerOrderMapper {
     	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
     	    "</if> " +
     	    "<if test='endDate != null and endDate != \"\"'> " +
-    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "AND o.order_date <![CDATA[ < ]]> DATE_ADD(#{endDate}, INTERVAL 1 DAY) " +
     	    "</if> " +
 
     	    "</script>")
@@ -169,7 +171,5 @@ public interface BuyerOrderMapper {
     // List<Map<S, O>> 형태인 이유
     // : 하나의 주문(order_num)이 여러 개의 상품을 포함할 수 있기 때문)
     // @Param("orderNum) : Mybatis에서 SQL 쿼리 내
-    // #{orderNum}과 메서드의 orderNum 매개변수를 매핑하기 위함
-    
-    
+    // #{orderNum}과 메서드의 orderNum 매개변수를 매핑하기 위함   
 }

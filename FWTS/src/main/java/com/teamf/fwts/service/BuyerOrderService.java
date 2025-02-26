@@ -84,14 +84,14 @@ public class BuyerOrderService {
 
 			// ✅ 장바구니에서 주문한 경우, 해당 상품 삭제
 			if (cartId > 0) { 
+				System.out.println(cartId);
 				int deletedRows = cartMapper.removeCartItem(buyerId, cartId);
 				System.out.println("🛒 장바구니 삭제 결과 - 삭제된 행 개수: " + deletedRows);
 			}
 		}
 		
-		return orderSuccess;
-		
-		}
+		return orderSuccess;	
+	}
     
     // ✅ 주문 상세 조회
     public OrderDetail getOrderWithProducts(String orderNum) {

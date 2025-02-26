@@ -4,8 +4,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.teamf.fwts.dto.OrderList;
-import com.teamf.fwts.mapper.BuyerCartMapper;
-import com.teamf.fwts.mapper.BuyerOrderMapper;
 import com.teamf.fwts.mapper.SellerOrderMapper;
 
 import lombok.RequiredArgsConstructor;
