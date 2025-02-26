@@ -35,10 +35,14 @@ public class BuyerOrderService {
 		
 		// ✅ 현재 상품의 재고 확인
 	    int currentStock = orderMapper.getInventory(proId);
+	    int minPossible = orderMapper.getMinPossible(proId);
 	    if (purchaseQuantity > currentStock) {
 	        System.out.println("❌ 재고 부족으로 주문 실패! (proId: " + proId + ", 남은 재고: " + currentStock + ")");
 	        return false; // 🚨 재고 부족으로 주문을 취소
-	    }
+	    } else if (purchaseQuantity < minPossible) {
+          System.out.println("실패");
+          return false; 
+       }
 		
 		// ✅ 주문 객체 생성 및 정보 설정
 		order.setBuyerId(buyerId);

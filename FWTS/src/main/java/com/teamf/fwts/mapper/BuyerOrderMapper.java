@@ -17,7 +17,7 @@ import java.util.List;
 public interface BuyerOrderMapper {
 	// 주문을 위한 정보 가져오기
 	@Select({"SELECT buyer.ceo_name, buyer.phone_num, buyer.postal_code, buyer.address, buyer.detail_address,", // 구매자 정보
-	        "p.pro_id, p.pro_name, p.seller_id, p.unit_price, p.delivery_fee,", // 상품 정보
+	        "p.pro_id, p.pro_name, p.seller_id, p.unit_price, p.delivery_fee, p.min_possible,", // 상품 정보
 	        "b.account_num, b.bank_name,", // 판매자 계좌번호
 	        "seller.company_name", // 판매 업체 이름
 	        "FROM products p",
@@ -27,6 +27,10 @@ public interface BuyerOrderMapper {
 	        "WHERE p.pro_id = #{proId}"})
 	OrderDto getOrderNow(@Param("buyerId") int buyerId, @Param("proId") int proId);
 
+	// 최소 주문 수량 조회
+    @Select("SELECT min_possible FROM products WHERE pro_id = #{proId}")
+    int getMinPossible(@Param("proId") int proId);
+	
 	// ✅ 사용자의 최근 배송지 가져오기
 	@Select("SELECT CONCAT('(', postal_code, ') ', address, ', ', detail_address) " +
 	        "FROM user_details WHERE user_id = #{buyerId}")

@@ -276,6 +276,23 @@ img {
 	</div>
 
 	<script>
+		//페이지 로드 시 실행
+		window.onload = function () {
+			<c:if test="${not empty message}">
+				alert("${message}");
+			</c:if>
+		};
+	
+		function addToCart(proId) {
+	        var quantity = document.getElementById('quantity').value;
+	        location.href = "/buyer/addToCart?proId=" + proId + "&quantity=" + quantity;
+	    }
+	    
+	    function orderNow(proId) {
+	    	var quantity = document.getElementById('quantity').value;
+	        location.href = "/buyer/orderNow?proId=" + proId + "&quantity=" + quantity;
+	    }
+	
         const maxStock = ${product.inventory};
         const unitPrice = ${product.unitPrice};
         const deliveryFee = ${product.deliveryFee};

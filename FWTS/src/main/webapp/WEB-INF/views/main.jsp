@@ -252,8 +252,8 @@
 				<!-- 탭 메뉴 -->
 				<ul class="tab-list">
 					<li class="tab-item active" data-tab="cut-flower">절화</li>
-					<li class="tab-item" data-tab="orchid">난</li>
 					<li class="tab-item" data-tab="foliage">관엽</li>
+					<li class="tab-item" data-tab="orchid">난</li>
 				</ul>
 
 				<!-- 그래프 영역 -->

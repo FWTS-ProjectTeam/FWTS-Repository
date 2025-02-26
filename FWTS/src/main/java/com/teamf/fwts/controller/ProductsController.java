@@ -53,9 +53,9 @@ public class ProductsController {
 		} else if ("1".equals(category)) {
 	        categoryName = "절화";
 	    } else if ("2".equals(category)) {
-	        categoryName = "난";
-	    } else if ("3".equals(category)) {
 	        categoryName = "관엽";
+	    } else if ("3".equals(category)) {
+	        categoryName = "난";
 	    } else if ("4".equals(category)) {
 	        categoryName = "기타";
 	    }
