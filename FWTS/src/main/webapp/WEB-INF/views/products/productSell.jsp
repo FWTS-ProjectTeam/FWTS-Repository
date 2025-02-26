@@ -355,7 +355,7 @@ table th, table td {
         	})
         	.then(data => {
             	alert(`${product.proName} 상품이 삭제되었습니다.`);
-            	location.href = `/products/shopM/${product.sellerId}`; // 삭제 후 해당 판매자의 페이지로 이동
+            	location.href = `/products/shopM`; // 삭제 후 해당 판매자의 페이지로 이동
         	})
         	.catch(error => {
             	console.error("삭제 중 오류 발생:", error);

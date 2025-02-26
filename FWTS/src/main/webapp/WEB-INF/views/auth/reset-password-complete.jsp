@@ -8,6 +8,13 @@
 <title>생화24 - 비밀번호 재설정</title>
 <link rel="stylesheet" href="/resources/css/auth.css">
 </head>
+<style>
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
+</style>
 <body>
 <div class="container">
     <h1>재설정 완료</h1>

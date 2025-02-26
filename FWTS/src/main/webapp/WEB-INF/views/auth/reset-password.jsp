@@ -46,6 +46,12 @@
 	.password-field i:hover {
 		color: var(--pink2);
 	}
+	
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

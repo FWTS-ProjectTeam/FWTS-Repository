@@ -37,6 +37,12 @@
     .links-container .normal {
         font-weight: normal;
     }
+    
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

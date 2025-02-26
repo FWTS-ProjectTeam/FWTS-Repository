@@ -22,6 +22,12 @@
     	margin: 0 auto;
     	justify-content: center;
     }
+    
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

@@ -66,6 +66,12 @@
 		background-color: var(--pink2);
 		cursor: pointer;
 	}
+	
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

@@ -15,6 +15,12 @@
         color: var(--pink2);
         margin-bottom: 20px;
     }
+    
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

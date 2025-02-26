@@ -52,6 +52,12 @@
 	    flex-direction: column;
 	    gap: 10px;
 	}
+	
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

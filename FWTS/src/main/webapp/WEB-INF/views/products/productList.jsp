@@ -150,12 +150,12 @@
 				</div>
 				<div class="header-right">
 					<a
-						href="?page=${queryString}&sort=default"
+						href="?page=${currentPage}${queryString}&sort=default"
 						class="sort-option ${sort == 'default' ? 'active' : ''}">인기순</a> <a
-						href="?page=${queryString}&sort=price_high"
+						href="?page=${currentPage}${queryString}&sort=price_high"
 						class="sort-option ${sort == 'price_high' ? 'active' : ''}">가격높은순</a>
 					<a
-						href="?page=${queryString}&sort=price_low"
+						href="?page=${currentPage}${queryString}&sort=price_low"
 						class="sort-option ${sort == 'price_low' ? 'active' : ''}">가격낮은순</a>
 				</div>
 			</div>

@@ -416,10 +416,10 @@
                	document.getElementById("business-no-check").value = "true";
                	
              	// 입력 필드 고정
-               	document.getElementById("company").readonly = true;
-               	document.getElementById("ceo").readonly = true;
-               	document.getElementById("opening-date").readonly = true;
-               	document.getElementById("business-no").readonly = true;
+               	document.getElementById("company").readOnly = true;
+               	document.getElementById("ceo").readOnly = true;
+               	document.getElementById("opening-date").readOnly = true;
+               	document.getElementById("business-no").readOnly = true;
            	}
        	})
        	.catch(error => {

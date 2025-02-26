@@ -44,6 +44,12 @@
 	    background: var(--pink3);
 	    color: white;
 	}
+	
+	html, body {
+	    height: auto;
+	    min-height: 100vh;
+	    overflow: auto;
+	}
 </style>
 </head>
 <body>

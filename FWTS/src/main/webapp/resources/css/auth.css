@@ -132,10 +132,3 @@ button {
     color: var(--gray3);
     margin-bottom: 20px;
 }
-
-/* SweetAlert2 모달이 떠도 레이아웃이 깨지지 않도록 설정 */
-html, body {
-    height: auto;
-    min-height: 100vh;
-    overflow: auto;
-}
