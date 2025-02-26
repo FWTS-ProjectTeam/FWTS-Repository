@@ -111,36 +111,60 @@ public interface BuyerOrderMapper {
     List<OrderDetail> getAllOrdersForExcel(@Param("buyerId") int buyerId);
     
     
-    // ✅ 주문 목록 조회 (검색어 + 페이징 적용)
     @Select("<script>" +
-            "SELECT o.order_num, o.purchase_quantity, o.total_price, o.order_state, o.order_date, " +
-            "p.pro_name " +
-            "FROM orders o " +
-            "JOIN products p ON o.pro_id = p.pro_id " +
-            "WHERE o.buyer_id = #{buyerId} " +
-            "<if test='searchKeyword != null and searchKeyword != \"\"'>" +
-            "AND p.pro_name LIKE #{searchKeyword} " + // 검색어가 입력되었을 떄 추가 조건
-            // 사용자가 searchKeyword를 입력하면 상품명 기준으로 검색하도록 like 조건 추가
-            "</if>" +
-            "ORDER BY o.order_date DESC " +
-            "LIMIT #{offset}, #{pageSize}" + // 페이징 적용, LIMIT를 사용해 페이징당 데이터 개수 제한
-            "</script>")
-    List<OrderList> getOrdersWithPagination(@Param("buyerId") int buyerId, 
-                                            @Param("searchKeyword") String searchKeyword,
-                                            @Param("offset") int offset, 
-                                            @Param("pageSize") int pageSize);
+    	    "SELECT o.order_num, o.purchase_quantity, o.total_price, o.order_state, o.order_date, " +
+    	    "p.pro_name " +
+    	    "FROM orders o " +
+    	    "JOIN products p ON o.pro_id = p.pro_id " +
+    	    "WHERE o.buyer_id = #{buyerId} " +
 
-    // ✅ 검색어가 있는 경우 검색된 총 개수 조회, 없으면 전체 주문 개수 조회
+    	    // ✅ 상품명 검색 (CONCAT 사용)
+    	    "<if test='searchKeyword != null and searchKeyword != \"\"'> " +
+    	    "AND p.pro_name LIKE CONCAT('%', #{searchKeyword}, '%') " +
+    	    "</if> " +
+
+    	    // ✅ 날짜 검색 (CDATA 사용)
+    	    "<if test='startDate != null and startDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
+    	    "</if> " +
+    	    "<if test='endDate != null and endDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "</if> " +
+
+    	    "ORDER BY o.order_date DESC " +
+    	    "LIMIT #{offset}, #{pageSize} " +
+    	    "</script>")
+    	List<OrderList> getOrdersWithPagination(@Param("buyerId") int buyerId, 
+    	                                        @Param("searchKeyword") String searchKeyword,
+    	                                        @Param("startDate") String startDate,
+    	                                        @Param("endDate") String endDate,
+    	                                        @Param("offset") int offset, 
+    	                                        @Param("pageSize") int pageSize);
+
     @Select("<script>" +
-            "SELECT COUNT(*) FROM orders o " +
-            "JOIN products p ON o.pro_id = p.pro_id " +
-            "WHERE o.buyer_id = #{buyerId} " +
-            "<if test='searchKeyword != null and searchKeyword != \"\"'>" +
-            "AND p.pro_name LIKE #{searchKeyword} " + // 검색어가 있는 경우 검색 적용, 없으면 이 부분이 쿼리에서 빠지고 전체 개수를 조회
-            "</if>" +
-            "</script>")
-    int getTotalOrderCount(@Param("buyerId") int buyerId, @Param("searchKeyword") String searchKeyword);
-    
+    	    "SELECT COUNT(*) FROM orders o " +
+    	    "JOIN products p ON o.pro_id = p.pro_id " +
+    	    "WHERE o.buyer_id = #{buyerId} " +
+
+    	    // ✅ 상품명 검색 (LIKE 사용)
+    	    "<if test='searchKeyword != null and searchKeyword != \"\"'> " +
+    	    "AND p.pro_name LIKE CONCAT('%', #{searchKeyword}, '%') " +
+    	    "</if> " +
+
+    	    // ✅ 날짜 조건 추가 (CDATA 사용)
+    	    "<if test='startDate != null and startDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
+    	    "</if> " +
+    	    "<if test='endDate != null and endDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "</if> " +
+
+    	    "</script>")
+    	int getTotalOrderCount(@Param("buyerId") int buyerId,
+    	                       @Param("searchKeyword") String searchKeyword,
+    	                       @Param("startDate") String startDate,
+    	                       @Param("endDate") String endDate);
+
     
     // List<Map<S, O>> 형태인 이유
     // : 하나의 주문(order_num)이 여러 개의 상품을 포함할 수 있기 때문)

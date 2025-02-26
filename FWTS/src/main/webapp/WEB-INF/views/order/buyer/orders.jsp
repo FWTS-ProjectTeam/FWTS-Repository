@@ -19,55 +19,43 @@
         color: white;
         border-radius: 5px;
     }
-	
-	th:nth-child(1), td:nth-child(1) { 
-	    width: 70px;  /* 번호 열의 너비 고정 */
-	    min-width: 70px;
-	    max-width: 70px;
-	}
-	th:nth-child(3), td:nth-child(3) { 
-	    width: 50px;  /* 수량 열의 너비 고정 */
-	    min-width: 50px;
-	    max-width: 50px;
-	}
-	th:nth-child(4), td:nth-child(4) { 
-	    width: 100px;  /* 상태 열의 너비 고정 */
-	    min-width: 100px;
-	    max-width: 100px;
-	}
-	th:nth-child(5), td:nth-child(5) { 
-	    width: 80px;  /* 상태 열의 너비 고정 */
-	    min-width: 80px;
-	    max-width: 80px;
-	}
-	th:nth-child(6), td:nth-child(6) { 
-	    width: 64px;  /* 상세보기 열의 너비 고정 */
-	    min-width: 64px;
-	    max-width: 64px;
+    
+	/* 검색 입력창 크기 조절 */
+	.search-table-box {
+	    width: 150px;  /* 기존보다 폭을 줄임 */
+	    padding: 6px 8px;
+	    font-size: 14px;
 	}
 	
+	/* 날짜 입력창 크기 조절 */
+	.search-table-box[type="date"] {
+	    width: 120px;  /* 날짜 선택 칸도 폭을 줄임 */
+	}
+    
+	
+	th:nth-child(1), td:nth-child(1) { width: 70px; }
+	th:nth-child(3), td:nth-child(3) { width: 50px; }
+	th:nth-child(4), td:nth-child(4) { width: 100px; }
+	th:nth-child(5), td:nth-child(5) { width: 80px; }
+	th:nth-child(6), td:nth-child(6) { width: 64px; }
+
 	/* 상세보기 버튼 */
 	.detail-button {
 	    background-color: transparent;
 	    border: none;
-	    padding: 0;
 	    font-size: 18px;
 	    cursor: pointer;
 	    transition: background-color 0.3s, color 0.3s;
 	}
-	.detail-button i.fas {
-	    color: var(--main2);
-	}
-	.detail-button:hover {
-	    background-color: #f0f0f0;
-	}
-	
-	/* 상태별 텍스트 색상 적용 */
-	.status-red { color: red; } /* 입금확인중 */
-	.status-orange { color: orange; } /* 배송준비중 */
-	.status-green { color: green; } /* 배송중 */
-	.status-blue { color: blue; } /* 배송완료 */
-	
+	.detail-button i.fas { color: var(--main2); }
+	.detail-button:hover { background-color: #f0f0f0; }
+
+	/* 상태별 텍스트 색상 */
+	.status-red { color: red; }
+	.status-orange { color: orange; }
+	.status-green { color: green; }
+	.status-blue { color: blue; }
+
 	/* 엑셀 다운로드 버튼 */
 	.excel-download {
 	    background-color: #4CAF50;
@@ -78,12 +66,8 @@
 	    border-radius: 5px;
 	    float: right;
 	}
-	.excel-download i {
-    	margin-right: 10px;
-    }
-	.excel-download:hover {
-	    background-color: #45a049;
-	}
+	.excel-download i { margin-right: 10px; }
+	.excel-download:hover { background-color: #45a049; }
 </style>
 </head>
 <body>
@@ -106,9 +90,14 @@
 	                </button>
 	            </form>
             
-            	<!-- 검색 -->
+            	<!-- ✅ 검색 (상품명 + 날짜 검색 추가됨) -->
 			    <form class="search-table-form" id="search-table-form" action="/buyer/orders">
 			        <input class="search-table-box" id="keyword" name="keyword" value="${tKeyword}" placeholder="상품명을 입력해주세요">
+			        
+			        <!-- ✅ 주문 날짜 검색 추가 -->
+			        <input class="search-table-box" type="date" id="startDate" name="startDate" value="${startDate}">
+			        <input class="search-table-box" type="date" id="endDate" name="endDate" value="${endDate}">
+			        
 			        <button type="submit" class="button">검색</button>
 			    </form>
 			</div>
@@ -131,21 +120,11 @@
                         <td><fmt:formatNumber value="${order.totalPrice}" type="number" /></td>
                         <td>
                             <c:choose>
-                                <c:when test="${order.orderState == 0}">
-                                    <span class="status-red">입금확인중</span>
-                                </c:when>
-                                <c:when test="${order.orderState == 1}">
-                                    <span class="status-orange">배송준비중</span>
-                                </c:when>
-                                <c:when test="${order.orderState == 2}">
-                                    <span class="status-green">배송중</span>
-                                </c:when>
-                                <c:when test="${order.orderState == 3}">
-                                    <span class="status-blue">배송완료</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <span>상태 미확인</span>
-                                </c:otherwise>
+                                <c:when test="${order.orderState == 0}"><span class="status-red">입금확인중</span></c:when>
+                                <c:when test="${order.orderState == 1}"><span class="status-orange">배송준비중</span></c:when>
+                                <c:when test="${order.orderState == 2}"><span class="status-green">배송중</span></c:when>
+                                <c:when test="${order.orderState == 3}"><span class="status-blue">배송완료</span></c:when>
+                                <c:otherwise><span>상태 미확인</span></c:otherwise>
                             </c:choose>
                         </td>
                         <td>
@@ -157,7 +136,7 @@
                 </c:forEach>
             </table>
 
-            <!-- 페이징 네비게이션 (검색어 유지) -->
+            <!-- ✅ 페이징 (검색어 + 날짜 유지) -->
             <div class="pagination">
             	<c:choose>
 			        <c:when test="${not empty orderList}">
@@ -165,17 +144,23 @@
 			            <c:if test="${not empty tKeyword}">
 			                <c:set var="queryString" value="${queryString}&keyword=${fn:escapeXml(tKeyword)}" />
 			            </c:if>
+			            <c:if test="${not empty startDate}">
+			                <c:set var="queryString" value="${queryString}&startDate=${startDate}" />
+			            </c:if>
+			            <c:if test="${not empty endDate}">
+			                <c:set var="queryString" value="${queryString}&endDate=${endDate}" />
+			            </c:if>
 		            
 		                <c:if test="${currentPage > 1}">
 		                    <a href="?page=${currentPage - 1}${queryString}">« 이전</a>
 		                </c:if>
-		
+
 						<c:set var="startPage" value="${currentPage - 2 > 0 ? currentPage - 2 : 1}" />
 		  					<c:set var="endPage" value="${startPage + 4 < totalPages ? startPage + 4 : totalPages}" />
 			            <c:forEach var="i" begin="${startPage}" end="${endPage}">
 					        <a href="?page=${i}${queryString}" class="${i == currentPage ? 'active' : ''}">${i}</a>
 					    </c:forEach>
-		
+
 		                <c:if test="${currentPage < totalPages}">
 		                    <a href="?page=${currentPage + 1}${queryString}">다음 »</a>
 		                </c:if>

@@ -1,5 +1,7 @@
 package com.teamf.fwts.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,4 +15,6 @@ public class OrderList { // 주문 내역
 	private int totalPrice; // 구매 총액
 	private int orderState; // 주문 및 배송 상태
 	private String proName; // 상품명
+	
+	private LocalDateTime orderDate;
 }

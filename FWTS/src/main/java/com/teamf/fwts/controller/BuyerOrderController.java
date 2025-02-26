@@ -96,35 +96,36 @@ public class BuyerOrderController { // 구매자 - 주문 및 배송 조회
     // 주문 목록 조회
     @GetMapping("/orders")
     public String getOrderList(
-        @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
+        @RequestParam(value = "page", defaultValue = "1") int page,
         @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam(value = "startDate", required = false) String startDate,
+        @RequestParam(value = "endDate", required = false) String endDate,
         Model model) {
-    	
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login"; // 로그인하지 않은 경우
+            return "redirect:/login";
         }
 
         String username = authentication.getName();
         int buyerId = userService.findByUsername(username).getUserId();
-        
-        int pageSize = 10; // 페이지당 표시할 주문 수
-        // 현재 페이지가 1이면 offset = 0, 페이지가 2이면 offset = 10
-        // 이렇게 하면 LIMIT을 사용할 때 해당 페이지의 데이터만 불러올 수 있음
+
+        int pageSize = 10;
         int offset = (page - 1) * pageSize;
-        
+
         // ✅ 검색어가 있으면 검색 + 페이징, 없으면 전체 조회 + 페이징
-        List<OrderList> orderList = orderService.getOrdersWithPagination(buyerId, keyword, offset, pageSize);
-        int totalOrders = orderService.getTotalOrderCount(buyerId, keyword); // 전체 주문 개수 (검색 포함)
-        // getTotalOrderCount() : 검색어가 있는 경우 검색된 총 개수 조회
-        // 전체 개수(totalOrders)를 기준으로 totalPages 계산
+        List<OrderList> orderList = orderService.getOrdersWithPagination(buyerId, keyword, startDate, endDate, offset, pageSize);
+        int totalOrders = orderService.getTotalOrderCount(buyerId, keyword, startDate, endDate);
         int totalPages = (int) Math.ceil((double) totalOrders / pageSize);
-        
-        // JSP로 데이터 전달
+
+        // ✅ 검색어 & 날짜 필터 유지
         model.addAttribute("orderList", orderList);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("tKeyword", keyword); // 검색어 유지
+        model.addAttribute("tKeyword", keyword);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+
         return "order/buyer/orders";
     }
     

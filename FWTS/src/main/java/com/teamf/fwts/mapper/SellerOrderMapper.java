@@ -52,34 +52,60 @@ public interface SellerOrderMapper {
     List<OrderDetail> getAllOrdersForExcel(@Param("sellerId") int sellerId);
     
     
-    // 검색어 조회
     @Select("<script>" +
-            "SELECT o.order_num, o.purchase_quantity, o.total_price, o.order_state, o.order_date, " +
-            "p.pro_name " +
-            "FROM orders o " +
-            "JOIN products p ON o.pro_id = p.pro_id " +
-            "WHERE o.seller_id = #{sellerId} " +
-            "<if test='searchKeyword != null and searchKeyword != \"\"'>" +
-            "AND p.pro_name LIKE #{searchKeyword} " +
-            "</if>" +
-            "ORDER BY o.order_date DESC " +
-            "LIMIT #{offset}, #{pageSize}" +
-            "</script>")
-    List<OrderList> getOrdersWithPagination(@Param("sellerId") int sellerId, 
-                                            @Param("searchKeyword") String searchKeyword,
-                                            @Param("offset") int offset, 
-                                            @Param("pageSize") int pageSize);
+    	    "SELECT o.order_num, o.purchase_quantity, o.total_price, o.order_state, o.order_date, " +
+    	    "p.pro_name " +
+    	    "FROM orders o " +
+    	    "JOIN products p ON o.pro_id = p.pro_id " +
+    	    "WHERE o.seller_id = #{sellerId} " +
+
+    	    // ✅ 상품명 검색 (CONCAT 사용)
+    	    "<if test='searchKeyword != null and searchKeyword != \"\"'> " +
+    	    "AND p.pro_name LIKE CONCAT('%', #{searchKeyword}, '%') " +
+    	    "</if> " +
+
+    	    // ✅ 날짜 검색 (CDATA 사용)
+    	    "<if test='startDate != null and startDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
+    	    "</if> " +
+    	    "<if test='endDate != null and endDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "</if> " +
+
+    	    "ORDER BY o.order_date DESC " +
+    	    "LIMIT #{offset}, #{pageSize} " +
+    	    "</script>")
+    	List<OrderList> getOrdersWithPagination(@Param("sellerId") int sellerId, 
+    	                                        @Param("searchKeyword") String searchKeyword,
+    	                                        @Param("startDate") String startDate,
+    	                                        @Param("endDate") String endDate,
+    	                                        @Param("offset") int offset, 
+    	                                        @Param("pageSize") int pageSize);
 
     @Select("<script>" +
-            "SELECT COUNT(*) FROM orders o " +
-            "JOIN products p ON o.pro_id = p.pro_id " +
-            "WHERE o.seller_id = #{sellerId} " +
-            "<if test='searchKeyword != null and searchKeyword != \"\"'>" +
-            "AND p.pro_name LIKE #{searchKeyword} " +
-            "</if>" +
-            "</script>")
-    int getTotalOrderCount(@Param("sellerId") int sellerId, @Param("searchKeyword") String searchKeyword);
-    
+    	    "SELECT COUNT(*) FROM orders o " +
+    	    "JOIN products p ON o.pro_id = p.pro_id " +
+    	    "WHERE o.seller_id = #{sellerId} " +
+
+    	    // ✅ 상품명 검색 (LIKE 사용)
+    	    "<if test='searchKeyword != null and searchKeyword != \"\"'> " +
+    	    "AND p.pro_name LIKE CONCAT('%', #{searchKeyword}, '%') " +
+    	    "</if> " +
+
+    	    // ✅ 날짜 조건 추가 (CDATA 사용)
+    	    "<if test='startDate != null and startDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ >= ]]> #{startDate} " +
+    	    "</if> " +
+    	    "<if test='endDate != null and endDate != \"\"'> " +
+    	    "AND o.order_date <![CDATA[ <= ]]> #{endDate} " +
+    	    "</if> " +
+
+    	    "</script>")
+    	int getTotalOrderCount(@Param("sellerId") int sellerId,
+    	                       @Param("searchKeyword") String searchKeyword,
+    	                       @Param("startDate") String startDate,
+    	                       @Param("endDate") String endDate);
+
     
     
 }

@@ -103,22 +103,42 @@ public class BuyerOrderService {
     
     // ✅ 검색어 처리 (페이징을 적용한 주문 목록을 가져오는 역할)
     // 검색어가 있을 경우 like 연산자 이용하여 검색어 반환
-    public List<OrderList> getOrdersWithPagination(int buyerId, String searchKeyword, int offset, int pageSize) {
-        if (searchKeyword != null && !searchKeyword.isEmpty()) {
-            searchKeyword = "%" + searchKeyword + "%"; // 검색어가 입력되었을 경우 LIKE 검색을 위해 앞뒤에 % 추가
-            // 이렇게 하면 SQL에서 LIKE '%검색어%'로 검색 가능
-        }
-        return orderMapper.getOrdersWithPagination(buyerId, searchKeyword, offset, pageSize);
-    }
+	public List<OrderList> getOrdersWithPagination(int buyerId, String searchKeyword,
+	            String startDate, String endDate,
+	            int offset, int pageSize) {
+		// ✅ 검색어가 있으면 LIKE 검색을 위해 % 추가
+		if (searchKeyword != null && !searchKeyword.isEmpty()) {
+			searchKeyword = "%" + searchKeyword + "%";
+		}
+	
+		// ✅ 날짜 값이 빈 문자열이면 null 처리
+		if (startDate != null && startDate.isEmpty()) {
+			startDate = null;
+		}
+		if (endDate != null && endDate.isEmpty()) {
+			endDate = null;
+		}
+	
+		return orderMapper.getOrdersWithPagination(buyerId, searchKeyword, startDate, endDate, offset, pageSize);
+	}
+
 
     // ✅ 검색 조건에 맞는 전체 주문 개수를 가져옴 ; 페이징 계산을 위해 사용
     // 1. 검색어가 있을 경우 like 연산자 통해서 검색 조건 추가
     // 2. 검색어가 없을 경우 전체 주문 개수 조회
     // 3. 전체 개수를 반환 -> 이를 사용해 총 페이지 수 계산 가능
-    public int getTotalOrderCount(int buyerId, String searchKeyword) {
+    public int getTotalOrderCount(int buyerId, String searchKeyword, String startDate, String endDate) {
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
             searchKeyword = "%" + searchKeyword + "%";
         }
-        return orderMapper.getTotalOrderCount(buyerId, searchKeyword);
+        
+        // ✅ 날짜 값이 빈 문자열이면 null 처리
+        if (startDate != null && startDate.isEmpty()) {
+            startDate = null;
+        }
+        if (endDate != null && endDate.isEmpty()) {
+            endDate = null;
+        }
+        return orderMapper.getTotalOrderCount(buyerId, searchKeyword, startDate, endDate);
     }
 }

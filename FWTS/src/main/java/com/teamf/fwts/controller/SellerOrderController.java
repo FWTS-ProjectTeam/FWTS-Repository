@@ -44,6 +44,8 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	public String getOrderList(
 	        @RequestParam(value = "page", defaultValue = "1") int page, // ✅ 기본값 1 (첫 페이지)
 	        @RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "startDate", required = false) String startDate,
+	        @RequestParam(value = "endDate", required = false) String endDate,
 	        Model model) {
 		
 		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,8 +60,8 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	        int offset = (page - 1) * pageSize; 
 		
 	        // ✅ 검색어가 있으면 검색 + 페이징, 없으면 전체 조회 + 페이징
-	        List<OrderList> orderList = orderService.getOrdersWithPagination(sellerId, keyword, offset, pageSize);
-	        int totalOrders = orderService.getTotalOrderCount(sellerId, keyword); // 전체 주문 개수 (검색 포함)
+	        List<OrderList> orderList = orderService.getOrdersWithPagination(sellerId, keyword, startDate, endDate, offset, pageSize);
+	        int totalOrders = orderService.getTotalOrderCount(sellerId, keyword, startDate, endDate); // 전체 주문 개수 (검색 포함)
 
 	        int totalPages = (int) Math.ceil((double) totalOrders / pageSize);
 	        
@@ -68,6 +70,9 @@ public class SellerOrderController { // 판매자 - 주문 관리
 	        model.addAttribute("currentPage", page);
 	        model.addAttribute("totalPages", totalPages);
 	        model.addAttribute("tKeyword", keyword); // 검색어 유지
+	        model.addAttribute("startDate", startDate);
+	        model.addAttribute("endDate", endDate);
+	        
 	        return "order/seller/orders";
 	}
     
