@@ -1,6 +1,8 @@
 package com.teamf.fwts.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -9,14 +11,17 @@ import org.springframework.ui.Model;
 import com.teamf.fwts.service.ProductsService;
 import com.teamf.fwts.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import com.teamf.fwts.dto.ProductsDto;
 import com.teamf.fwts.entity.UserDetails;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -208,19 +213,52 @@ public class ProductsController {
 		return "products/productEdit";
 	}
 	
-    // 상품 등록 처리
-    @PostMapping("/add/{sellerId}")
-    public ResponseEntity<Map<String, Object>> registerProduct(@PathVariable("sellerId") int sellerId,@ModelAttribute ProductsDto products,Model model) {
-        productsService.addProduct(products);
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "상품이 성공적으로 등록되었습니다.");
-        response.put("productId", products.getProId());
-     // 판매자 정보
-        UserDetails userDetails = userService.findUserDetailsByUserId(sellerId);
-		model.addAttribute("userDetails", userDetails);
-        return ResponseEntity.ok(response);
-    }
+	// 상품 등록 처리
+	@PostMapping("/add/{sellerId}")
+	public ResponseEntity<Map<String, Object>> registerProduct(
+	        @PathVariable("sellerId") int sellerId,
+	        @ModelAttribute ProductsDto products,
+	        @RequestParam("productImage") MultipartFile productImage,  // 이미지 파일 받기
+	        HttpServletRequest request) {
+
+	    Map<String, Object> response = new HashMap<>();
+
+	    try {
+	        // 1️⃣ 파일이 비어 있지 않은 경우
+	        if (!productImage.isEmpty()) {
+	            // 2️⃣ 저장할 디렉토리 설정 (예: /uploads/)
+	            String uploadDir = request.getServletContext().getRealPath("/uploads/");
+	            File dir = new File(uploadDir);
+	            if (!dir.exists()) {
+	                dir.mkdirs();  // 디렉토리가 없으면 생성
+	            }
+
+	            // 3️⃣ 파일명 생성 (UUID 사용하여 중복 방지)
+	            String originalFilename = productImage.getOriginalFilename();
+	            String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+	            File saveFile = new File(uploadDir, savedFilename);
+	            productImage.transferTo(saveFile);  // 파일 저장
+
+	            // 4️⃣ 이미지 경로를 DTO에 설정
+	            String imgPath = "/uploads/" + savedFilename;
+	            products.setImgPath(imgPath);
+	        }
+
+	        // 5️⃣ 상품 저장
+	        productsService.addProduct(products);
+
+	        // 6️⃣ 응답 데이터 설정
+	        response.put("message", "상품이 성공적으로 등록되었습니다.");
+	        response.put("productId", products.getProId());
+	        response.put("imgPath", products.getImgPath());
+
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        response.put("message", "상품 등록 중 오류 발생");
+	        response.put("error", e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
     
     // 상품 삭제 처리
     @PutMapping("/delete/{id}")
@@ -233,15 +271,61 @@ public class ProductsController {
     }
     
     // 상품 수정 처리
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateProduct(@PathVariable ("id") int id, @ModelAttribute ProductsDto products) {
-        products.setProId(id);
-        productsService.updateProduct(products);
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateProduct(
+            @PathVariable("id") int id,
+            @ModelAttribute ProductsDto products,
+            @RequestParam(value = "productImage", required = false) MultipartFile productImage,
+            HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "상품이 성공적으로 수정되었습니다.");
-        response.put("productId", id);
+        try {
+            ProductsDto existingProduct = productsService.getProductById(id);
+            if (existingProduct == null) {
+                response.put("message", "상품을 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
 
-        return ResponseEntity.ok(response);
+            // 이미지가 업로드되었을 때만 처리
+            if (productImage != null && !productImage.isEmpty()) {
+                String uploadDir = request.getServletContext().getRealPath("/uploads/");
+                File dir = new File(uploadDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                String originalFilename = productImage.getOriginalFilename();
+                String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+                File saveFile = new File(uploadDir, savedFilename);
+                productImage.transferTo(saveFile);
+
+                // 기존 이미지 삭제
+                if (existingProduct.getImgPath() != null) {
+                    File oldFile = new File(request.getServletContext().getRealPath(existingProduct.getImgPath()));
+                    if (oldFile.exists()) {
+                        oldFile.delete();
+                    }
+                }
+
+                products.setImgPath("/uploads/" + savedFilename);
+            } else {
+                // 새 이미지가 없을 경우 기존 이미지 유지
+                products.setImgPath(existingProduct.getImgPath());
+            }
+
+            products.setProId(id);
+            productsService.updateProduct(products);
+
+            response.put("message", "상품이 성공적으로 수정되었습니다.");
+            response.put("productId", id);
+            response.put("imgPath", products.getImgPath());
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("message", "상품 수정 중 오류 발생");
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 }

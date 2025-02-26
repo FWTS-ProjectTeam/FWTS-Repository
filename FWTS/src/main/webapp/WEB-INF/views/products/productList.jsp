@@ -69,12 +69,12 @@
 }
 
 .product-image {
-	width: 180px;
-	height: 180px;
-	border-radius: 5px;
-	background-color: #f2f2f2; /* 기본 배경 색상 */
-	display: block;
-	object-fit: cover; /* 이미지를 덮어 씌우는 방식 */
+   width: 100%; /* 부모 크기에 맞게 자동 조정 */
+   height: 200px; /* 비율 유지 */
+   border-radius: 5px;
+   background-color: #f2f2f2; 
+   display: block;
+   object-fit: cover;
 }
 
 .product-image[alt]:empty {

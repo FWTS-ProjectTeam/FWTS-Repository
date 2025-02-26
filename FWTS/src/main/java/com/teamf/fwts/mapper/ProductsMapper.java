@@ -62,9 +62,7 @@ public interface ProductsMapper {
     List<ProductsDto> findAllBySellerIdWithPage(Map<String, Object> params);
     
 	// 상품 업데이트
-	@Update({"UPDATE products SET",
-			"pro_name = #{proName}, category_id= #{categoryId}, inventory = #{inventory}, max_possible=#{maxPossible}, min_possible= #{minPossible}, unit_price = #{unitPrice}, description = #{description}, is_sales = #{isSales}, img_path = #{imgPath}, regist_date = NOW()",
-			"WHERE pro_id = #{proId}"})
+	@Update("UPDATE products SET pro_name = #{proName}, category_id= #{categoryId}, inventory = #{inventory},max_possible=#{maxPossible},min_possible= #{minPossible}, unit_price = #{unitPrice}, description = #{description}, is_sales = #{isSales}, img_path = #{imgPath},delivery_fee=#{deliveryFee}, regist_date = NOW() WHERE pro_id = #{proId}")
 	void updateProduct(ProductsDto product);
 
 	// 상품 삭제

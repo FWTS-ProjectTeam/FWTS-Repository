@@ -200,6 +200,12 @@ table th, table td {
 	border: 1px solid #ccc;
 	text-align: left;
 }
+.description-title {
+	background-color: var(--main4);
+	padding: 15px 10px;
+	color: white;
+	font-weight: bold;
+}
 </style>
 
 </head>
@@ -238,6 +244,7 @@ table th, table td {
 								<p>최대 구매 가능 수량: ${product.maxPossible}</p>
 								<p>재고: ${product.inventory}</p>
 								<p>가격: ${product.unitPrice}</p>
+								<p>배송비: ${product.deliveryFee}</p>
 							</div>
 							<div>
 								<p>
@@ -259,7 +266,7 @@ table th, table td {
 						</div>
 					</div>
 				</div>
-				<div class="pro-info2">
+				<%-- <div class="pro-info2">
 					<div class="tabs">
 						<button class="tab-button active" onclick="showTab('description')">상품
 							설명</button>
@@ -286,7 +293,20 @@ table th, table td {
 						<h3>최근 거래 내역</h3>
 
 					</div>
-				</div>
+				</div> --%>
+				<div class="pro-info2">
+				<p class="description-title">상품 설명</p>
+				<p>
+					<c:choose>
+						<c:when test="${empty product.description}">
+                		등록된 상품 설명이 없습니다.
+            			</c:when>
+						<c:otherwise>
+							<pre>${product.description}</pre>
+						</c:otherwise>
+					</c:choose>
+				</p>
+			</div>
 
 				<div class="button-container">
 					<button class="btn1"

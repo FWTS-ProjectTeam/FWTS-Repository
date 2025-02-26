@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -51,9 +53,9 @@
 	font-weight: bold;
 	position: absolute; /* 부모 중앙에 텍스트 배치 */
 	text-align: center;
-	margin-top:30px;
-	margin-bottom:10px;
+	margin-top: 30px; margin-bottom : 10px;
 	z-index: 1;
+	margin-bottom: 10px;
 }
 
 img {
@@ -173,12 +175,13 @@ img {
 									상품명: <input type="text" name="proName" id="proName"
 										value="${product.proName}">
 								</p>
-								<p>
-									판매 상태: <select name="isSales" id="isSales">
-										<option value="true" ${product.isSales() ? 'selected' : ''}>판매 중</option>
-										<option value="false" ${!product.isSales() ? 'selected' : ''}>판매 중지</option>
-									</select>
-								</p>
+								<label for="isSales">판매 상태:<select name="isSales"
+									id="isSales">
+									<option value="1" ${product.sales ? 'selected' : ''}>판매
+										중</option>
+									<option value="0" ${!product.sales ? 'selected' : ''}>판매
+										중지</option>
+								</select></label>
 								<p>
 									최소 구매 가능 수량: <input type="number" name="minPossible"
 										id="minPossible" value="${product.minPossible}">
@@ -196,18 +199,16 @@ img {
 										value="${product.unitPrice}">
 								</p>
 								<p>
-									카테고리: <select name="category" id="category">
-										<option value="1"
-											${product.categoryId == 1 ? 'selected="selected"' : ''}>절화</option>
-										<option value="2"
-											${product.categoryId == 2 ? 'selected="selected"' : ''}>관엽</option>
-										<option value="3"
-											${product.categoryId == 3 ? 'selected="selected"' : ''}>난</option>
-										<option value="4"
-											${product.categoryId == 4 ? 'selected="selected"' : ''}>기타</option>
-									</select>
+									배송비: <input type="number" name="deliveryFee" id="deliveryFee"
+										value="${product.deliveryFee}">
 								</p>
-
+								<label for="categoryId">카테고리:<select name="categoryId"
+									id="categoryId">
+										<option value="1" ${product.categoryId == 1 ? 'selected' : ''}>절화</option>
+										<option value="2" ${product.categoryId == 2 ? 'selected' : ''}>관엽</option>
+										<option value="3" ${product.categoryId == 3 ? 'selected' : ''}>난</option>
+										<option value="4" ${product.categoryId == 4 ? 'selected' : ''}>기타</option>
+								</select></label>
 							</div>
 						</div>
 					</div>
@@ -230,25 +231,22 @@ img {
 	</div>
 	<script>
 	function submitForm(event, id) {
-	    event.preventDefault(); // 기본 폼 제출 방지 (페이지 이동 방지)
+	    event.preventDefault();
 
 	    const form = document.getElementById("updateForm");
 	    if (!form) {
-	        alert("폼이 존재하지 않습니다.");
+	        alert("폼을 찾을 수 없습니다.");
 	        return;
 	    }
 
 	    const formData = new FormData(form);
 	    const proName = formData.get("proName") || "상품";
-	    const isConfirmed = confirm(`\${formData.get("isSales")} \${proName} 상품을 수정하시겠습니까?`);
-	    
-	    if (!isConfirmed) {
-	        console.log("사용자가 취소함");
-	        return; // 사용자가 취소하면 아무것도 하지 않음
-	    }
+
+	    const isConfirmed = confirm(`${proName} 상품을 수정하시겠습니까?`);
+	    if (!isConfirmed) return;
 
 	    fetch(`/products/update/${id}`, {
-	        method: "PUT",
+	        method: "POST", // ✅ 변경: PUT → POST
 	        body: formData,
 	        headers: {
 	            "Accept": "application/json"
@@ -256,19 +254,22 @@ img {
 	    })
 	    .then(response => {
 	        if (!response.ok) {
-	            throw new Error("서버 응답이 올바르지 않습니다.");
+	            throw new Error("서버 응답 오류");
 	        }
 	        return response.json();
 	    })
 	    .then(data => {
 	        alert("수정이 완료되었습니다.");
-	        location.href = `/products/sell/${product.proId}`;
+	        location.href = `/products/sell/${id}`;
 	    })
 	    .catch(error => {
 	        console.error("수정 중 오류 발생:", error);
-	        alert("서버 오류로 인해 수정에 실패했습니다.");
+	        alert("수정에 실패했습니다.");
 	    });
 	}
+
 </script>
+
 </body>
 </html>
+

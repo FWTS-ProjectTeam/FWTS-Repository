@@ -10,7 +10,8 @@
 <meta charset="UTF-8">
 <title>생화24</title>
 <link rel="stylesheet" href="/resources/css/common.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <style>
@@ -245,47 +246,47 @@
             </div>
         </section>
         
-        <section class="flower-prices">
-		    <h2>최근 3일 꽃 거래 동향</h2>
-		
-		    <!-- 탭 메뉴 -->
-		    <ul class="tab-list">
-			    <li class="tab-item active" data-tab="cut-flower">절화</li>
-			    <li class="tab-item" data-tab="orchid">난</li>
-			    <li class="tab-item" data-tab="foliage">관엽</li>
-			</ul>
-			
-			<!-- 그래프 영역 -->
-			<div class="tab-content">
-			    <div class="tab-panel active" id="cut-flower">
-			        <div class="price-chart">
-			            <div class="loading" id="cut-flower-loading"></div>
-			            <canvas id="cut-flower-chart"></canvas>
-			            <p class="error" id="cut-flower-error"></p>
-			        </div>
-			    </div>
-			    <div class="tab-panel" id="orchid">
-			        <div class="price-chart">
-			            <div class="loading" id="orchid-loading"></div>
-			            <canvas id="orchid-chart"></canvas>
-			            <p class="error" id="orchid-error"></p>
-			        </div>
-			    </div>
-			    <div class="tab-panel" id="foliage">
-			        <div class="price-chart">
-			            <div class="loading" id="foliage-loading"></div>
-			            <canvas id="foliage-chart"></canvas>
-			            <p class="error" id="foliage-error"></p>
-			        </div>
-			    </div>
-			</div>
-		</section>
-    </div>
-	
-	<!-- 푸터 -->
-	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
-</div>
-<script>
+			<section class="flower-prices">
+				<h2>최근 3일 꽃 거래 동향</h2>
+
+				<!-- 탭 메뉴 -->
+				<ul class="tab-list">
+					<li class="tab-item active" data-tab="cut-flower">절화</li>
+					<li class="tab-item" data-tab="orchid">난</li>
+					<li class="tab-item" data-tab="foliage">관엽</li>
+				</ul>
+
+				<!-- 그래프 영역 -->
+				<div class="tab-content">
+					<div class="tab-panel active" id="cut-flower">
+						<div class="price-chart">
+							<div class="loading" id="cut-flower-loading"></div>
+							<canvas id="cut-flower-chart"></canvas>
+							<p class="error" id="cut-flower-error"></p>
+						</div>
+					</div>
+					<div class="tab-panel" id="orchid">
+						<div class="price-chart">
+							<div class="loading" id="orchid-loading"></div>
+							<canvas id="orchid-chart"></canvas>
+							<p class="error" id="orchid-error"></p>
+						</div>
+					</div>
+					<div class="tab-panel" id="foliage">
+						<div class="price-chart">
+							<div class="loading" id="foliage-loading"></div>
+							<canvas id="foliage-chart"></canvas>
+							<p class="error" id="foliage-error"></p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- 푸터 -->
+		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+	</div>
+	<script>
 	document.addEventListener("DOMContentLoaded", function () { 
 	    // 페이지 로드 후 데이터 로드
 	    loadAllFlowerData();
