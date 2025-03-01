@@ -10,4 +10,6 @@
 
 # Ignore build outputs
 /target/
-/out/
+/out/FWTS/bin/main/application.properties
+FWTS/build/resources/main/application.properties
+FWTS/src/main/resources/application.properties
