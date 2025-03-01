@@ -180,16 +180,6 @@
 									</c:choose>
 								</h3>
 								<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
-								<span style="font-size:12px;">
-									<c:choose>
-										<c:when test="${fn:length(product.description) > 25}">
-                                ${fn:substring(product.description, 0, 25)}...
-                            </c:when>
-										<c:otherwise>
-                                ${product.description}
-                            </c:otherwise>
-									</c:choose>
-								</span>
 								<div class="product-details">
 									<span style="font-weight: bold; color:var(--main4);">${product.unitPrice}원</span>
 									<span style="color:#999; font-size:12px;">배송비: ${product.deliveryFee}원</span>

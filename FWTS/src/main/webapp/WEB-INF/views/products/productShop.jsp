@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>생화24-샵의 상품 리스트</title>
+<title>생화24- 샵의 상품 리스트</title>
 <link rel="stylesheet" href="/resources/css/common.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
@@ -183,16 +183,6 @@
 									</c:choose>
 								</h3>
 								<img src="${product.imgPath}" alt="이미지가 없습니다" class="product-image">
-								<span style="font-size:12px;">
-									<c:choose>
-										<c:when test="${fn:length(product.description) > 25}">
-	                               			${fn:substring(product.description, 0, 25)}...
-	                           			</c:when>
-										<c:otherwise>
-	                               			${product.description}
-	                           			</c:otherwise>
-									</c:choose>
-								</span>
 								<div class="product-details">
 									<span style="font-weight: bold; color:var(--main4);">${product.unitPrice}원</span>
 									<span style="color:#999; font-size:12px;">배송비: ${product.deliveryFee}원</span>

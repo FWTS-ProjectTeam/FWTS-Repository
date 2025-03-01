@@ -254,47 +254,47 @@
             </div>
         </section>
         
-			<section class="flower-prices">
-				<h2>최근 3일 꽃 거래 동향</h2>
+		<section class="flower-prices">
+			<h2>최근 3일 꽃 거래 동향</h2>
 
-				<!-- 탭 메뉴 -->
-				<ul class="tab-list">
-					<li class="tab-item active" data-tab="cut-flower">절화</li>
-					<li class="tab-item" data-tab="foliage">관엽</li>
-					<li class="tab-item" data-tab="orchid">난</li>
-				</ul>
+			<!-- 탭 메뉴 -->
+			<ul class="tab-list">
+				<li class="tab-item active" data-tab="cut-flower">절화</li>
+				<li class="tab-item" data-tab="foliage">관엽</li>
+				<li class="tab-item" data-tab="orchid">난</li>
+			</ul>
 
-				<!-- 그래프 영역 -->
-				<div class="tab-content">
-					<div class="tab-panel active" id="cut-flower">
-						<div class="price-chart">
-							<div class="loading" id="cut-flower-loading"></div>
-							<canvas id="cut-flower-chart"></canvas>
-							<p class="error" id="cut-flower-error"></p>
-						</div>
-					</div>
-					<div class="tab-panel" id="orchid">
-						<div class="price-chart">
-							<div class="loading" id="orchid-loading"></div>
-							<canvas id="orchid-chart"></canvas>
-							<p class="error" id="orchid-error"></p>
-						</div>
-					</div>
-					<div class="tab-panel" id="foliage">
-						<div class="price-chart">
-							<div class="loading" id="foliage-loading"></div>
-							<canvas id="foliage-chart"></canvas>
-							<p class="error" id="foliage-error"></p>
-						</div>
+			<!-- 그래프 영역 -->
+			<div class="tab-content">
+				<div class="tab-panel active" id="cut-flower">
+					<div class="price-chart">
+						<div class="loading" id="cut-flower-loading"></div>
+						<canvas id="cut-flower-chart"></canvas>
+						<p class="error" id="cut-flower-error"></p>
 					</div>
 				</div>
-			</section>
-		</div>
-
-		<!-- 푸터 -->
-		<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+				<div class="tab-panel" id="orchid">
+					<div class="price-chart">
+						<div class="loading" id="orchid-loading"></div>
+						<canvas id="orchid-chart"></canvas>
+						<p class="error" id="orchid-error"></p>
+					</div>
+				</div>
+				<div class="tab-panel" id="foliage">
+					<div class="price-chart">
+						<div class="loading" id="foliage-loading"></div>
+						<canvas id="foliage-chart"></canvas>
+						<p class="error" id="foliage-error"></p>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
-	<script>
+
+	<!-- 푸터 -->
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+</div>
+<script>
 	document.addEventListener("DOMContentLoaded", function () { 
 	    // 페이지 로드 후 데이터 로드
 	    loadAllFlowerData();

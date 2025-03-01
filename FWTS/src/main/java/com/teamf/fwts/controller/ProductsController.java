@@ -224,30 +224,30 @@ public class ProductsController {
 	    Map<String, Object> response = new HashMap<>();
 
 	    try {
-	        // 1️⃣ 파일이 비어 있지 않은 경우
+	        // 1️. 파일이 비어 있지 않은 경우
 	        if (!productImage.isEmpty()) {
-	            // 2️⃣ 저장할 디렉토리 설정 (예: /uploads/)
+	            // 2️. 저장할 디렉토리 설정 (예: /uploads/)
 	            String uploadDir = request.getServletContext().getRealPath("/uploads/");
 	            File dir = new File(uploadDir);
 	            if (!dir.exists()) {
 	                dir.mkdirs();  // 디렉토리가 없으면 생성
 	            }
 
-	            // 3️⃣ 파일명 생성 (UUID 사용하여 중복 방지)
+	            // 3️. 파일명 생성 (UUID 사용하여 중복 방지)
 	            String originalFilename = productImage.getOriginalFilename();
 	            String savedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
 	            File saveFile = new File(uploadDir, savedFilename);
 	            productImage.transferTo(saveFile);  // 파일 저장
 
-	            // 4️⃣ 이미지 경로를 DTO에 설정
+	            // 4. 이미지 경로를 DTO에 설정
 	            String imgPath = "/uploads/" + savedFilename;
 	            products.setImgPath(imgPath);
 	        }
 
-	        // 5️⃣ 상품 저장
+	        // 5️. 상품 저장
 	        productsService.addProduct(products);
 
-	        // 6️⃣ 응답 데이터 설정
+	        // 6️. 응답 데이터 설정
 	        response.put("message", "상품이 성공적으로 등록되었습니다.");
 	        response.put("productId", products.getProId());
 	        response.put("imgPath", products.getImgPath());

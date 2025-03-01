@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>주문 확인</title>
+    <title>생화24 - 주문 확인</title>
     <style>
         .container {
             text-align: center;
